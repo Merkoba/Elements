@@ -242,8 +242,7 @@ function generate_tiles()
         {
             element.direction = "down";
         }
-
-        if(element.profit === -1000000 && element.direction === "down")
+        else if(element.profit === -1000000 && element.direction === "down")
         {
             element.direction = "up";
         }
