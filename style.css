@@ -1,0 +1,281 @@
+body, html
+{
+	font-family: sans-serif;
+	background-color: #fff;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+body
+{
+	background-image: url('splash.jpg');
+	background-size: cover;          
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+#fab
+{
+	padding-top: 0.8em;
+	padding-bottom: 0.8em;
+	font-size: 2em;
+	position: fixed;
+	background-color: #fff;
+	width: 100%;
+	text-align: center;
+}
+
+#left_side
+{
+	font-size: 1.6em;
+    top: 1.2em;
+	left: 1.8em;
+	position: fixed;
+	z-index: 34534;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#right_side
+{
+	font-size: 1.6em;
+	top: 1.2em;
+	right: 2em;
+	position: fixed;
+	z-index: 34534;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
+}
+
+#seed
+{
+	cursor: pointer;
+	padding-right: 2em;
+}
+
+#highscores
+{
+	cursor: pointer;
+	padding-right: 2em;
+}
+
+#halp
+{
+	cursor: pointer;
+}
+
+#counter
+{
+	display: inline-block;
+	padding-left: 1.4em;
+}
+
+#start
+{
+	padding-left: 2em;
+	cursor: pointer;
+}
+
+.select-style 
+{
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: #fff;
+	white-space:nowrap;
+}
+
+.select-style select 
+{
+    width: 4.7em;
+	cursor: pointer;
+	font-size: 1em;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+}
+
+.select-style select:focus {
+    outline: none;
+}
+
+#main_container
+{
+	text-align: center;
+	outline: 0;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.element_container
+{
+	width: 8em;
+	display: inline-block;
+	padding: 3.5em;
+	padding-top: 2.5em;
+	border: 2px solid #4a4a4a;
+	text-align: center;
+	height: 7em;
+	overflow: hidden;
+	outline: 0;
+}
+
+.element_name
+{
+	white-space: nowrap;
+}
+
+.element_profit
+{
+	font-size: 1.2em;
+	padding-top: 0.7em;
+	white-space:nowrap;
+}
+
+.element_direction
+{
+	padding-top: 0.4em;
+	padding-bottom: 1em;
+	font-size: 1.2em;
+}
+
+.element_patent_btn
+{
+	color: #2F2F2F;
+	background-color: #eee;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	padding: 0.7em;
+	border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+	font-size: 0.7em;
+}
+
+.element_patent_btn:hover 
+{
+	background-color: #e3e3e3;
+	border-color: rgba(0,0,0,0.5);
+}
+
+.element_patent_btn:active 
+{
+	background-color: #CCC;
+	border-color: rgba(0,0,0,0.9);
+}
+
+.green
+{
+	background-color: #84BF84;
+}
+
+.red
+{
+	background-color: #bb5175;
+}
+
+
+.btn_sell
+{
+	background-color: #699DB6;
+	border-color: rgba(0,0,0,0.3);
+	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+	color: #FFF;
+}
+
+.btn_sell:hover 
+{
+	background-color: #4F87A2;
+	border-color: rgba(0,0,0,0.5);
+}
+
+.btn_sell:active 
+{
+	background-color: #3C677B;
+	border-color: rgba(0,0,0,0.9);
+}
+
+#overlay
+{
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	z-index: 49939959;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: none;
+}
+
+#msg
+{
+	font-size: 1.7em;
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	background: white;
+	padding: 1.6em;
+	overflow: auto;
+	max-height: 80vh;
+	overflow-x: hidden;
+	overflow-y: auto;
+	display: none;
+	z-index: 499399259;
+}
+
+b 
+{
+	letter-spacing: 0.1em;
+	font-size: 1.4em;
+}
+
+.dialog_btn
+{
+	display: inline-block;
+	color: #2F2F2F;
+	background-color: #eee;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	padding: 0.7em;
+	border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+	font-size: 0.7em;
+}
+
+.dialog_btn:hover 
+{
+	background-color: #e3e3e3;
+	border-color: rgba(0,0,0,0.5);
+}
+
+.dialog_btn:active 
+{
+	background-color: #CCC;
+	border-color: rgba(0,0,0,0.9);
+}
+
+#seed_input
+{
+	font-size: 1.2em;
+	width: 5em;
+	padding: 0.2em;
+	text-align: center;
+}

@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>Elements</title>
+		<link rel="shortcut icon" href="favicon.ico?v=1" type="image/x-icon"> 
+
+		<script src='jquery.js'></script>
+		<script src='seedrandom.js'></script>
+
+		<script src='base.js?v=67'></script>
+		<link rel="stylesheet" href="style.css?v=28">
+
+		<script>
+			$(function()
+			{
+				init();
+			})
+		</script>
+
+	</head>
+	<body>
+
+		<div id="left_side">
+			<span class="select-style">
+				<select id='speed_select'>
+					<option value="15000">Slow</option>
+					<option value="10000" selected>Normal</option>
+					<option value="5000">Fast</option>
+				</select>
+			</span>
+
+			<span id='counter'>50</span>
+			<span id='start' onclick="start()">Start</span>
+		</div>
+
+		<div id="fab">E l e m e n t s</div>
+
+		<div id="right_side">
+			<span id="seed" onclick="seed_picker()">#</span>
+			<span id="highscores" onclick="show_highscores()">+</span>
+			<span id="halp" onclick="halp()">?</span>
+		</div>
+
+		<br><br><br><br><br>
+
+		<div id='main_container' tabindex=1></div>
+
+		<audio id='nope' src='nope.mp3?v=1'></audio>
+		<audio id='pup' src='pup.mp3?v=4'></audio>
+		<audio id='lost' src='lost.mp3?v=2'></audio>
+		<audio id='ended' src='ended.mp3?v=1'></audio>
+		<audio id='highscore' src='highscore.mp3?v=1'></audio>
+		<audio id='started' src='started.mp3?v=2'></audio>
+
+		<div id='overlay'></div>
+
+		<div id='msg'></div>
+
+	</body>
+</html>
