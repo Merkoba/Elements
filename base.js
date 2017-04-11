@@ -188,6 +188,7 @@ function start()
     stop_loop();
     hide_overlay();
     generate_tiles();
+    set_speed();
     $('#fab').html('Starting Game');
     $('#counter').html('---');
     $('#start').html('Restart');
@@ -405,9 +406,15 @@ function loop()
         if(count > 0)
         {
             tick();
+
+            if(speed === "linear")
+            {
+                loop_speed -= 204.0816326530612;
+            }
+
             loop();
         }
-    }, speed);
+    }, loop_speed);
 };
 
 function stop_loop()
@@ -509,6 +516,7 @@ function halp()
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
 	s += "Changes in profit are either +200,000 or -200,000.<br><br>";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
+    s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
     s += "The game ends after 50 ticks have passed.<br><br>";
@@ -553,15 +561,39 @@ function show_highscores()
 
 function get_speed()
 {
+    var speeds = ["slow", "normal", "fast", "linear"];
+
     speed = localStorage.getItem("speed");
 
     if(speed === null)
     {
-        speed = "10000";
-        localStorage.setItem("speed", "10000");
+        speed = "normal";
+        localStorage.setItem("speed", speed);
+    }
+
+    else if(speeds.indexOf(speed) === -1)
+    {
+        speed = "normal";
+        localStorage.setItem("speed", speed);
     }
 
     $('#speed_select').val(speed);
+}
+
+function set_speed()
+{
+    if(speed === "slow" || speed === "linear")
+    {
+        loop_speed = 15000;
+    }
+    else if(speed === "normal")
+    {
+        loop_speed = 10000;
+    }
+    else if(speed === "fast")
+    {
+        loop_speed = 5000;
+    }
 }
 
 function game_ended()
@@ -776,14 +808,11 @@ function speed_changed()
 {
     $('#speed_select').change(function()
     {
-        speed = parseInt($('#speed_select option:selected').val()); 
+        speed = $('#speed_select option:selected').val(); 
 
-        if(count > 0)
-        {
-            restart_loop(); 
-        }
-        
         localStorage.setItem("speed", speed);
+
+        start();
     });
 }
 
