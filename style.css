@@ -238,6 +238,7 @@ body
 	overflow-y: auto;
 	display: none;
 	z-index: 499399259;
+	outline: 0;
 }
 
 b 

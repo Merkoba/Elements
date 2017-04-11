@@ -171,23 +171,25 @@ var profits = [-1000000, -800000, -600000, -400000, -200000, 0, 200000, 400000, 
 
 var directions = ["up", "down"];
 
+var msg_open = false;
+
 function init()
 {
     get_highscores();
-    speed_changed();   
     get_speed();
+    speed_changed();   
     overlay_clicked();
+    key_detection();
 }
 
 function start()
 { 
+    count = 0;
     stop_loop();
     hide_overlay();
-    count = 50;
-    update_counter();
-    fab = 1000000;
     generate_tiles();
-    update_fab();
+    $('#fab').html('Starting Game');
+    $('#counter').html('---');
     $('#start').html('Restart');
     $('body').css('background-image', 'none');
     $('#main_container').focus();
@@ -205,7 +207,13 @@ function start()
         {
             $(this).css('display', 'inline-block')
         });
+
+        fab = 1000000;
+        count = 50;
+        update_fab();
+        update_counter();
         loop();
+
     }, 3700);
 }
 
@@ -502,6 +510,7 @@ function halp()
 	s += "Changes in profit are either +200,000 or -200,000.<br><br>";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
+    s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
     s += "The game ends after 50 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
 
@@ -615,6 +624,7 @@ function hide_overlay()
 {
     $('#overlay').css('display', 'none');
     $('#msg').css('display', 'none');
+    msg_open = false;
 }
 
 function msg(txt)
@@ -624,6 +634,8 @@ function msg(txt)
     $('#msg').html(txt);
     $('#msg').css('display', 'block');
     $('#msg').scrollTop(0);
+    $('#msg').focus();
+    msg_open = true;
 }
 
 function refresh()
@@ -764,8 +776,40 @@ function speed_changed()
 {
     $('#speed_select').change(function()
     {
-        speed = parseInt($('#speed_select option:selected').val());   
-        restart_loop();    
+        speed = parseInt($('#speed_select option:selected').val()); 
+
+        if(count > 0)
+        {
+            restart_loop(); 
+        }
+        
         localStorage.setItem("speed", speed);
+    });
+}
+
+function key_detection()
+{
+    $(document).keydown(function(e)
+    { 
+        var code = e.keyCode;
+
+        if(!msg_open)
+        {
+            if(code === 40 || code === 83)
+            {
+                $('body').animate({scrollTop:$(document).height() - $(window).height()}, 100, 'linear');
+            }
+            else if(code === 38 || code === 87)
+            {
+                $('body').animate({scrollTop:0}, 100, 'linear');
+            }
+        }
+        else
+        {
+            if(code === 27)
+            {
+                hide_overlay();
+            }
+        }
     });
 }
