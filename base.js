@@ -173,13 +173,8 @@ var directions = ["up", "down"];
 
 function init()
 {
-    $('#speed_select').change(function()
-    {
-        speed = parseInt($('#speed_select option:selected').val());       
-        localStorage.setItem("speed", speed);
-    });
-    
     get_highscores();
+    speed_changed();   
     get_speed();
     overlay_clicked();
 }
@@ -413,6 +408,12 @@ function stop_loop()
     {
         clearTimeout(loop_timeout);
     }
+}
+
+function restart_loop()
+{
+    stop_loop();
+    loop();
 }
 
 function tick()
@@ -757,4 +758,14 @@ function get_random_direction_index()
     }
 
     return n;
+}
+
+function speed_changed()
+{
+    $('#speed_select').change(function()
+    {
+        speed = parseInt($('#speed_select option:selected').val());   
+        restart_loop();    
+        localStorage.setItem("speed", speed);
+    });
 }
