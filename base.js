@@ -175,9 +175,10 @@ var msg_open = false;
 
 function init()
 {
-    get_highscores();
     get_speed();
+    set_speed();
     speed_changed();   
+    get_highscores();
     overlay_clicked();
     key_detection();
 }
@@ -188,7 +189,6 @@ function start()
     stop_loop();
     hide_overlay();
     generate_tiles();
-    set_speed();
     $('#fab').html('Starting Game');
     $('#counter').html('---');
     $('#start').html('Restart');
@@ -403,10 +403,14 @@ function loop()
 {
     loop_timeout = setTimeout(function() 
     {
+
         if(count > 0)
         {
             tick();
+        }
 
+        if(count > 0)
+        {
             if(speed === "linear")
             {
                 loop_speed -= 204.0816326530612;
@@ -414,6 +418,7 @@ function loop()
 
             loop();
         }
+
     }, loop_speed);
 };
 
@@ -427,8 +432,11 @@ function stop_loop()
 
 function restart_loop()
 {
-    stop_loop();
-    loop();
+    if(loop_timeout !== undefined)
+    {
+        clearTimeout(loop_timeout);
+        loop();
+    }
 }
 
 function tick()
@@ -810,9 +818,11 @@ function speed_changed()
     {
         speed = $('#speed_select option:selected').val(); 
 
-        localStorage.setItem("speed", speed);
+        set_speed();
 
-        start();
+        restart_loop();
+        
+        localStorage.setItem("speed", speed);
     });
 }
 
