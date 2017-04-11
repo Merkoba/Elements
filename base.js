@@ -173,11 +173,13 @@ var directions = ["up", "down"];
 
 var msg_open = false;
 
+var highscores;
+
 function init()
 {
     get_speed();
-    set_speed();
-    speed_changed();   
+    speed_changed();
+    get_seed();
     get_highscores();
     overlay_clicked();
     key_detection();
@@ -189,6 +191,7 @@ function start()
     stop_loop();
     hide_overlay();
     generate_tiles();
+    set_speed();
     $('#fab').html('Starting Game');
     $('#counter').html('---');
     $('#start').html('Restart');
@@ -432,11 +435,8 @@ function stop_loop()
 
 function restart_loop()
 {
-    if(loop_timeout !== undefined)
-    {
-        clearTimeout(loop_timeout);
-        loop();
-    }
+    stop_loop();
+    loop();
 }
 
 function tick()
@@ -537,51 +537,172 @@ function get_highscores()
 {
     highscores = JSON.parse(localStorage.getItem("highscores"));
 
-    if(highscores === null)
+    if(highscores === null || highscores.Overall === undefined)
     {
-        highscores = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
+        highscores = {Overall:[-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999]};
         localStorage.setItem("highscores", JSON.stringify(highscores));
+    }
+}
+
+function get_setting_highscores()
+{
+    var s = get_setting();
+
+    var hs = highscores[s];
+
+    if(hs === undefined)
+    {
+        highscores[s] = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
+        return highscores[s];
     }
     else
     {
-        highscores.sort(function(a, b){return b-a});
+        return hs;
     }
+}
+
+function get_setting()
+{
+    if(seed === -1)
+    {
+        var s = "#";
+    }
+
+    else
+    {
+        var s = "#" + seed;
+    }
+
+    s += " - " + speed;
+
+    return s;
+}
+
+function start_setting(setting)
+{
+    var sd = setting.split(" ")[0].replace('#', '');
+
+    if(sd === '')
+    {
+        seed = -1;
+        $('#seed').html('#');
+    }
+
+    else
+    {
+        seed = parseInt(sd);
+        $('#seed').html('# ' + seed);
+    }
+
+    var split = setting.split(" ");
+
+    speed = split[split.length - 1];
+
+    $('#speed_select').val(speed);
+
+    localStorage.setItem("speed", speed);
+
+    start();
 }
 
 function show_highscores()
 {
-    var s = "<b>High Scores</b><br><br>";
+    var scores = get_setting_highscores();
 
-    for(var i=0; i<highscores.length; i++)
+    var s = "<b>High Scores</b>";
+
+    s += "<div class='select-style2'><select id='hs_setting_select'>";
+
+    s += "<option value='Overall'>Overall</option>";
+
+    var keys = Object.keys(highscores);
+
+    keys.sort();
+
+    var setting = get_setting();
+
+    for(var i=0; i<keys.length; i++)
     {
-        var hs = highscores[i];
+        var key = keys[i];
+
+        if(key === "Overall")
+        {
+            continue;
+        }
+
+        if(key === setting)
+        {
+            s += "<option value='" + key + "' selected>" + key + "</option>";
+        }
+
+        else
+        {
+            s += "<option value='" + key + "'>" + key + "</option>";
+        }
+    }
+
+    s += "</select></div><div id='scores'></div>";
+
+    scores.sort(function(a, b){return b-a});
+
+    msg(s);
+    
+    show_scores();
+
+    $('#hs_setting_select').change(function()
+    {
+        show_scores();
+    });
+}
+
+function show_scores()
+{
+    var setting = $('#hs_setting_select option:selected').val();
+
+    var scores = highscores[setting];
+
+    var s = "";
+
+    for(var i=0; i<scores.length; i++)
+    {
+        var hs = scores[i];
 
         if(hs === -99999)
         {
             hs = "----";
         }
 
-        s += format(hs) + "<br><br>";
+        else
+        {
+            hs = format(hs);
+        }
+
+        s += hs + "<br><br>";
     }
 
-    msg(s);
+    if(setting !== "Overall")
+    {
+        s += "<div id='try_again' onclick='start_setting(\"" + setting + "\")'>Try Again</div>";
+    }
+
+    $('#scores').html(s);
 }
 
 function get_speed()
 {
-    var speeds = ["slow", "normal", "fast", "linear"];
+    var speeds = ["Slow", "Normal", "Fast", "Linear"];
 
     speed = localStorage.getItem("speed");
 
     if(speed === null)
     {
-        speed = "normal";
+        speed = "Normal";
         localStorage.setItem("speed", speed);
     }
 
     else if(speeds.indexOf(speed) === -1)
     {
-        speed = "normal";
+        speed = "Normal";
         localStorage.setItem("speed", speed);
     }
 
@@ -590,15 +711,15 @@ function get_speed()
 
 function set_speed()
 {
-    if(speed === "slow" || speed === "linear")
+    if(speed === "Slow" || speed === "Linear")
     {
         loop_speed = 15000;
     }
-    else if(speed === "normal")
+    else if(speed === "Normal")
     {
         loop_speed = 10000;
     }
-    else if(speed === "fast")
+    else if(speed === "Fast")
     {
         loop_speed = 5000;
     }
@@ -606,11 +727,14 @@ function set_speed()
 
 function game_ended()
 {
-    if(fab > highscores[highscores.length -1])
+    var hs = get_setting_highscores();
+    var overall = highscores.Overall;
+
+    if(fab > hs[hs.length -1])
     {
-        if(fab > highscores[0])
+        if(fab > hs[0])
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>");
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>");
             play('highscore');
         }
         else
@@ -619,18 +743,30 @@ function game_ended()
             play('ended');
         }
 
-        highscores.push(fab);
+        hs.push(fab);
 
-        highscores.sort(function(a, b){return b-a});
+        hs.sort(function(a, b){return b-a});
 
-        highscores = highscores.slice(0, 10);
+        hs.splice(10, hs.length);
 
         localStorage.setItem("highscores", JSON.stringify(highscores));
     }
+
     else
     {
         msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>");
         play('ended');
+    }
+
+    if(fab > overall[overall.length -1])
+    {
+        overall.push(fab);
+
+        overall.sort(function(a, b){return b-a});
+
+        overall.splice(10, overall.length);
+
+        localStorage.setItem("highscores", JSON.stringify(highscores));
     }
 
     fab_ended();
@@ -760,6 +896,27 @@ function check_seed()
     }
 }
 
+function get_seed()
+{
+    seed = localStorage.getItem("seed");
+
+    if(seed === null)
+    {
+        seed = -1;
+        localStorage.setItem("seed", seed);
+    }
+
+    if(seed === -1)
+    {
+        $('#seed').html('#');
+    }
+
+    else
+    {
+        $('#seed').html('# ' + seed);
+    }
+}
+
 function change_seed(s)
 {
     seed = parseInt(s);
@@ -772,6 +929,8 @@ function change_seed(s)
     {
         $('#seed').html('# ' + seed);
     }
+
+    localStorage.setItem("seed", seed);
 
     start();
 }
@@ -817,12 +976,8 @@ function speed_changed()
     $('#speed_select').change(function()
     {
         speed = $('#speed_select option:selected').val(); 
-
-        set_speed();
-
-        restart_loop();
-        
         localStorage.setItem("speed", speed);
+        start();
     });
 }
 
