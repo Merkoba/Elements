@@ -157,8 +157,6 @@ var elements = [
     }
 ];
 
-var num_owned = 0;
-
 var loop_timeout;
 
 var started_timeout;
@@ -281,7 +279,7 @@ function generate_tiles()
         $('#main_container').append(s);
     }
 
-    $('.element_patent_btn').each(function()
+    $('.element_container').each(function()
     {
         $(this).click(function()
         {
@@ -293,22 +291,18 @@ function generate_tiles()
     });    
 }
 
-function patent_btn_events(btn)
+function patent_btn_events(parent)
 {
-    var parent = $(btn).parent();
-
     var name = $(parent).find('.element_name').get(0).innerHTML;
+    var btn = $(parent).find('.element_patent_btn').get(0);
 
     var element = get_element(name);
 
     if(btn.innerHTML === 'Buy Patent')
     {
-        $(btn).addClass('btn_sell');
-        $(btn).html('Sell Patent');
-
         if(element.profit <= 0)
         {
-            var price = 1000;
+            var price = 100000;
         }
         else
         {
@@ -325,17 +319,15 @@ function patent_btn_events(btn)
 
         element.owned = true;
 
-        num_owned += 1;
+        $(btn).addClass('btn_sell');
+        $(btn).html('Sell Patent');
     }
 
     else
     {
-        $(btn).removeClass('btn_sell');
-        $(btn).html('Buy Patent');
-
         if(element.profit <= 0)
         {
-            var price = 1000;
+            var price = 100000;
         }
         else
         {
@@ -346,7 +338,8 @@ function patent_btn_events(btn)
 
         element.owned = false;
 
-        num_owned -= 1;
+        $(btn).removeClass('btn_sell');
+        $(btn).html('Buy Patent');
     }
 
     update_fab();
@@ -519,10 +512,11 @@ function halp()
     s += "Point earnings or loses of owned patents only occurs after each tick.<br><br>";
     s += "You can sell the patent of an element and get 4 times its current profit.<br><br>";
 	s += "Selling high profit patents is a major source of points.<br><br>";
-    s += "If you buy a patent and it has 0 or negative profit it will cost 1000.<br><br>";
-    s += "When you sell a patent and it has 0 or negative profit you will get 1000.<br><br>";
+    s += "If you buy a patent and it has 0 or negative profit it will cost 100,000.<br><br>";
+    s += "When you sell a patent and it has 0 or negative profit you will get 100,000.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
-	s += "Changes in profit are either +200,000 or -200,000.<br><br>";
+    s += "Changes in profit are either +200,000 or -200,000.<br><br>";
+	s += "You can click any part of the tile to buy or sell not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can change the speed of the game which changes the interval between ticks."
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";

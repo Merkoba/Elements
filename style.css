@@ -165,6 +165,7 @@ body
 	height: 7em;
 	overflow: hidden;
 	outline: 0;
+	cursor: pointer;
 }
 
 .element_name
@@ -197,19 +198,21 @@ body
 	border: 1px solid rgba(0,0,0,0.3);
 	border-bottom-width: 3px;
 	font-size: 0.7em;
+	cursor: pointer;
+	outline: 0;
 }
 
-.element_patent_btn:hover 
+/*.element_patent_btn:hover 
 {
 	background-color: #e3e3e3;
 	border-color: rgba(0,0,0,0.5);
-}
+}*/
 
-.element_patent_btn:active 
+/*.element_patent_btn:active 
 {
 	background-color: #CCC;
 	border-color: rgba(0,0,0,0.9);
-}
+}*/
 
 .green
 {
@@ -221,7 +224,6 @@ body
 	background-color: #bb5175;
 }
 
-
 .btn_sell
 {
 	background-color: #699DB6;
@@ -230,17 +232,17 @@ body
 	color: #FFF;
 }
 
-.btn_sell:hover 
+/*.btn_sell:hover 
 {
 	background-color: #4F87A2;
 	border-color: rgba(0,0,0,0.5);
-}
+}*/
 
-.btn_sell:active 
+/*.btn_sell:active 
 {
 	background-color: #3C677B;
 	border-color: rgba(0,0,0,0.9);
-}
+}*/
 
 #overlay
 {
