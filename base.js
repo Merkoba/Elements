@@ -173,6 +173,8 @@ var msg_open = false;
 
 var highscores;
 
+var ls_highscores = "highscores_v1";
+
 function init()
 {
     get_speed();
@@ -509,7 +511,7 @@ function halp()
     s += "You lose points when you own elements that have a negative profit.<br><br>";
     s += "You own an element by buying its patent. The price is 4 times its current profit.<br><br>";
     s += "You are only able to buy patents you can afford.<br><br>";
-    s += "Point earnings or loses of owned patents only occurs after each tick.<br><br>";
+    s += "Point earnings or losses of owned patents only occurs after each tick.<br><br>";
     s += "You can sell the patent of an element and get 4 times its current profit.<br><br>";
 	s += "Selling high profit patents is a major source of points.<br><br>";
     s += "If you buy a patent and it has 0 or negative profit it will cost 100,000.<br><br>";
@@ -530,12 +532,12 @@ function halp()
 
 function get_highscores()
 {
-    highscores = JSON.parse(localStorage.getItem("highscores"));
+    highscores = JSON.parse(localStorage.getItem(ls_highscores));
 
-    if(highscores === null || highscores.Overall === undefined)
+    if(highscores === null)
     {
-        highscores = {Overall:[-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999]};
-        localStorage.setItem("highscores", JSON.stringify(highscores));
+        highscores = {Overall:[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']]};
+        localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
     else
@@ -664,45 +666,68 @@ function show_highscores()
 
     msg(s);
     
-    show_scores();
+    show_scores($('#hs_setting_select option:selected').val());
 
     $('#hs_setting_select').change(function()
     {
-        show_scores();
+        show_scores($('#hs_setting_select option:selected').val());
     });
 }
 
-function show_scores()
+function show_scores(setting)
 {
-    var setting = $('#hs_setting_select option:selected').val();
-
     var scores = highscores[setting];
 
     var s = "";
 
-    for(var i=0; i<scores.length; i++)
+    if(setting === "Overall")
     {
-        var hs = scores[i];
-
-        if(hs === -99999)
+        for(var i=0; i<scores.length; i++)
         {
-            hs = "----";
-        }
+            var hs = scores[i][0];
+            var ss = scores[i][1];
 
-        else
-        {
-            hs = format(hs);
-        }
 
-        s += hs + "<br><br>";
+            if(hs === -99999)
+            {
+                s += "----<br><br>";
+            }
+
+            else
+            {
+                s += "<span class='clickable_score' onclick='show_scores(\"" + ss + "\")'>";
+                s += "<div class='setting_small'>" + ss + "</div>";
+                s += format(hs) + "</span><br><br>";
+            }
+
+        }    
     }
-
-    if(setting !== "Overall")
+    
+    else
     {
+        for(var i=0; i<scores.length; i++)
+        {
+            var hs = scores[i];
+
+            if(hs === -99999)
+            {
+                s += "----<br><br>";
+            }
+
+            else
+            {
+                s += format(hs) + "<br><br>";
+            }
+        }
+        
         s += "<div id='try_again' onclick='start_setting(\"" + setting + "\")'>Try Again</div>";
     }
-
+    
     $('#scores').html(s);
+    
+    $('#hs_setting_select').val(setting);
+
+    $('#msg').scrollTop(0);
 }
 
 function get_speed()
@@ -766,7 +791,7 @@ function game_ended()
 
         hs.splice(10, hs.length);
 
-        localStorage.setItem("highscores", JSON.stringify(highscores));
+        localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
     else
@@ -775,15 +800,27 @@ function game_ended()
         play('ended');
     }
 
-    if(fab > overall[overall.length -1])
+    overall.sort(function(a, b)
     {
-        overall.push(fab);
+        var x=a[0];
+        var y=b[0];
+        return y-x;
+    });
 
-        overall.sort(function(a, b){return b-a});
+    if(fab > overall[overall.length -1][0])
+    {
+        overall.push([fab, get_setting()]);
+
+        overall.sort(function(a, b)
+        {
+            var x=a[0];
+            var y=b[0];
+            return y-x;
+        });
 
         overall.splice(10, overall.length);
 
-        localStorage.setItem("highscores", JSON.stringify(highscores));
+        localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
     fab_ended();
