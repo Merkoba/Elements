@@ -303,7 +303,17 @@ function patent_btn_events(btn)
 
     if(btn.innerHTML === 'Buy Patent')
     {
-        var price = element.profit * 4;
+        $(btn).addClass('btn_sell');
+        $(btn).html('Sell Patent');
+
+        if(element.profit <= 0)
+        {
+            var price = 1000;
+        }
+        else
+        {
+            var price = element.profit * 4;
+        }
 
         if(fab < price)
         {
@@ -311,17 +321,7 @@ function patent_btn_events(btn)
             return false;
         }
 
-        $(btn).addClass('btn_sell');
-        $(btn).html('Sell Patent');
-
-        if(element.profit <= 0)
-        {
-            fab -= 1000;
-        }
-        else
-        {
-            fab -= price;
-        }
+        fab -= price;
 
         element.owned = true;
 
@@ -330,19 +330,19 @@ function patent_btn_events(btn)
 
     else
     {
-        var price = element.profit * 4;
-
         $(btn).removeClass('btn_sell');
         $(btn).html('Buy Patent');
 
         if(element.profit <= 0)
         {
-            fab += 1000;
+            var price = 1000;
         }
         else
         {
-            fab += price;
+            var price = element.profit * 4;
         }
+
+        fab += price;
 
         element.owned = false;
 
