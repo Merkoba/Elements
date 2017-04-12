@@ -606,6 +606,8 @@ function start_setting(setting)
         $('#seed').html('# ' + seed);
     }
 
+    localStorage.setItem("seed", seed);
+
     var split = setting.split(" ");
 
     speed = split[split.length - 1];
@@ -917,6 +919,8 @@ function get_seed()
         seed = -1;
         localStorage.setItem("seed", seed);
     }
+
+    seed = parseInt(seed);
 
     if(seed === -1)
     {
