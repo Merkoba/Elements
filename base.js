@@ -523,9 +523,10 @@ function halp()
     s += "When you sell a patent and it has 0 or negative profit you will get 1000.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
 	s += "Changes in profit are either +200,000 or -200,000.<br><br>";
+    s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
+    s += "You can change the speed of the game which changes the interval between ticks."
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
-    s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
     s += "The game ends after 50 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
@@ -543,15 +544,23 @@ function get_highscores()
         localStorage.setItem("highscores", JSON.stringify(highscores));
     }
 
-    var keys = Object.keys(highscores);
-
-    for(var i=0; i<keys.length; i++)
+    else
     {
-        var sum = highscores[keys[i]].reduce((a, b) => a + b, 0);
+        var keys = Object.keys(highscores);
 
-        if(sum < 1)
+        for(var i=0; i<keys.length; i++)
         {
-            delete highscores[keys[i]];
+            if(keys[i] === "Overall")
+            {
+                continue;
+            }
+
+            var sum = highscores[keys[i]].reduce((a, b) => a + b, 0);
+
+            if(sum === -999990)
+            {
+                delete highscores[keys[i]];
+            }
         }
     }
 }

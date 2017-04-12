@@ -6,8 +6,8 @@
 		<script src='jquery.js'></script>
 		<script src='seedrandom.js'></script>
 
-		<script src='base.js?v=83'></script>
-		<link rel="stylesheet" href="style.css?v=32">
+		<script src='base.js?v=86'></script>
+		<link rel="stylesheet" href="style.css?v=33">
 
 		<script>
 			$(function()
@@ -20,6 +20,7 @@
 	<body>
 
 		<div id="left_side">
+			<span id="seed" onclick="seed_picker()">#</span>
 			<span class="select-style">
 				<select id='speed_select'>
 					<option value="Slow">Slow</option>
@@ -29,14 +30,13 @@
 				</select>
 			</span>
 
-			<span id='counter'>---</span>
 			<span id='start' onclick="start()">Start</span>
 		</div>
 
 		<div id="fab">E l e m e n t s</div>
 
 		<div id="right_side">
-			<span id="seed" onclick="seed_picker()">#</span>
+			<span id='counter'>---</span>
 			<span id="highscores" onclick="show_highscores()">+</span>
 			<span id="halp" onclick="halp()">?</span>
 		</div>
