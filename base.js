@@ -542,6 +542,18 @@ function get_highscores()
         highscores = {Overall:[-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999]};
         localStorage.setItem("highscores", JSON.stringify(highscores));
     }
+
+    var keys = Object.keys(highscores);
+
+    for(var i=0; i<keys.length; i++)
+    {
+        var sum = highscores[keys[i]].reduce((a, b) => a + b, 0);
+
+        if(sum < 1)
+        {
+            delete highscores[keys[i]];
+        }
+    }
 }
 
 function get_setting_highscores()
