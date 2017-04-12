@@ -414,7 +414,7 @@ function loop()
 
         if(count > 0)
         {
-            if(speed === "linear")
+            if(speed === "Linear")
             {
                 loop_speed -= 204.0816326530612;
             }
