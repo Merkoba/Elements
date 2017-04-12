@@ -526,7 +526,8 @@ function halp()
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
     s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
-    s += "You can restart a game with backspace.<br><br>";
+    s += "You can start/restart a game with backspace.<br><br>";
+    s += "Escape closes dialogs or opens the seed picker.<br><br>";
     s += "The game ends after 50 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
 
@@ -859,6 +860,7 @@ function hide_overlay(force=false)
     {
         $('#overlay').css('display', 'none');
         $('#msg').css('display', 'none');
+        $('#msg').html('');
         msg_open = false;
         msg_closeable = false;
     }
@@ -1071,6 +1073,27 @@ function key_detection()
     { 
         var code = e.keyCode;
 
+        if(!$('input').is(':focus'))
+        {
+            if(code === 8)
+            {
+                start();
+                e.preventDefault();
+            }
+        }
+
+        else
+        {
+            if(code === 13)
+            {
+                if($('#seed_input').is(':focus'))
+                {
+                    check_seed();
+                    return;
+                }
+            }
+        }
+
         if(!msg_open)
         {
             if(code === 40 || code === 83)
@@ -1081,11 +1104,12 @@ function key_detection()
             {
                 $('body').animate({scrollTop:0}, 100, 'linear');
             }
-            if(code === 8)
+            else if(code === 27)
             {
-                start();
+                seed_picker();
             }
         }
+
         else
         {
             if(code === 27)
