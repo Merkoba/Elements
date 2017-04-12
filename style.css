@@ -293,6 +293,7 @@ b
 	border: 1px solid rgba(0,0,0,0.3);
 	border-bottom-width: 3px;
 	font-size: 0.7em;
+	cursor: pointer;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;

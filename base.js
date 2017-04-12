@@ -175,6 +175,8 @@ var highscores;
 
 var ls_highscores = "highscores_v1";
 
+var msg_closeable = false;
+
 function init()
 {
     get_speed();
@@ -189,7 +191,7 @@ function start()
 { 
     count = 0;
     stop_loop();
-    hide_overlay();
+    hide_overlay(true);
     generate_tiles();
     set_speed();
     $('#fab').html('Starting Game');
@@ -776,12 +778,12 @@ function game_ended()
     {
         if(fab > hs[0])
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>");
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('highscore');
         }
         else
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>");
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
             play('ended');
         }
 
@@ -796,7 +798,7 @@ function game_ended()
 
     else
     {
-        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>");
+        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
         play('ended');
     }
 
@@ -835,7 +837,7 @@ function lost()
 
     count = 0;
 
-    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>");
+    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
 
     fab_ended();
 
@@ -850,22 +852,46 @@ function overlay_clicked()
     })
 }
 
-function hide_overlay()
+function hide_overlay(force=false)
 {
-    $('#overlay').css('display', 'none');
-    $('#msg').css('display', 'none');
-    msg_open = false;
+    if(msg_closeable || force)
+    {
+        $('#overlay').css('display', 'none');
+        $('#msg').css('display', 'none');
+        msg_open = false;
+    }
 }
 
-function msg(txt)
+function msg(txt, temp_disable=false)
 {
     to_top();
+    
     $('#overlay').css('display', 'block');
     $('#msg').html(txt);
     $('#msg').css('display', 'block');
     $('#msg').scrollTop(0);
     $('#msg').focus();
+
+    if(temp_disable)
+    {
+        $('.dialog_btn').prop('disabled', true);
+        msg_closeable = false;
+
+        setTimeout(function()
+        {
+            $('.dialog_btn').prop('disabled', false);
+            msg_closeable = true;
+
+        }, 1000)
+    }
+
+    else
+    {
+        msg_closeable = true;
+    }
+
     msg_open = true;
+
 }
 
 function refresh()
