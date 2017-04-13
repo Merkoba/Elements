@@ -1143,6 +1143,7 @@ function stop()
     count = 0;
     stop_loop();
     stop_all_audio();
+    hide_overlay(true);
     $('#main_container').html('');
     $('#fab').html('E l e m e n t s');
     $('#counter').html('---');
