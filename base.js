@@ -847,6 +847,8 @@ function game_ended()
         play('ended');
     }
 
+    $('#start').html('Play Again');
+
     overall.sort(function(a, b)
     {
         var x=a[0];
@@ -885,6 +887,8 @@ function lost()
     msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
 
     fab_ended();
+
+    $('#start').html('Play Again');
 
     play('lost');
 }
