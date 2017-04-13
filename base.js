@@ -261,8 +261,34 @@ function generate_tiles()
 
         element.id = i;
 
-        element.profit = profits[get_random_profit_index()];
-        element.direction = directions[get_random_direction_index()];
+        if(isNaN(seed))
+        {
+            var index = 5;
+        }
+        else
+        {
+            var index = get_random_profit_index();
+        }
+
+        element.profit = profits[index];
+
+        if(isNaN(seed))
+        {
+            if(i % 2 === 0)
+            {
+                index = 1;
+            }
+            else
+            {
+                index = 0;
+            }
+        }
+        else
+        {
+            index = get_random_direction_index();
+        }
+
+        element.direction = directions[index];
 
         if(element.profit === 1000000 && element.direction === "up")
         {
@@ -608,7 +634,7 @@ function get_setting()
 
     else
     {
-        var s = "#" + seed;
+        var s = "#" + parseInt(seed);
     }
 
     s += " - " + speed;
