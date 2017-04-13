@@ -867,7 +867,24 @@ function game_ended()
             return y-x;
         });
 
-        overall.splice(10, overall.length);
+        var counted = [];
+        var ncounted = [];
+
+        for(var i=0; i<overall.length; i++)
+        {
+            if(ncounted.indexOf(overall[i][1]) === -1)
+            {
+                counted.push(overall[i]);
+                ncounted.push(overall[i][1]);
+
+                if(counted.length === 10)
+                {
+                    break;
+                }
+            }
+        }
+
+        highscores.Overall = counted;
 
         localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
