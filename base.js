@@ -1176,7 +1176,7 @@ function stop()
     hide_overlay(true);
     $('#main_container').html('');
     $('#fab').html('E l e m e n t s');
-    $('#counter').html('---');
+    $('#counter').html('');
     $('#start').html('Start');
     $('body').css('background-image', 'url(splash.jpg)');
 }
