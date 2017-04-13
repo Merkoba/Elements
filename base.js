@@ -673,8 +673,6 @@ function start_setting(setting)
 
 function show_highscores()
 {
-    var scores = get_setting_highscores();
-
     var s = "<b>High Scores</b>";
 
     s += "<div class='select-style2'><select id='hs_setting_select'>";
@@ -708,8 +706,6 @@ function show_highscores()
     }
 
     s += "</select></div><div id='scores'></div>";
-
-    scores.sort(function(a, b){return b-a});
 
     msg(s);
     
