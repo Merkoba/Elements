@@ -724,7 +724,7 @@ function show_scores(setting)
             }
         }
         
-        s += "<div id='try_again' onclick='start_setting(\"" + setting + "\")'>Try Again</div>";
+        s += "<div id='play_again' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
     }
     
     $('#scores').html(s);
@@ -895,7 +895,6 @@ function msg(txt, temp_disable=false)
     }
 
     msg_open = true;
-
 }
 
 function refresh()
