@@ -187,6 +187,18 @@ function init()
     key_detection();
 }
 
+function check_start()
+{
+    if($('#start').html() === 'Stop')
+    {
+        stop();
+    }
+    else
+    {
+        start();
+    }
+}
+
 function start()
 { 
     count = 0;
@@ -196,16 +208,13 @@ function start()
     set_speed();
     $('#fab').html('Starting Game');
     $('#counter').html('---');
-    $('#start').html('Restart');
+    $('#start').html('Stop');
     $('body').css('background-image', 'none');
     $('#main_container').focus();
     to_top();
     play('started');
 
-    if(started_timeout !== undefined)
-    {
-        clearTimeout(started_timeout)
-    }
+    clear_started();
 
     started_timeout = setTimeout(function()
     {
@@ -221,6 +230,14 @@ function start()
         loop();
 
     }, 3700);
+}
+
+function clear_started()
+{
+    if(started_timeout !== undefined)
+    {
+        clearTimeout(started_timeout)
+    }
 }
 
 function generate_tiles()
@@ -526,7 +543,7 @@ function halp()
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
     s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
-    s += "You can start/restart a game with backspace.<br><br>";
+    s += "You can start/stop a game with backspace.<br><br>";
     s += "Escape closes dialogs or opens the seed picker.<br><br>";
     s += "The game ends after 50 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
@@ -1076,8 +1093,9 @@ function key_detection()
         {
             if(code === 8)
             {
-                start();
+                check_start();
                 e.preventDefault();
+                return;
             }
         }
 
@@ -1117,4 +1135,26 @@ function key_detection()
             }
         }
     });
+}
+
+function stop()
+{
+    clear_started();
+    count = 0;
+    stop_loop();
+    stop_all_audio();
+    $('#main_container').html('');
+    $('#fab').html('E l e m e n t s');
+    $('#counter').html('---');
+    $('#start').html('Start');
+    $('body').css('background-image', 'url(splash.jpg)');
+}
+
+function stop_all_audio()
+{
+    $('audio').each(function()
+    {
+        this.pause();
+        this.currentTime = 0;
+    })
 }
