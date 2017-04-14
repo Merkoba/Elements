@@ -868,7 +868,7 @@ function game_ended()
 
         for(var i=0; i<overall.length; i++)
         {
-            if(ncounted.indexOf(overall[i][1]) === -1)
+            if(overall[i][1] === "" || ncounted.indexOf(overall[i][1]) === -1)
             {
                 counted.push(overall[i]);
                 ncounted.push(overall[i][1]);
@@ -886,7 +886,6 @@ function game_ended()
     }
 
     fab_ended();
-
 }
 
 function lost()
