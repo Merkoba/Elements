@@ -157,11 +157,13 @@ var elements = [
     }
 ];
 
+var start_fab = 1000000;
+
+var start_count = 30;
+
 var loop_timeout;
 
 var started_timeout;
-
-var fab = 1000000;
 
 var seed = -1;
 
@@ -176,6 +178,8 @@ var highscores;
 var ls_highscores = "highscores_v1";
 
 var msg_closeable = false;
+
+var linear_diff = 10000 / (start_count - 1);
 
 function init()
 {
@@ -223,12 +227,11 @@ function start()
             $(this).css('display', 'inline-block')
         });
 
-        fab = 1000000;
-        count = 30;
+        fab = start_fab;
+        count = start_count;
         update_fab();
         update_counter();
         loop();
-
     }, 3700);
 }
 
@@ -456,7 +459,7 @@ function loop()
         {
             if(speed === "Linear")
             {
-                loop_speed -= 204.0816326530612;
+                loop_speed -= linear_diff;
             }
 
             loop();
