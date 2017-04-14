@@ -608,20 +608,18 @@ function get_highscores()
     }
 }
 
-function get_setting_highscores()
+function get_setting_highscores(setting)
 {
-    var s = get_setting();
+    var scores = highscores[setting];
 
-    var hs = highscores[s];
-
-    if(hs === undefined)
+    if(scores === undefined)
     {
-        highscores[s] = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
-        return highscores[s];
+        highscores[setting] = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
+        return highscores[setting];
     }
     else
     {
-        return hs;
+        return scores;
     }
 }
 
@@ -724,14 +722,7 @@ function show_highscores()
 
 function show_scores(setting)
 {
-    if(highscores[setting] === undefined)
-    {
-        var scores = get_setting_highscores();
-    }
-    else
-    {
-        var scores = highscores[setting];
-    }
+    var scores = get_setting_highscores(setting);
 
     var s = "";
 
@@ -840,7 +831,8 @@ function lost()
 
 function game_ended()
 {
-    var hs = get_setting_highscores();
+    var setting = get_setting();
+    var hs = get_setting_highscores(setting);
     var overall = highscores.Overall;
 
     if(fab > hs[hs.length -1])
@@ -882,7 +874,7 @@ function game_ended()
 
     if(fab > overall[overall.length -1][0])
     {
-        overall.push([fab, get_setting()]);
+        overall.push([fab, setting]);
 
         overall.sort(function(a, b)
         {
