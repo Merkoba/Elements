@@ -224,7 +224,7 @@ function start()
         });
 
         fab = 1000000;
-        count = 50;
+        count = 30;
         update_fab();
         update_counter();
         loop();
@@ -571,7 +571,7 @@ function halp()
     s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
     s += "You can start/stop a game with backspace.<br><br>";
     s += "Escape closes dialogs or opens the seed picker.<br><br>";
-    s += "The game ends after 50 ticks have passed.<br><br>";
+    s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
 
 	msg(s);
@@ -810,6 +810,23 @@ function set_speed()
     }
 }
 
+function lost()
+{
+    count -= 1;
+
+    update_counter();
+
+    count = 0;
+
+    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
+
+    fab_ended();
+
+    $('#start').html('Play Again');
+
+    play('lost');
+}
+
 function game_ended()
 {
     var hs = get_setting_highscores();
@@ -824,7 +841,7 @@ function game_ended()
         }
         else
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('ended');
         }
 
@@ -886,23 +903,6 @@ function game_ended()
     }
 
     fab_ended();
-}
-
-function lost()
-{
-    count -= 1;
-
-    update_counter();
-
-    count = 0;
-
-    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
-
-    fab_ended();
-
-    $('#start').html('Play Again');
-
-    play('lost');
 }
 
 function overlay_clicked()
