@@ -6,6 +6,7 @@ body, html
 	padding: 0;
 	height: 100%;
 	width: 100%;
+	color: #000000;
 }
 
 body
@@ -338,4 +339,9 @@ b
 .clickable_score
 {
 	cursor: pointer;
+}
+
+a:hover, a:visited, a:link
+{
+	color: #000000;
 }

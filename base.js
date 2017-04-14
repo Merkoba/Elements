@@ -1,3 +1,5 @@
+var version = "1.0";
+
 var elements = [
     {
         "name": "Adamant",
@@ -551,9 +553,9 @@ function decrease_counter()
     }
 }
 
-function halp()
+function instructions()
 {
-    s = "<b>Instructions</b><br><br>"
+    var s = "<b>Instructions</b><br><br>"
 	s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
     s += "You lose points when you own elements that have a negative profit.<br><br>";
@@ -571,13 +573,32 @@ function halp()
     s += "You can change the speed of the game which changes the interval between ticks."
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
-    s += "You can use upArrow or W to scroll to the top. And downArrow or S to scroll to the bottom.<br><br>";
-    s += "You can start/stop a game with backspace.<br><br>";
-    s += "Escape closes dialogs or opens the seed picker.<br><br>";
     s += "The game ends after 30 ticks have passed.<br><br>";
-    s += "If you get to 0 or less points you lose.<br><br>";
+    s += "If you get to 0 or less points you lose.";
 
-	msg(s);
+    msg(s);
+}
+
+function shortcuts()
+{
+    var s = "<b>Shortcuts</b><br><br>"
+    s += "You can use UpArrow or W to scroll to the top. And DownArrow or S to scroll to the bottom.<br><br>";
+    s += "You can start/stop a game with Backspace.<br><br>";
+    s += "Escape closes dialogs or opens the seed picker.<br><br>";
+    s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
+    s += "You can select a seed with Enter when the seed picker input is focused.";
+
+    msg(s);
+}
+
+function about()
+{
+    var s = "<b>About</b><br><br>"
+    s += "Idea and development by madprops<br><br>"
+    s += "Version " + version + "<br><br>"
+    s += "<a target='_blank' href='http://merkoba.com'>http://merkoba.com</a>"
+
+    msg(s);
 }
 
 function get_highscores()
@@ -1207,3 +1228,12 @@ function stop_all_audio()
         this.currentTime = 0;
     })
 } 
+
+function info()
+{
+    var s = "<button class='dialog_btn' onclick='instructions()'>Instructions</button><br><br>";
+    s += "<button class='dialog_btn' onclick='shortcuts()'>Shortcuts</button><br><br>";
+    s += "<button class='dialog_btn' onclick='about()'>About</button>";
+
+    msg(s);
+}
