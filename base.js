@@ -331,7 +331,7 @@ function generate_tiles()
 
     $('.element_container').each(function()
     {
-        $(this).click(function()
+        $(this).mousedown(function()
         {
             if(count > 0)
             {
@@ -1206,4 +1206,4 @@ function stop_all_audio()
         this.pause();
         this.currentTime = 0;
     })
-}
+} 
