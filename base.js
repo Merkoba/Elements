@@ -681,9 +681,14 @@ function show_highscores()
 
     var keys = Object.keys(highscores);
 
-    keys.sort();
-
     var setting = get_setting();
+    
+    if(keys.indexOf(setting) === -1)
+    {
+        keys.push(setting);
+    }
+
+    keys.sort();
 
     for(var i=0; i<keys.length; i++)
     {
@@ -719,7 +724,14 @@ function show_highscores()
 
 function show_scores(setting)
 {
-    var scores = highscores[setting];
+    if(highscores[setting] === undefined)
+    {
+        var scores = get_setting_highscores();
+    }
+    else
+    {
+        var scores = highscores[setting];
+    }
 
     var s = "";
 
@@ -729,7 +741,6 @@ function show_scores(setting)
         {
             var hs = scores[i][0];
             var ss = scores[i][1];
-
 
             if(hs === -99999)
             {
