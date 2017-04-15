@@ -1,161 +1,161 @@
-var version = "1.1";
+var version = "1.2";
 
 var elements = [
     {
-        "name": "Adamant",
+        "name": "Adamant"
     },
     {
-        "name": "Adamantite",
+        "name": "Adamantite"
     },
     {
-        "name": "Adamantium",
+        "name": "Adamantium"
     },
     {
-        "name": "Nth Metal",
+        "name": "Administratium"
     },
     {
-        "name": "Administratium",
+        "name": "Administrontium"
     },
     {
-        "name": "Administrontium",
+        "name": "Aether"
     },
     {
-        "name": "Aether",
+        "name": "Australium"
     },
     {
-        "name": "Australium",
+        "name": "Badassium"
     },
     {
-        "name": "Badassium",
+        "name": "Bavarium"
     },
     {
-        "name": "Bavarium",
+        "name": "Bombastium"
     },
     {
-        "name": "Bombastium",
+        "name": "Bureaucratium"
     },
     {
-        "name": "Bureaucratium",
+        "name": "Byzanium"
     },
     {
-        "name": "Byzanium",
+        "name": "Carbonadium"
     },
     {
-        "name": "Cobalt Thorium G",
+        "name": "Cavorite"
     },
     {
-        "name": "Carbonadium",
+        "name": "Chronoton"
     },
     {
-        "name": "Cavorite",
+        "name": "Cobalt Thorium G"
     },
     {
-        "name": "Chronoton",
+        "name": "Collapsium"
     },
     {
-        "name": "Collapsium",
+        "name": "Dilithium"
     },
     {
-        "name": "Dilithium",
+        "name": "Divinium (E115)"
     },
     {
-        "name": "Divinium (E115)",
+        "name": "Duranium"
     },
     {
-        "name": "Duranium",
+        "name": "Durium"
     },
     {
-        "name": "Durium",
+        "name": "Dust"
     },
     {
-        "name": "Dust",
+        "name": "Element 99"
     },
     {
-        "name": "Element Zero",
+        "name": "Element Zero"
     },
     {
-        "name": "Element 99",
+        "name": "Feminum"
     },
     {
-        "name": "Feminum",
+        "name": "Frinkonium"
     },
     {
-        "name": "Frinkonium",
+        "name": "Harbenite"
     },
     {
-        "name": "Harbenite",
+        "name": "Ice-Nine"
     },
     {
-        "name": "Ice-Nine",
+        "name": "Katchin"
     },
     {
-        "name": "Katchin",
+        "name": "Kryptonite"
     },
     {
-        "name": "Kryptonite",
+        "name": "Meteorillium"
     },
     {
-        "name": "Meteorillium",
+        "name": "Mithril"
     },
     {
-        "name": "Mithril",
+        "name": "Nth Metal"
     },
     {
-        "name": "Octiron",
+        "name": "Octiron"
     },
     {
-        "name": "Orichalcum",
+        "name": "Orichalcum"
     },
     {
-        "name": "Polydenum",
+        "name": "Polydenum"
     },
     {
-        "name": "Quadium",
+        "name": "Quadium"
     },
     {
-        "name": "Radium X",
+        "name": "Radium X"
     },
     {
-        "name": "Rearden Metal",
+        "name": "Rearden Metal"
     },
     {
-        "name": "Redstone",
+        "name": "Redstone"
     },
     {
-        "name": "Scrith",
+        "name": "Scrith"
     },
     {
-        "name": "Timonium",
+        "name": "Timonium"
     },
     {
-        "name": "Transformium",
+        "name": "Transformium"
     },
     {
-        "name": "Tritanium",
+        "name": "Tritanium"
     },
     {
-        "name": "Unobtanium",
+        "name": "Unobtanium"
     },
     {
-        "name": "Uridium",
+        "name": "Uridium"
     },
     {
-        "name": "Uru",
+        "name": "Uru"
     },
     {
-        "name": "Verterium",
+        "name": "Verterium"
     },
     {
-        "name": "Vibranium",
+        "name": "Vibranium"
     },
     {
-        "name": "Wishalloy",
+        "name": "Wishalloy"
     },
     {
-        "name": "Xirdalium",
+        "name": "Xirdalium"
     },
     {
-        "name": "Xithricite",
+        "name": "Xithricite"
     }
 ];
 
