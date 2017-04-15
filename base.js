@@ -1,4 +1,4 @@
-var version = "1.0";
+var version = "1.1";
 
 var elements = [
     {
@@ -844,7 +844,7 @@ function lost()
 
     count = 0;
 
-    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
+    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
 
     fab_ended();
 
@@ -865,25 +865,31 @@ function game_ended()
         {
             msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('highscore');
+
+            hs.push(fab);
+            hs.sort(function(a, b){return b-a});
+            hs.splice(10, hs.length);
+            localStorage.setItem(ls_highscores, JSON.stringify(highscores));
         }
+
         else
         {
             msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('ended');
+            
+            if(hs.indexOf(fab) === -1)
+            {
+                hs.push(fab);
+                hs.sort(function(a, b){return b-a});
+                hs.splice(10, hs.length);
+                localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+            }
         }
-
-        hs.push(fab);
-
-        hs.sort(function(a, b){return b-a});
-
-        hs.splice(10, hs.length);
-
-        localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
     else
     {
-        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>", true);
+        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
         play('ended');
     }
 
