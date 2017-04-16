@@ -345,3 +345,17 @@ a:hover, a:visited, a:link
 {
 	color: #000000;
 }
+
+table 
+{
+	text-align: center;
+	margin-left: auto;
+    margin-right: auto;
+    font-size: 1em;
+}
+
+th, td 
+{
+    border: 1px solid grey;
+    padding: 0.4em;
+}

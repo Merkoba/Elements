@@ -1,4 +1,4 @@
-var version = "1.2";
+var version = "2.1";
 
 var elements = [
     {
@@ -354,11 +354,30 @@ function patent_btn_events(parent)
     {
         if(element.profit <= 0)
         {
-            var price = 100000;
+            var price = Math.abs(element.profit);
         }
         else
         {
-            var price = element.profit * 4;
+            if(element.profit === 200000)
+            {
+                var price = element.profit;
+            }
+            else if(element.profit === 400000)
+            {
+                var price = element.profit * 2;
+            }
+            else if(element.profit === 600000)
+            {
+                var price = element.profit * 3;
+            }
+            else if(element.profit === 800000)
+            {
+                var price = element.profit * 4;
+            }
+            else if(element.profit === 1000000)
+            {
+                var price = element.profit * 5;
+            }
         }
 
         if(fab < price)
@@ -379,11 +398,30 @@ function patent_btn_events(parent)
     {
         if(element.profit <= 0)
         {
-            var price = 100000;
+            var price = 0;
         }
         else
         {
-            var price = element.profit * 4;
+            if(element.profit === 200000)
+            {
+                var price = element.profit;
+            }
+            else if(element.profit === 400000)
+            {
+                var price = element.profit * 2;
+            }
+            else if(element.profit === 600000)
+            {
+                var price = element.profit * 3;
+            }
+            else if(element.profit === 800000)
+            {
+                var price = element.profit * 4;
+            }
+            else if(element.profit === 1000000)
+            {
+                var price = element.profit * 5;
+            }
         }
 
         fab += price;
@@ -559,22 +597,21 @@ function instructions()
 	s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
     s += "You lose points when you own elements that have a negative profit.<br><br>";
-    s += "You own an element by buying its patent. The price is 4 times its current profit.<br><br>";
+    s += "You own an element by buying its patent.<br><br>";
     s += "You are only able to buy patents you can afford.<br><br>";
     s += "Point earnings or losses of owned patents only occurs after each tick.<br><br>";
-    s += "You can sell the patent of an element and get 4 times its current profit.<br><br>";
-	s += "Selling high profit patents is a major source of points.<br><br>";
-    s += "If you buy a patent and it has 0 or negative profit it will cost 100,000.<br><br>";
-    s += "When you sell a patent and it has 0 or negative profit you will get 100,000.<br><br>";
+    s += "The prices for each profit point are shown in the table below:<br><br>";
+    s += "<table cellspacing=0><tr><th>Profit</th><th>Buy Price</th><th>Sell Price</th></tr><tr><td>-1,000,000</td><td>1,000,000</td><td>0</td></tr><tr><td>-800,000</td><td>800,000</td><td>0</td></tr><tr><td>-600,000</td><td>600,000</td><td>0</td></tr><tr><td>-400,000</td><td>400,000</td><td>0</td></tr><tr><td>-200,000</td><td>200,000</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>200,000</td><td>200,000 x 5</td><td>200,000</td></tr><tr><td>400,000</td><td>400,000 x 5</td><td>400,000 x 2</td></tr><tr><td>600,000</td><td>600,000 x 5</td><td>600,000 x 3</td></tr><tr><td>800,000</td><td>800,000 x 5</td><td>800,000 x 4</td></tr><tr><td>1,000,000</td><td>1,000,000 x 5</td><td>1,000,000 x 5</td></tr></table><br>";
+    s += "Buying low and selling high is a major source of points.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
-    s += "Changes in profit are either +200,000 or -200,000.<br><br>";
-	s += "You can click any part of the tile to buy or sell not just the button.<br><br>";
+    s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
+    s += "You can click any part of the tile to buy or sell not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can change the speed of the game which changes the interval between ticks."
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
     s += "The game ends after 30 ticks have passed.<br><br>";
-    s += "If you get to 0 or less points you lose.";
+    s += "If you get to 0 or less points you lose.<br><br>";
 
     msg(s);
 }
