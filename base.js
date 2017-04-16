@@ -1,4 +1,4 @@
-var version = "2.1";
+var version = "2.2";
 
 var elements = [
     {
@@ -360,19 +360,19 @@ function patent_btn_events(parent)
         {
             if(element.profit === 200000)
             {
-                var price = element.profit;
+                var price = element.profit * 5;
             }
             else if(element.profit === 400000)
             {
-                var price = element.profit * 2;
+                var price = element.profit * 5;
             }
             else if(element.profit === 600000)
             {
-                var price = element.profit * 3;
+                var price = element.profit * 5;
             }
             else if(element.profit === 800000)
             {
-                var price = element.profit * 4;
+                var price = element.profit * 5;
             }
             else if(element.profit === 1000000)
             {
