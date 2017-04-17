@@ -1,4 +1,4 @@
-var version = "2.2";
+var version = "2.3";
 
 var elements = [
     {
@@ -383,7 +383,7 @@ function patent_btn_events(parent)
         }
         else
         {
-            var price = element.profit * (element.profit / 100000) / 2;
+            var price = element.profit * (element.profit / 200000);
         }
 
         fab += price;
