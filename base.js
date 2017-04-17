@@ -1,4 +1,4 @@
-var version = "2.3";
+var version = "2.4";
 
 var elements = [
     {
@@ -767,8 +767,9 @@ function show_scores(setting)
                 s += "<div class='setting_small'>" + ss + "</div>";
                 s += format(hs) + "</span><br><br>";
             }
-
         }    
+        
+        s += "<div id='play_again' onclick='clear_highscores()'>Clear High Scores</div>";
     }
     
     else
@@ -1241,4 +1242,16 @@ function info()
     s += "<button class='dialog_btn' onclick='about()'>About</button>";
 
     msg(s);
+}
+
+function clear_highscores()
+{
+    var conf = confirm("This will delete all your high scores. Are you sure?");
+
+    if(conf) 
+    {
+        localStorage.removeItem(ls_highscores);
+        get_highscores();
+        show_highscores();
+    } 
 }
