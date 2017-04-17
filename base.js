@@ -383,26 +383,7 @@ function patent_btn_events(parent)
         }
         else
         {
-            if(element.profit === 200000)
-            {
-                var price = element.profit;
-            }
-            else if(element.profit === 400000)
-            {
-                var price = element.profit * 2;
-            }
-            else if(element.profit === 600000)
-            {
-                var price = element.profit * 3;
-            }
-            else if(element.profit === 800000)
-            {
-                var price = element.profit * 4;
-            }
-            else if(element.profit === 1000000)
-            {
-                var price = element.profit * 5;
-            }
+            var price = element.profit * (element.profit / 100000) / 2;
         }
 
         fab += price;
