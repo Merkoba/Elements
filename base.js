@@ -1,4 +1,4 @@
-var version = "2.4";
+var version = "2.5";
 
 var elements = [
     {
@@ -188,7 +188,6 @@ function init()
     get_speed();
     speed_changed();
     get_seed();
-    get_highscores();
     overlay_clicked();
     key_detection();
 }
@@ -694,6 +693,8 @@ function start_setting(setting)
 
 function show_highscores()
 {
+    get_highscores();
+
     var s = "<b>High Scores</b>";
 
     s += "<div class='select-style2'><select id='hs_setting_select'>";
@@ -855,6 +856,8 @@ function lost()
 
 function game_ended()
 {
+    get_highscores();
+
     var setting = get_setting();
     var hs = get_setting_highscores(setting);
     var overall = highscores.Overall;
@@ -1251,7 +1254,6 @@ function clear_highscores()
     if(conf) 
     {
         localStorage.removeItem(ls_highscores);
-        get_highscores();
         show_highscores();
     } 
 }
