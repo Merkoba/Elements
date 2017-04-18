@@ -1,4 +1,4 @@
-var version = "2.5";
+var version = "2.6";
 
 var elements = [
     {
@@ -568,9 +568,10 @@ function instructions()
     s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
     s += "You can click any part of the tile to buy or sell not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
-    s += "You can change the speed of the game which changes the interval between ticks."
+    s += "You can change the speed of the game which changes the interval between ticks.";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
+    s += "Try changing the zoom level of the browser to get a comfortable grid.<br><br>"
     s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
 
@@ -1193,11 +1194,11 @@ function key_detection()
         {
             if(code === 40 || code === 83)
             {
-                $('body').animate({scrollTop:$(document).height() - $(window).height()}, 100, 'linear');
+                $('body').scrollTop($(document).height() - $(window).height());
             }
             else if(code === 38 || code === 87)
             {
-                $('body').animate({scrollTop:0}, 100, 'linear');
+                $('body').scrollTop(0);
             }
             else if(code === 27)
             {
