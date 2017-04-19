@@ -1,4 +1,4 @@
-var version = "3.0";
+var version = "3.1";
 
 var elements = [
     {
@@ -214,7 +214,10 @@ function start()
     stop_loop();
     hide_overlay(true);
     generate_tiles();
-    fit();
+    if(options.fit)
+    {
+        fit();
+    }
     set_speed();
     $('#fab').html('Starting Game');
     $('#counter').html('---');
@@ -349,20 +352,17 @@ function generate_tiles()
 
 function fit()
 {
-    var size = '1';
+    var size = 1;
 
     $('#main_container').css('font-size', size + 'em');
 
-    if(options.fit)
+    for(var i=0; i<20; i++)
     {
-        for(var i=0; i<10; i++)
+        if(document.body.scrollHeight > document.body.clientHeight)
         {
-            if(window.innerWidth > document.documentElement.clientWidth)
-            {
-                size -= 0.05;
-                
-                $('#main_container').css('font-size', size + 'em');
-            }
+            size -= 0.025;
+            
+            $('#main_container').css('font-size', size + 'em');
         }
     }
 }
@@ -649,7 +649,15 @@ function show_options()
     {
         options.fit = $(this).prop('checked');
         localStorage.setItem(ls_options, JSON.stringify(options));
-        fit();
+
+        if(options.fit)
+        {
+            fit();
+        }
+        else
+        {
+            $('#main_container').css('font-size', '1em');
+        }
     })
 }
 
@@ -1340,6 +1348,9 @@ function resize_events()
 {
     $(window).resize(function()
     {
-        resize_timer();
+        if(options.fit)
+        {
+            resize_timer();
+        }
     })
 }
