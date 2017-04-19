@@ -352,17 +352,20 @@ function generate_tiles()
 
 function fit()
 {
-    var size = 1;
-
-    $('#main_container').css('font-size', size + 'em');
-
-    for(var i=0; i<20; i++)
+    if($('#main_container').html() !== "")
     {
-        if(document.body.scrollHeight > document.body.clientHeight)
+        var size = 1;
+
+        $('#main_container').css('font-size', size + 'em');
+
+        for(var i=0; i<20; i++)
         {
-            size -= 0.025;
-            
-            $('#main_container').css('font-size', size + 'em');
+            if(document.body.scrollHeight > document.body.clientHeight)
+            {
+                size -= 0.025;
+                
+                $('#main_container').css('font-size', size + 'em');
+            }
         }
     }
 }
