@@ -1,4 +1,4 @@
-var version = "2.6";
+var version = "3.0";
 
 var elements = [
     {
@@ -179,6 +179,8 @@ var highscores;
 
 var ls_highscores = "highscores_v1";
 
+var ls_options = "options_v1";
+
 var msg_closeable = false;
 
 var linear_diff = 10000 / (start_count - 1);
@@ -186,10 +188,12 @@ var linear_diff = 10000 / (start_count - 1);
 function init()
 {
     get_speed();
+    get_options();
     speed_changed();
     get_seed();
     overlay_clicked();
     key_detection();
+    resize_events();
 }
 
 function check_start()
@@ -210,6 +214,7 @@ function start()
     stop_loop();
     hide_overlay(true);
     generate_tiles();
+    fit();
     set_speed();
     $('#fab').html('Starting Game');
     $('#counter').html('---');
@@ -340,6 +345,26 @@ function generate_tiles()
             }
         })
     });    
+}
+
+function fit()
+{
+    var size = '1';
+
+    $('#main_container').css('font-size', size + 'em');
+
+    if(options.fit)
+    {
+        for(var i=0; i<10; i++)
+        {
+            if(window.innerWidth > document.documentElement.clientWidth)
+            {
+                size -= 0.05;
+                
+                $('#main_container').css('font-size', size + 'em');
+            }
+        }
+    }
 }
 
 function patent_btn_events(parent)
@@ -554,7 +579,7 @@ function decrease_counter()
 
 function instructions()
 {
-    var s = "<b>Instructions</b><br><br>"
+    var s = "<b>Instructions</b><br><br>";
 	s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
     s += "You lose points when you own elements that have a negative profit.<br><br>";
@@ -572,7 +597,7 @@ function instructions()
     s += "You can change the speed of the game which changes the interval between ticks.";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
-    s += "Try changing the zoom level of the browser to get a comfortable grid.<br><br>"
+    s += "You can enable or disable automatic grid resizing to fit your window.<br><br>"
     s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
 
@@ -581,7 +606,7 @@ function instructions()
 
 function shortcuts()
 {
-    var s = "<b>Shortcuts</b><br><br>"
+    var s = "<b>Shortcuts</b><br><br>";
     s += "You can use UpArrow or W to scroll to the top. And DownArrow or S to scroll to the bottom.<br><br>";
     s += "You can start/stop a game with Backspace.<br><br>";
     s += "Escape closes dialogs or opens the seed picker.<br><br>";
@@ -589,6 +614,43 @@ function shortcuts()
     s += "You can select a seed with Enter when the seed picker input is focused.";
 
     msg(s);
+}
+
+function get_options()
+{
+    options = JSON.parse(localStorage.getItem(ls_options));
+
+    if(options === null)
+    {
+        options = {fit: true}
+        localStorage.setItem(ls_options, JSON.stringify(options));
+    }
+}
+
+function show_options()
+{
+    var s = "<b>Options</b><br><br>";
+
+    s += "Automatically fit grid<br><br>";
+
+    if(options.fit)
+    {
+        s += "<input id='chk_fit' type='checkbox' checked>";
+    }
+
+    else
+    {
+        s += "<input id='chk_fit' type='checkbox'>";
+    }
+
+    msg(s);
+
+    $('#chk_fit').change(function()
+    {
+        options.fit = $(this).prop('checked');
+        localStorage.setItem(ls_options, JSON.stringify(options));
+        fit();
+    })
 }
 
 function about()
@@ -1244,6 +1306,7 @@ function info()
 {
     var s = "<button class='dialog_btn' onclick='instructions()'>Instructions</button><br><br>";
     s += "<button class='dialog_btn' onclick='shortcuts()'>Shortcuts</button><br><br>";
+    s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
     s += "<button class='dialog_btn' onclick='about()'>About</button>";
 
     msg(s);
@@ -1258,4 +1321,25 @@ function clear_highscores()
         localStorage.removeItem(ls_highscores);
         show_highscores();
     } 
+}
+
+var resize_timer = (function() 
+{
+    var timer; 
+    return function() 
+    {
+        clearTimeout(timer);
+        timer = setTimeout(function() 
+        {
+            fit();
+        }, 350);
+    };
+})();
+
+function resize_events()
+{
+    $(window).resize(function()
+    {
+        resize_timer();
+    })
 }

@@ -161,7 +161,7 @@ body
 	display: inline-block;
 	padding: 3.5em;
 	padding-top: 2.5em;
-	border: 2px solid #4a4a4a;
+	border: 0.14em solid #4a4a4a;
 	text-align: center;
 	height: 7em;
 	overflow: hidden;
@@ -195,9 +195,9 @@ body
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	padding: 0.7em;
-	border-radius: 5px;
-	border: 1px solid rgba(0,0,0,0.3);
-	border-bottom-width: 3px;
+	border-radius: 0.4em;
+	border: 0.15em solid rgba(0,0,0,0.3);
+	border-bottom-width: 0.2em;
 	font-size: 0.7em;
 	cursor: pointer;
 	outline: 0;
@@ -228,8 +228,8 @@ body
 .btn_sell
 {
 	background-color: #699DB6;
-	border-color: rgba(0,0,0,0.3);
-	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+/*	border-color: rgba(0,0,0,0.3);*/
+	text-shadow: 0 0.1em 0 rgba(0,0,0,0.5);
 	color: #FFF;
 }
 
@@ -358,4 +358,10 @@ th, td
 {
     border: 1px solid grey;
     padding: 0.4em;
+}
+
+input[type="checkbox"]
+{
+	width: 2em;
+	height: 2em;
 }
