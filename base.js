@@ -1,4 +1,4 @@
-var version = "3.1";
+var version = "3.2";
 
 var elements = [
     {
@@ -179,7 +179,7 @@ var highscores;
 
 var ls_highscores = "highscores_v1";
 
-var ls_options = "options_v1";
+var ls_options = "options_v2";
 
 var msg_closeable = false;
 
@@ -597,10 +597,9 @@ function instructions()
     s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
     s += "You can click any part of the tile to buy or sell not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
-    s += "You can change the speed of the game which changes the interval between ticks.";
+    s += "You can change the speed of the game which changes the interval between ticks.<br><br>";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
-    s += "You can enable or disable automatic grid resizing to fit your window.<br><br>"
     s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get to 0 or less points you lose.<br><br>";
 
@@ -625,7 +624,7 @@ function get_options()
 
     if(options === null)
     {
-        options = {fit: true}
+        options = {fit: true, sounds: true}
         localStorage.setItem(ls_options, JSON.stringify(options));
     }
 }
@@ -646,6 +645,18 @@ function show_options()
         s += "<input id='chk_fit' type='checkbox'>";
     }
 
+    s += "<br><br>Enable sounds<br><br>";
+
+    if(options.sounds)
+    {
+        s += "<input id='chk_sounds' type='checkbox' checked>";
+    }
+
+    else
+    {
+        s += "<input id='chk_sounds' type='checkbox'>";
+    }
+
     msg(s);
 
     $('#chk_fit').change(function()
@@ -661,7 +672,18 @@ function show_options()
         {
             $('#main_container').css('font-size', '1em');
         }
-    })
+    });
+
+    $('#chk_sounds').change(function()
+    {
+        options.sounds = $(this).prop('checked');
+        localStorage.setItem(ls_options, JSON.stringify(options));
+
+        if(!options.sounds)
+        {
+            stop_all_audio();
+        }
+    });
 }
 
 function about()
@@ -1074,7 +1096,7 @@ function refresh()
 
 function play(what)
 {
-    if(document.hasFocus())
+    if(options.sounds && document.hasFocus())
     {
         $('#' + what)[0].pause();
         $('#' + what)[0].currentTime = 0;
