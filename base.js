@@ -573,10 +573,7 @@ function decrease_counter()
     }
     else
     {
-        if(document.hasFocus())
-        {
-            play('pup');
-        }
+        play('pup');
     }
 }
 
