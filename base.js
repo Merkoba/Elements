@@ -1,4 +1,4 @@
-var version = "3.3";
+var version = "4.0";
 
 var elements = [
     {
@@ -177,7 +177,7 @@ var msg_open = false;
 
 var highscores;
 
-var ls_highscores = "highscores_v1";
+var ls_highscores = "highscores_v2";
 
 var ls_options = "options_v2";
 
@@ -699,7 +699,13 @@ function get_highscores()
 
     if(highscores === null)
     {
-        highscores = {Overall:[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']]};
+        highscores = {
+            "Overall":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
+            "Overall - Slow":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
+            "Overall - Normal":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
+            "Overall - Fast":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
+            "Overall - Linear":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']]
+        };
         localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
@@ -709,7 +715,7 @@ function get_highscores()
 
         for(var i=0; i<keys.length; i++)
         {
-            if(keys[i] === "Overall")
+            if(keys[i].indexOf("Overall") !== -1)
             {
                 continue;
             }
@@ -794,6 +800,10 @@ function show_highscores()
     s += "<div class='select-style2'><select id='hs_setting_select'>";
 
     s += "<option value='Overall'>Overall</option>";
+    s += "<option value='Overall - Slow'>Overall - Slow</option>";
+    s += "<option value='Overall - Normal'>Overall - Normal</option>";
+    s += "<option value='Overall - Fast'>Overall - Fast</option>";
+    s += "<option value='Overall - Linear'>Overall - Linear</option>";
 
     var keys = Object.keys(highscores);
 
@@ -810,7 +820,7 @@ function show_highscores()
     {
         var key = keys[i];
 
-        if(key === "Overall")
+        if(key.indexOf("Overall") !== -1)
         {
             continue;
         }
@@ -844,7 +854,7 @@ function show_scores(setting)
 
     var s = "";
 
-    if(setting === "Overall")
+    if(setting.indexOf("Overall") !== -1)
     {
         for(var i=0; i<scores.length; i++)
         {
@@ -853,18 +863,26 @@ function show_scores(setting)
 
             if(hs === -99999)
             {
-                s += "----<br><br>";
+                s += "----";
             }
 
             else
             {
                 s += "<span class='clickable_score' onclick='show_scores(\"" + ss + "\")'>";
                 s += "<div class='setting_small'>" + ss + "</div>";
-                s += format(hs) + "</span><br><br>";
+                s += format(hs) + "</span>";
+            }
+
+            if(i < scores.length - 1)
+            {
+                s += "<br><br>";
             }
         }    
         
-        s += "<div id='play_again' onclick='clear_highscores()'>Clear High Scores</div>";
+        if(setting === "Overall")
+        {
+            s += "<br><br><div id='play_again' onclick='clear_highscores()'>Clear High Scores</div>";
+        }
     }
     
     else
@@ -955,6 +973,7 @@ function game_ended()
     var setting = get_setting();
     var hs = get_setting_highscores(setting);
     var overall = highscores.Overall;
+    var overall_speed = highscores["Overall - " + speed];
 
     if(fab > hs[hs.length -1])
     {
@@ -998,6 +1017,39 @@ function game_ended()
         var y=b[0];
         return y-x;
     });
+
+    if(fab > overall_speed[overall_speed.length -1][0])
+    {
+        overall_speed.push([fab, setting]);
+
+        overall_speed.sort(function(a, b)
+        {
+            var x=a[0];
+            var y=b[0];
+            return y-x;
+        });
+
+        var counted = [];
+        var ncounted = [];
+
+        for(var i=0; i<overall_speed.length; i++)
+        {
+            if(overall_speed[i][1] === "" || ncounted.indexOf(overall_speed[i][1]) === -1)
+            {
+                counted.push(overall_speed[i]);
+                ncounted.push(overall_speed[i][1]);
+
+                if(counted.length === 10)
+                {
+                    break;
+                }
+            }
+        }
+
+        highscores["Overall - " + speed] = counted;
+
+        localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+    }
 
     if(fab > overall[overall.length -1][0])
     {
@@ -1075,7 +1127,7 @@ function msg(txt, temp_disable=false)
             $('.dialog_btn').prop('disabled', false);
             msg_closeable = true;
 
-        }, 1000)
+        }, 800)
     }
 
     else
