@@ -1,4 +1,4 @@
-var version = "4.0";
+var version = "5.0";
 
 var elements = [
     {
@@ -179,11 +179,15 @@ var highscores;
 
 var ls_highscores = "highscores_v2";
 
-var ls_options = "options_v2";
+var ls_options = "options_v3";
 
 var msg_closeable = false;
 
 var linear_diff = 10000 / (start_count - 1);
+
+var count = 0;
+
+var music_fadeout_interval;
 
 function init()
 {
@@ -194,6 +198,7 @@ function init()
     overlay_clicked();
     key_detection();
     resize_events();
+    music_control();
 }
 
 function check_start()
@@ -214,18 +219,31 @@ function start()
     stop_loop();
     hide_overlay(true);
     generate_tiles();
+
     if(options.fit)
     {
         fit();
     }
+
     set_speed();
+
     $('#fab').html('Starting Game');
     $('#counter').html('---');
     $('#start').html('Stop');
     $('body').css('background-image', 'none');
     $('#main_container').focus();
+
     to_top();
+
     play('started');
+
+    if(music_fadeout_interval !== undefined)
+    {
+        clearInterval(music_fadeout_interval);
+    }
+
+    $('#music')[0].volume = 1;
+    play('music');
 
     clear_started();
 
@@ -621,7 +639,7 @@ function get_options()
 
     if(options === null)
     {
-        options = {fit: true, sounds: true}
+        options = {fit: true, sounds: true, music: true}
         localStorage.setItem(ls_options, JSON.stringify(options));
     }
 }
@@ -642,7 +660,7 @@ function show_options()
         s += "<input id='chk_fit' type='checkbox'>";
     }
 
-    s += "<br><br>Enable sounds<br><br>";
+    s += "<br><br><br>Enable sounds<br><br>";
 
     if(options.sounds)
     {
@@ -652,6 +670,18 @@ function show_options()
     else
     {
         s += "<input id='chk_sounds' type='checkbox'>";
+    }
+
+    s += "<br><br><br>Enable music<br><br>";
+
+    if(options.music)
+    {
+        s += "<input id='chk_music' type='checkbox' checked>";
+    }
+
+    else
+    {
+        s += "<input id='chk_music' type='checkbox'>";
     }
 
     msg(s);
@@ -678,7 +708,25 @@ function show_options()
 
         if(!options.sounds)
         {
-            stop_all_audio();
+            stop_all_sounds();
+        }
+    });
+
+    $('#chk_music').change(function()
+    {
+        options.music = $(this).prop('checked');
+        localStorage.setItem(ls_options, JSON.stringify(options));
+
+        if(!options.music)
+        {
+            stop_the_music();
+        }
+        else
+        {
+            if($('#main_container').html() !== "" && $('#music')[0].volume > 0)
+            {
+                play('music');
+            }
         }
     });
 }
@@ -951,6 +999,8 @@ function set_speed()
 
 function lost()
 {
+    start_music_fadeout();
+
     count -= 1;
 
     update_counter();
@@ -968,6 +1018,8 @@ function lost()
 
 function game_ended()
 {
+    start_music_fadeout();
+
     get_highscores();
 
     var setting = get_setting();
@@ -1145,12 +1197,61 @@ function refresh()
 
 function play(what)
 {
-    if(options.sounds && document.hasFocus())
+    if(what === "music")
+    {
+        if(options.music)
+        {
+            $('#music')[0].pause();
+            $('#music')[0].currentTime = 0;
+            $('#music')[0].play();
+        }
+    }
+
+    else if(options.sounds)
     {
         $('#' + what)[0].pause();
         $('#' + what)[0].currentTime = 0;
         $('#' + what)[0].play();
     }
+}
+
+function music_control()
+{
+    $('#music')[0].ontimeupdate = function() 
+    {
+        if(count > 0 && this.currentTime > 73.2)
+        {
+            this.currentTime = 4.5;
+        }
+    };
+}
+
+function start_music_fadeout()
+{
+    music_fadeout_interval = setInterval(music_fadeout, 100);
+}
+
+function music_fadeout() 
+{
+    var newVolume = $('#music')[0].volume - 0.01;
+
+    if(newVolume >= 0)
+    {
+        $('#music')[0].volume = newVolume;
+    }
+
+    else
+    {
+        if(music_fadeout_interval !== undefined)
+        {
+            clearInterval(music_fadeout_interval);
+        }
+
+        $('#music')[0].volume = 0;
+        $('#music')[0].pause();
+        $('#music')[0].currentTIme = 0;
+    }
+
 }
 
 function to_top()
@@ -1375,14 +1476,26 @@ function stop()
     $('body').css('background-image', 'url(splash.jpg)');
 }
 
-function stop_all_audio()
+function stop_all_sounds()
 {
-    $('audio').each(function()
+    $('.sound').each(function()
     {
         this.pause();
         this.currentTime = 0;
-    })
+    });
 } 
+
+function stop_the_music()
+{
+    $('#music')[0].pause();
+    $('#music')[0].currentTime = 0;
+} 
+
+function stop_all_audio()
+{
+    stop_all_sounds();
+    stop_the_music();
+}
 
 function info()
 {
