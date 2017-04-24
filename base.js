@@ -1,4 +1,4 @@
-var version = "6.3";
+var version = "6.4";
 
 var elements = [
     {"name": "Adamant"},
@@ -85,6 +85,8 @@ var count = 0;
 
 var music_fadeout_interval;
 
+var playing = false;
+
 function init()
 {
     get_speed();
@@ -111,6 +113,7 @@ function check_start()
 
 function start()
 { 
+    playing = true;
     count = 0;
     stop_loop();
     hide_overlay(true);
@@ -667,7 +670,7 @@ function show_options()
         }
         else
         {
-            if($('#main_container').html() !== "" && $('#music')[0].volume > 0)
+            if(playing)
             {
                 play('music');
             }
@@ -679,7 +682,7 @@ function show_options()
         options.hints = $(this).prop('checked');
         localStorage.setItem(ls_options, JSON.stringify(options));
 
-        if($('#main_container').html() !== "")
+        if(playing)
         {
             start();
         }
@@ -954,6 +957,8 @@ function set_speed()
 
 function lost()
 {
+    playing = false;
+
     start_music_fadeout();
 
     count -= 1;
@@ -980,6 +985,8 @@ function lost()
 
 function game_ended()
 {
+    playing = false;
+
     start_music_fadeout();
 
     if(options.hints)
@@ -1433,6 +1440,7 @@ function key_detection()
 
 function stop()
 {
+    playing = false;
     clear_started();
     count = 0;
     stop_loop();
