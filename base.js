@@ -1,4 +1,4 @@
-var version = "6.2";
+var version = "6.3";
 
 var elements = [
     {"name": "Adamant"},
@@ -679,19 +679,9 @@ function show_options()
         options.hints = $(this).prop('checked');
         localStorage.setItem(ls_options, JSON.stringify(options));
 
-        if(!options.hints)
+        if($('#main_container').html() !== "")
         {
-            $('.element_container').each(function()
-            {
-                $(this).removeClass('pulsating');
-            });
-        }
-        else
-        {
-            for(var i=0; i<elements.length; i++)
-            {
-                check_hints(elements[i]);
-            }
+            start();
         }
     });
 }
@@ -992,6 +982,13 @@ function game_ended()
 {
     start_music_fadeout();
 
+    if(options.hints)
+    {
+        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>", true);
+        play('ended');
+        return;
+    }
+
     get_highscores();
 
     var setting = get_setting();
@@ -999,20 +996,11 @@ function game_ended()
     var overall = highscores.Overall;
     var overall_speed = highscores["Overall - " + speed];
 
-    if(options.hints)
-    {
-        var ht = "<span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>"
-    }
-    else
-    {
-        var ht = "";
-    }
-
-    if(fab > hs[hs.length -1])
+    if(!options.hints && fab > hs[hs.length -1])
     {
         if(fab > hs[0])
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>" + ht, true);
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('highscore');
 
             hs.push(fab);
@@ -1023,7 +1011,7 @@ function game_ended()
 
         else
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>" + ht, true);
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('ended');
             
             if(hs.indexOf(fab) === -1)
@@ -1038,7 +1026,7 @@ function game_ended()
 
     else
     {
-        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>" + ht, true);
+        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
         play('ended');
     }
 
@@ -1534,5 +1522,11 @@ function disable_hints()
 {
     options.hints = false;
     localStorage.setItem(ls_options, JSON.stringify(options));
+
     $('#hint_dis').remove();
+
+    $('.element_container').each(function()
+    {
+        $(this).removeClass('pulsating');
+    })
 }
