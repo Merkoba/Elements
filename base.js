@@ -1,162 +1,58 @@
-var version = "5.0";
+var version = "6.0";
 
 var elements = [
-    {
-        "name": "Adamant"
-    },
-    {
-        "name": "Adamantite"
-    },
-    {
-        "name": "Adamantium"
-    },
-    {
-        "name": "Administratium"
-    },
-    {
-        "name": "Administrontium"
-    },
-    {
-        "name": "Aether"
-    },
-    {
-        "name": "Australium"
-    },
-    {
-        "name": "Badassium"
-    },
-    {
-        "name": "Bavarium"
-    },
-    {
-        "name": "Bombastium"
-    },
-    {
-        "name": "Bureaucratium"
-    },
-    {
-        "name": "Byzanium"
-    },
-    {
-        "name": "Carbonadium"
-    },
-    {
-        "name": "Cavorite"
-    },
-    {
-        "name": "Chronoton"
-    },
-    {
-        "name": "Cobalt Thorium G"
-    },
-    {
-        "name": "Collapsium"
-    },
-    {
-        "name": "Dilithium"
-    },
-    {
-        "name": "Divinium (E115)"
-    },
-    {
-        "name": "Duranium"
-    },
-    {
-        "name": "Durium"
-    },
-    {
-        "name": "Dust"
-    },
-    {
-        "name": "Element 99"
-    },
-    {
-        "name": "Element Zero"
-    },
-    {
-        "name": "Feminum"
-    },
-    {
-        "name": "Frinkonium"
-    },
-    {
-        "name": "Harbenite"
-    },
-    {
-        "name": "Ice-Nine"
-    },
-    {
-        "name": "Katchin"
-    },
-    {
-        "name": "Kryptonite"
-    },
-    {
-        "name": "Meteorillium"
-    },
-    {
-        "name": "Mithril"
-    },
-    {
-        "name": "Nth Metal"
-    },
-    {
-        "name": "Octiron"
-    },
-    {
-        "name": "Orichalcum"
-    },
-    {
-        "name": "Polydenum"
-    },
-    {
-        "name": "Quadium"
-    },
-    {
-        "name": "Radium X"
-    },
-    {
-        "name": "Rearden Metal"
-    },
-    {
-        "name": "Redstone"
-    },
-    {
-        "name": "Scrith"
-    },
-    {
-        "name": "Timonium"
-    },
-    {
-        "name": "Transformium"
-    },
-    {
-        "name": "Tritanium"
-    },
-    {
-        "name": "Unobtanium"
-    },
-    {
-        "name": "Uridium"
-    },
-    {
-        "name": "Uru"
-    },
-    {
-        "name": "Verterium"
-    },
-    {
-        "name": "Vibranium"
-    },
-    {
-        "name": "Wishalloy"
-    },
-    {
-        "name": "Xirdalium"
-    },
-    {
-        "name": "Xithricite"
-    }
+    {"name": "Adamant"},
+    {"name": "Adamantite"},
+    {"name": "Adamantium"},
+    {"name": "Administratium"},
+    {"name": "Administrontium"},
+    {"name": "Aether"},
+    {"name": "Australium"},
+    {"name": "Badassium"},
+    {"name": "Bavarium"},
+    {"name": "Bombastium"},
+    {"name": "Bureaucratium"},
+    {"name": "Byzanium"},
+    {"name": "Carbonadium"},
+    {"name": "Cavorite"},
+    {"name": "Chronoton"},
+    {"name": "Cobalt Thorium G"},
+    {"name": "Collapsium"},
+    {"name": "Dilithium"},
+    {"name": "Divinium (E115)"},
+    {"name": "Duranium"},
+    {"name": "Durium"},
+    {"name": "Dust"},
+    {"name": "Element 99"},
+    {"name": "Element Zero"},
+    {"name": "Feminum"},
+    {"name": "Frinkonium"},
+    {"name": "Harbenite"},
+    {"name": "Ice-Nine"},
+    {"name": "Katchin"},
+    {"name": "Kryptonite"},
+    {"name": "Meteorillium"},
+    {"name": "Mithril"},
+    {"name": "Nth Metal"},
+    {"name": "Octiron"},
+    {"name": "Orichalcum"},
+    {"name": "Polydenum"},
+    {"name": "Quadium"},
+    {"name": "Radium X"},
+    {"name": "Rearden Metal"},
+    {"name": "Redstone"},
+    {"name": "Scrith"},
+    {"name": "Timonium"},
+    {"name": "Transformium"},
+    {"name": "Tritanium"},
+    {"name": "Unobtanium"},
+    {"name": "Uridium"},
+    {"name": "Uru"},
+    {"name": "Verterium"},
+    {"name": "Vibranium"},
+    {"name": "Wishalloy"},
+    {"name": "Xirdalium"},
+    {"name": "Xithricite"}
 ];
 
 var start_fab = 1000000;
@@ -179,7 +75,7 @@ var highscores;
 
 var ls_highscores = "highscores_v2";
 
-var ls_options = "options_v3";
+var ls_options = "options_v4";
 
 var msg_closeable = false;
 
@@ -338,14 +234,23 @@ function generate_tiles()
             var dir = "DOWN";
         }
 
+        var s = "<div class='element_container";
+
         if(element.profit > 0)
         {
-            var s = "<div class='element_container green'>";
+            s +=  " green";
         }
         else
         {
-            var s = "<div class='element_container red'>";
+            s += " red";
         }
+
+        if(options.hints && element.profit === 0 && element.direction === "up")
+        {
+            s += " pulsating";
+        }
+
+        s += "'>";
 
         s += "<div class='element_name'>" + elements[i].name + "</div>";
         s += "<div class='element_profit'>" + format(element.profit) +"</div>";
@@ -437,6 +342,11 @@ function patent_btn_events(parent)
 
         $(btn).removeClass('btn_sell');
         $(btn).html('Buy Patent');
+    }
+
+    if(options.hints)
+    {
+        $(parent).removeClass('pulsating');
     }
 
     update_fab();
@@ -541,16 +451,31 @@ function tick()
 
 		$(cont).find('.element_profit').html(format(element.profit));
 
-		if(element.profit > 0)
-		{
-			$(cont).removeClass('red');
-			$(cont).addClass('green');
-		}
-		else
-		{
-			$(cont).removeClass('green');
-			$(cont).addClass('red');				
-		}
+        if(element.profit > 0)
+        {
+            $(cont).removeClass('red');
+            $(cont).addClass('green');
+
+        }
+        else
+        {
+            $(cont).removeClass('green');
+            $(cont).addClass('red');                
+        }
+
+        if(options.hints)
+        {
+            $(cont).removeClass('pulsating');
+
+            if(element.profit === 1000000 && element.owned)
+            {
+                $(cont).addClass('pulsating');
+            }
+            else if(element.profit === 0 && element.direction === "up" && !element.owned)
+            {
+                $(cont).addClass('pulsating');
+            }
+        }
 
         if(element.owned)
         {
@@ -639,7 +564,7 @@ function get_options()
 
     if(options === null)
     {
-        options = {fit: true, sounds: true, music: true}
+        options = {fit: true, sounds: true, music: true, hints: false}
         localStorage.setItem(ls_options, JSON.stringify(options));
     }
 }
@@ -648,7 +573,7 @@ function show_options()
 {
     var s = "<b>Options</b><br><br>";
 
-    s += "Automatically fit grid<br><br>";
+    s += "Automatically Fit Grid<br><br>";
 
     if(options.fit)
     {
@@ -660,7 +585,7 @@ function show_options()
         s += "<input id='chk_fit' type='checkbox'>";
     }
 
-    s += "<br><br><br>Enable sounds<br><br>";
+    s += "<br><br><br>Enable Sounds<br><br>";
 
     if(options.sounds)
     {
@@ -672,7 +597,7 @@ function show_options()
         s += "<input id='chk_sounds' type='checkbox'>";
     }
 
-    s += "<br><br><br>Enable music<br><br>";
+    s += "<br><br><br>Enable Music<br><br>";
 
     if(options.music)
     {
@@ -682,6 +607,18 @@ function show_options()
     else
     {
         s += "<input id='chk_music' type='checkbox'>";
+    }
+
+    s += "<br><br><br>Enable Hints<br><br>";
+
+    if(options.hints)
+    {
+        s += "<input id='chk_hints' type='checkbox' checked>";
+    }
+
+    else
+    {
+        s += "<input id='chk_hints' type='checkbox'>";
     }
 
     msg(s);
@@ -727,6 +664,20 @@ function show_options()
             {
                 play('music');
             }
+        }
+    });
+
+    $('#chk_hints').change(function()
+    {
+        options.hints = $(this).prop('checked');
+        localStorage.setItem(ls_options, JSON.stringify(options));
+
+        if(!options.hints)
+        {
+            $('.element_container').each(function()
+            {
+                $(this).removeClass('pulsating');
+            })
         }
     });
 }

@@ -365,3 +365,24 @@ input[type="checkbox"]
 	width: 2em;
 	height: 2em;
 }
+
+.pulsating
+{
+	animation: pulse 1s infinite;
+}
+
+@keyframes pulse 
+{
+	0% 
+	{
+		box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.8) inset;
+	}
+	70% 
+	{
+		box-shadow: 0 0 0 1em rgba(204, 169, 44, 0) inset;
+	}
+	100% 
+	{
+		box-shadow: 0 0 0 0 rgba(204, 169, 44, 0) inset;
+	}
+}
