@@ -1,4 +1,4 @@
-var version = "6.4";
+var version = "6.5";
 
 var elements = [
     {"name": "Adamant"},
@@ -248,7 +248,7 @@ function generate_tiles()
             s += " red";
         }
 
-        if(options.hints && element.profit === 0 && element.direction === "up")
+        if(options.hints && (element.profit === 0 || element.profit === 200000) && element.direction === "up")
         {
             s += " pulsating";
         }
@@ -494,13 +494,28 @@ function check_hints(element)
 
     $(cont).removeClass('pulsating');
 
-    if(element.direction === "down" && element.owned)
+    if(count > 1)
     {
-        $(cont).addClass('pulsating');
-    }
-    else if(element.profit === 0 && element.direction === "up" && !element.owned)
-    {
-        $(cont).addClass('pulsating');
+        if(element.direction === "down" && element.owned)
+        {
+            $(cont).addClass('pulsating');
+        }
+
+        else if(element.profit === 0 && element.direction === "up" && !element.owned)
+        {
+            $(cont).addClass('pulsating');
+        }
+
+        else if(element.profit > 0 && element.profit < 1000000 && element.direction === "up" && !element.owned)
+        {
+            if((element.profit / 200000) + count > 6)
+            {
+                if(fab >= element.profit * 5)
+                {
+                    $(cont).addClass('pulsating');
+                }
+            }
+        }
     }
 }
 
