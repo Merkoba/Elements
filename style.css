@@ -375,7 +375,7 @@ input[type="checkbox"]
 {
 	0% 
 	{
-		box-shadow: 0 0 0 0 rgba(204, 169, 44, 0.8) inset;
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 1) inset;
 	}
 	70% 
 	{

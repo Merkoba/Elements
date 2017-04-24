@@ -1,4 +1,4 @@
-var version = "6.0";
+var version = "6.2";
 
 var elements = [
     {"name": "Adamant"},
@@ -346,7 +346,7 @@ function patent_btn_events(parent)
 
     if(options.hints)
     {
-        $(parent).removeClass('pulsating');
+        check_hints(element);
     }
 
     update_fab();
@@ -465,16 +465,7 @@ function tick()
 
         if(options.hints)
         {
-            $(cont).removeClass('pulsating');
-
-            if(element.profit === 1000000 && element.owned)
-            {
-                $(cont).addClass('pulsating');
-            }
-            else if(element.profit === 0 && element.direction === "up" && !element.owned)
-            {
-                $(cont).addClass('pulsating');
-            }
+            check_hints(element);
         }
 
         if(element.owned)
@@ -492,6 +483,22 @@ function tick()
     }
 
     decrease_counter();
+}
+
+function check_hints(element)
+{
+    var cont = $('.element_container').get(element.id);
+
+    $(cont).removeClass('pulsating');
+
+    if(element.direction === "down" && element.owned)
+    {
+        $(cont).addClass('pulsating');
+    }
+    else if(element.profit === 0 && element.direction === "up" && !element.owned)
+    {
+        $(cont).addClass('pulsating');
+    }
 }
 
 function update_fab()
@@ -677,7 +684,14 @@ function show_options()
             $('.element_container').each(function()
             {
                 $(this).removeClass('pulsating');
-            })
+            });
+        }
+        else
+        {
+            for(var i=0; i<elements.length; i++)
+            {
+                check_hints(elements[i]);
+            }
         }
     });
 }
@@ -958,7 +972,14 @@ function lost()
 
     count = 0;
 
-    msg("You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='instructions()'>Instructions</button>", true);
+    var s = "You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='instructions()'>Instructions</button>";
+    
+    if(!options.hints)
+    {
+        s += "<br><br><button class='dialog_btn' onclick='play_with_hints()'>Play with Hints</button>";
+    }
+
+    msg(s, true);
 
     fab_ended();
 
@@ -978,11 +999,20 @@ function game_ended()
     var overall = highscores.Overall;
     var overall_speed = highscores["Overall - " + speed];
 
+    if(options.hints)
+    {
+        var ht = "<span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>"
+    }
+    else
+    {
+        var ht = "";
+    }
+
     if(fab > hs[hs.length -1])
     {
         if(fab > hs[0])
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>" + ht, true);
             play('highscore');
 
             hs.push(fab);
@@ -993,7 +1023,7 @@ function game_ended()
 
         else
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>" + ht, true);
             play('ended');
             
             if(hs.indexOf(fab) === -1)
@@ -1008,7 +1038,7 @@ function game_ended()
 
     else
     {
-        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>" + ht, true);
         play('ended');
     }
 
@@ -1491,4 +1521,18 @@ function resize_events()
             resize_timer();
         }
     })
+}
+
+function play_with_hints()
+{
+    options.hints = true;
+    localStorage.setItem(ls_options, JSON.stringify(options));
+    start();
+}
+
+function disable_hints()
+{
+    options.hints = false;
+    localStorage.setItem(ls_options, JSON.stringify(options));
+    $('#hint_dis').remove();
 }
