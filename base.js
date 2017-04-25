@@ -1,4 +1,4 @@
-var version = "7.1";
+var version = "7.2";
 
 var elements = [
     {"name": "Adamant"},
@@ -521,9 +521,19 @@ function check_hint(element)
 
     else if(count === 1)
     {
-        if(element.profit !== 0 && element.owned)
+        if(element.owned)
         {
             if(element.profit === -200000 && element.direction === "up")
+            {
+                return;
+            }
+
+            else if(element.profit === 0 && element.direction === "up")
+            {
+                return;
+            }
+
+            else if(element.profit === 200000 && element.direction === "up")
             {
                 return;
             }
