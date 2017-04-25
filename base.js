@@ -1,4 +1,4 @@
-var version = "6.6";
+var version = "6.7";
 
 var elements = [
     {"name": "Adamant"},
@@ -97,6 +97,7 @@ function init()
     key_detection();
     resize_events();
     music_control();
+    check_firstime();
 }
 
 function check_start()
@@ -555,7 +556,8 @@ function decrease_counter()
 
 function instructions()
 {
-    var s = "<b>Instructions</b><br><br>";
+    var s = "<b>Instructions</b><br>";
+    s += "<img src='inst.gif' id='instgif'><br><br>"
 	s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
     s += "You lose points when you own elements that have a negative profit.<br><br>";
@@ -1359,6 +1361,15 @@ function change_seed(s)
     localStorage.setItem("seed", seed);
 
     start();
+}
+
+function check_firstime()
+{
+    if(localStorage.getItem("firstime") === null)
+    {
+        instructions();
+        localStorage.setItem("firstime", "check");
+    }
 }
 
 function get_random_profit_index()
