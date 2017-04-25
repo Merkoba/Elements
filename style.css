@@ -26,6 +26,12 @@ body
 	background-color: #fff;
 	width: 100%;
 	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
 }
 
 #left_side
@@ -70,7 +76,7 @@ body
 	padding-right: 2em;
 }
 
-#halp
+#info
 {
 	cursor: pointer;
 }
@@ -79,6 +85,12 @@ body
 {
 	display: inline-block;
 	padding-right: 2em;
+	-webkit-touch-callout: auto;
+	-webkit-user-select: auto;
+	-khtml-user-select: auto;
+	-moz-user-select: auto;
+	-ms-user-select: auto;
+	user-select: auto;	
 }
 
 #start

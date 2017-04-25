@@ -1,4 +1,4 @@
-var version = "8.2";
+var version = "8.3";
 
 var elements = [
     {"name": "Adamant"},
@@ -593,8 +593,21 @@ function instructions()
     s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
+    s += "You start with 1 million points.<br><br>"
     s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get 0 or fewer points after a tick, you lose.<br><br>";
+    s += "<br><b>Strategy</b><br><br>";
+    s += "The point is to maximize your points by selling at 1 million as much as you can while spending the least.<br><br>";
+    s += "The ideal is to buy at 0 because it costs you 0 points and sell at 1 million. Earning you 8 million in total.<br><br>";
+    s += "200,000 + 400,000 + 600,000 + 800,000 + 1,000,000 + 5,000,000.<br><br>";
+    s += "If you don't buy at 0 you should still buy them when they're going up because they will still earn you points when sold at 1 million.<br><br>";
+    s += "For example if you buy at 400,000 UP, you first spend 2 million, then earn 600,000 + 800,000 + 1,000,000 + 5,000,000, with a total of 5.4 million.<br><br>";
+    s += "Buying at 800,000 UP will give you 2 million when sold at 1 million.<br><br>";
+    s += "Buying reds can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
+    s += "You could buy cheap reds as some sort of insurance if you think you won't be able to buy them at 0.<br><br>";
+    s += "As ticks are about to end make sure you don't buy anything that won't earn you points and sell what you need to sell at the last tick.<br><br>";
+    s += "For instace selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
+    s += "In the end, it's a game of picking an effective basic strategy, being quick to click, and be able to have an idea of where everything is.<br><br>";
 
     msg(s);
 }
