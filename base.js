@@ -1,4 +1,4 @@
-var version = "6.5";
+var version = "6.6";
 
 var elements = [
     {"name": "Adamant"},
@@ -347,12 +347,12 @@ function patent_btn_events(parent)
         $(btn).html('Buy Patent');
     }
 
+    update_fab();
+
     if(options.hints)
     {
-        check_hints(element);
+        check_all_hints();
     }
-
-    update_fab();
 }
 
 function get_element(name)
@@ -466,11 +466,6 @@ function tick()
             $(cont).addClass('red');                
         }
 
-        if(options.hints)
-        {
-            check_hints(element);
-        }
-
         if(element.owned)
         {
             fab += element.profit;
@@ -486,6 +481,11 @@ function tick()
     }
 
     decrease_counter();
+
+    if(options.hints)
+    {
+        check_all_hints();
+    }
 }
 
 function check_hints(element)
@@ -494,7 +494,7 @@ function check_hints(element)
 
     $(cont).removeClass('pulsating');
 
-    if(count > 1)
+    if(count > 0)
     {
         if(element.direction === "down" && element.owned)
         {
@@ -516,6 +516,14 @@ function check_hints(element)
                 }
             }
         }
+    }
+}
+
+function check_all_hints()
+{
+    for(var i=0; i<elements.length; i++)
+    {
+        check_hints(elements[i]);
     }
 }
 
