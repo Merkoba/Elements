@@ -1,4 +1,4 @@
-var version = "7.2";
+var version = "8.0";
 
 var elements = [
     {"name": "Adamant"},
@@ -55,7 +55,7 @@ var elements = [
     {"name": "Xithricite"}
 ];
 
-var start_fab = 1000000;
+var start_points = 1000000;
 
 var start_count = 30;
 
@@ -127,8 +127,8 @@ function start()
 
     set_speed();
 
-    $('#fab').html('Starting Game');
-    $('#counter').html('---');
+    $('#title').html('Starting Game');
+    $('#points').html('---');
     $('#start').html('Stop');
     $('body').css('background-image', 'none');
     $('#main_container').focus();
@@ -154,9 +154,9 @@ function start()
             $(this).css('display', 'inline-block')
         });
 
-        fab = start_fab;
+        points = start_points;
         count = start_count;
-        update_fab();
+        update_points();
         update_counter();
         loop();
     }, 3700);
@@ -315,13 +315,13 @@ function patent_btn_events(parent)
             var price = element.profit * 5;
         }
 
-        if(fab < price)
+        if(points < price)
         {
             play('nope');
             return false;
         }
 
-        fab -= price;
+        points -= price;
 
         element.owned = true;
 
@@ -340,7 +340,7 @@ function patent_btn_events(parent)
             var price = element.profit * (element.profit / 200000);
         }
 
-        fab += price;
+        points += price;
 
         element.owned = false;
 
@@ -348,7 +348,7 @@ function patent_btn_events(parent)
         $(btn).html('Buy Patent');
     }
 
-    update_fab();
+    update_points();
 
     if(options.hints)
     {
@@ -469,13 +469,13 @@ function tick()
 
         if(element.owned)
         {
-            fab += element.profit;
+            points += element.profit;
         }
 	}
     
-    update_fab();
+    update_points();
 
-    if(fab <= 0)
+    if(points <= 0)
     { 
         lost();
         return;
@@ -511,7 +511,7 @@ function check_hint(element)
         {
             if((element.profit / 200000) + count > 6)
             {
-                if(fab >= element.profit * 5)
+                if(points >= element.profit * 5)
                 {
                     $(cont).addClass('pulsating');
                 }
@@ -551,14 +551,9 @@ function check_all_hints()
     }
 }
 
-function update_fab()
+function update_points()
 {
-    $('#fab').html(format(fab));
-}
-
-function fab_ended()
-{
-	$('#fab').html(format(fab) + " (Game Ended)");
+    $('#points').html(format(points));
 }
 
 function decrease_counter()
@@ -569,7 +564,7 @@ function decrease_counter()
 
     if(count <= 0)
     {   
-        game_ended();
+        ended();
     }
     else
     {
@@ -1005,17 +1000,18 @@ function set_speed()
 
 function lost()
 {
+
     playing = false;
 
     start_music_fadeout();
 
     count -= 1;
 
-    update_counter();
+    $('#title').html('You Lost');
 
     count = 0;
 
-    var s = "You got " + format(fab) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='instructions()'>Instructions</button>";
+    var s = "You got " + format(points) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='instructions()'>Instructions</button>";
     
     if(!options.hints)
     {
@@ -1024,22 +1020,22 @@ function lost()
 
     msg(s, true);
 
-    fab_ended();
-
     $('#start').html('Play Again');
 
     play('lost');
 }
 
-function game_ended()
+function ended()
 {
+    $('#title').html('Game Ended');
+
     playing = false;
 
     start_music_fadeout();
 
     if(options.hints)
     {
-        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>", true);
+        msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>", true);
         play('ended');
         return;
     }
@@ -1051,14 +1047,14 @@ function game_ended()
     var overall = highscores.Overall;
     var overall_speed = highscores["Overall - " + speed];
 
-    if(!options.hints && fab > hs[hs.length -1])
+    if(!options.hints && points > hs[hs.length -1])
     {
-        if(fab > hs[0])
+        if(points > hs[0])
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+            msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('highscore');
 
-            hs.push(fab);
+            hs.push(points);
             hs.sort(function(a, b){return b-a});
             hs.splice(10, hs.length);
             localStorage.setItem(ls_highscores, JSON.stringify(highscores));
@@ -1066,12 +1062,12 @@ function game_ended()
 
         else
         {
-            msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+            msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('ended');
             
-            if(hs.indexOf(fab) === -1)
+            if(hs.indexOf(points) === -1)
             {
-                hs.push(fab);
+                hs.push(points);
                 hs.sort(function(a, b){return b-a});
                 hs.splice(10, hs.length);
                 localStorage.setItem(ls_highscores, JSON.stringify(highscores));
@@ -1081,7 +1077,7 @@ function game_ended()
 
     else
     {
-        msg("Time's up!<br><br>Score: " + format(fab) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+        msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
         play('ended');
     }
 
@@ -1094,9 +1090,9 @@ function game_ended()
         return y-x;
     });
 
-    if(fab > overall_speed[overall_speed.length -1][0])
+    if(points > overall_speed[overall_speed.length -1][0])
     {
-        overall_speed.push([fab, setting]);
+        overall_speed.push([points, setting]);
 
         overall_speed.sort(function(a, b)
         {
@@ -1127,9 +1123,9 @@ function game_ended()
         localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
-    if(fab > overall[overall.length -1][0])
+    if(points > overall[overall.length -1][0])
     {
-        overall.push([fab, setting]);
+        overall.push([points, setting]);
 
         overall.sort(function(a, b)
         {
@@ -1159,8 +1155,6 @@ function game_ended()
 
         localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
-
-    fab_ended();
 }
 
 function overlay_clicked()
@@ -1285,7 +1279,7 @@ function to_top()
 
 function update_counter()
 {
-    $('#counter').html(count);
+    $('#title').html(count);
 }
 
 function seed_picker()
@@ -1504,8 +1498,8 @@ function stop()
     stop_all_audio();
     hide_overlay(true);
     $('#main_container').html('');
-    $('#fab').html('E l e m e n t s');
-    $('#counter').html('');
+    $('#title').html('E l e m e n t s');
+    $('#points').html('');
     $('#start').html('Start');
     $('body').css('background-image', 'url(splash.jpg)');
 }
