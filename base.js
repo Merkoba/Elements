@@ -1,4 +1,4 @@
-var version = "7.0";
+var version = "7.1";
 
 var elements = [
     {"name": "Adamant"},
@@ -489,13 +489,13 @@ function tick()
     }
 }
 
-function check_hints(element)
+function check_hint(element)
 {
     var cont = $('.element_container').get(element.id);
 
     $(cont).removeClass('pulsating');
 
-    if(count > 0)
+    if(count > 1)
     {
         if(element.direction === "down" && element.owned)
         {
@@ -518,13 +518,26 @@ function check_hints(element)
             }
         }
     }
+
+    else if(count === 1)
+    {
+        if(element.profit !== 0 && element.owned)
+        {
+            if(element.profit === -200000 && element.direction === "up")
+            {
+                return;
+            }
+
+            $(cont).addClass('pulsating');
+        }
+    }
 }
 
 function check_all_hints()
 {
     for(var i=0; i<elements.length; i++)
     {
-        check_hints(elements[i]);
+        check_hint(elements[i]);
     }
 }
 
@@ -1550,7 +1563,7 @@ function resize_events()
         {
             resize_timer();
         }
-    })
+    });
 }
 
 function play_with_hints()
@@ -1570,5 +1583,5 @@ function disable_hints()
     $('.element_container').each(function()
     {
         $(this).removeClass('pulsating');
-    })
+    });
 }
