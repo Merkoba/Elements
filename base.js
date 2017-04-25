@@ -1,4 +1,4 @@
-var version = "8.1";
+var version = "8.2";
 
 var elements = [
     {"name": "Adamant"},
@@ -128,6 +128,7 @@ function start()
     set_speed();
 
     $('#title').html('Starting Game');
+    $('#points').html('');
     $('#start').html('Stop');
     $('body').css('background-image', 'none');
     $('#main_container').focus();
