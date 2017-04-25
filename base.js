@@ -1,4 +1,4 @@
-var version = "6.7";
+var version = "7.0";
 
 var elements = [
     {"name": "Adamant"},
@@ -563,20 +563,20 @@ function instructions()
     s += "You lose points when you own elements that have a negative profit.<br><br>";
     s += "You own an element by buying its patent.<br><br>";
     s += "You are only able to buy patents you can afford.<br><br>";
-    s += "Point earnings or losses of owned patents only occurs after each tick.<br><br>";
+    s += "Point earnings or losses of owned patents only occur after each tick.<br><br>";
     s += "The prices for each profit point are shown in the table below:<br><br>";
     s += "<table cellspacing=0><tr><th>Profit</th><th>Buy Price</th><th>Sell Price</th></tr><tr><td>-1,000,000</td><td>1,000,000</td><td>0</td></tr><tr><td>-800,000</td><td>800,000</td><td>0</td></tr><tr><td>-600,000</td><td>600,000</td><td>0</td></tr><tr><td>-400,000</td><td>400,000</td><td>0</td></tr><tr><td>-200,000</td><td>200,000</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>200,000</td><td>200,000 x 5</td><td>200,000</td></tr><tr><td>400,000</td><td>400,000 x 5</td><td>400,000 x 2</td></tr><tr><td>600,000</td><td>600,000 x 5</td><td>600,000 x 3</td></tr><tr><td>800,000</td><td>800,000 x 5</td><td>800,000 x 4</td></tr><tr><td>1,000,000</td><td>1,000,000 x 5</td><td>1,000,000 x 5</td></tr></table><br>";
     s += "Buying low and selling high is a major source of points.<br><br>";
     s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
     s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
-    s += "You can click any part of the tile to buy or sell not just the button.<br><br>";
+    s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
-    s += "You can change the speed of the game which changes the interval between ticks.<br><br>";
+    s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
     s += "The game ends after 30 ticks have passed.<br><br>";
-    s += "If you get to 0 or less points you lose.<br><br>";
+    s += "If you get 0 or fewer points after a tick, you lose.<br><br>";
 
     msg(s);
 }
