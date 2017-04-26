@@ -1,4 +1,4 @@
-var version = "9.3";
+var version = "10";
 
 var elements = [
     {"name": "Adamant"},
@@ -31,6 +31,7 @@ var elements = [
     {"name": "Ice-Nine"},
     {"name": "Katchin"},
     {"name": "Kryptonite"},
+    {"name": "Merkoba 51"},
     {"name": "Meteorillium"},
     {"name": "Mithril"},
     {"name": "Nth Metal"},
@@ -51,6 +52,7 @@ var elements = [
     {"name": "Verterium"},
     {"name": "Vibranium"},
     {"name": "Wishalloy"},
+    {"name": "Woodium"},
     {"name": "Xirdalium"},
     {"name": "Xithricite"}
 ];
