@@ -1,4 +1,4 @@
-var version = "10";
+var version = "11";
 
 var elements = [
     {"name": "Adamant"},
@@ -89,6 +89,8 @@ var music_fadeout_interval;
 
 var playing = false;
 
+var last_highscore = "";
+
 function init()
 {
     get_speed();
@@ -148,6 +150,8 @@ function start()
     play('music');
 
     clear_started();
+
+    last_highscore = '';
 
     started_timeout = setTimeout(function()
     {
@@ -934,9 +938,20 @@ function show_scores(setting)
 
             else
             {
-                s += "<span class='clickable_score' onclick='show_scores(\"" + ss + "\")'>";
+                s += "<span class='clickable_score'";
+                s += " onclick='show_scores(\"" + ss + "\")'>";
                 s += "<div class='setting_small'>" + ss + "</div>";
-                s += format(hs) + "</span>";
+
+                if(last_highscore !== "" && ss == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
+                {
+                    s += "<span class='highlighted_score'>" + format(hs) + "</span>";
+                }
+                else
+                {
+                    s += "<span>" + format(hs) + "</span>";
+                }
+
+                s += "</span>";
             }
 
             if(i < scores.length - 1)
@@ -964,7 +979,16 @@ function show_scores(setting)
 
             else
             {
-                s += format(hs) + "<br><br>";
+                if(last_highscore !== "" && setting == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
+                {
+                    s += "<span class='highlighted_score'>" + format(hs) + "</span>";
+                }
+                else
+                {
+                    s += "<span>" + format(hs) + "</span>";
+                }
+
+                s += "<br><br>";
             }
         }
         
@@ -1172,6 +1196,8 @@ function ended()
 
         localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
+
+    last_highscore = setting + "=" + points;
 }
 
 function overlay_clicked()

@@ -353,6 +353,11 @@ b
 	cursor: pointer;
 }
 
+.highlighted_score
+{
+	background-color: #dcdcdc;
+}
+
 a:hover, a:visited, a:link
 {
 	color: #000000;
