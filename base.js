@@ -1,4 +1,4 @@
-var version = "9.2";
+var version = "9.3";
 
 var elements = [
     {"name": "Adamant"},
@@ -604,11 +604,11 @@ function instructions()
     s += "For example if you buy at 400,000 UP, you first spend 2 million, then earn 600,000 + 800,000 + 1,000,000 + 5,000,000, with a total of 5.4 million.<br><br>";
     s += "Buying at 800,000 UP will give you 2 million when sold at 1 million.<br><br>";
     s += "You should sell any patent you own that is going down because it will only lose value or subtract you points if it gets in the reds.<br><br>"
-    s += "For instance, it's better to sell at 800,000 DOWN that gives you 3.2 million. Instead of selling it at 200,000 DOWN which only gives you 1.4 million.<br><br>"
-    s += "Buying reds can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
+    s += "For instance, it's better to sell at 800,000 DOWN that gives you 3.2 million. Instead of selling it until it reaches 200,000 DOWN which only gives you 1.4 million.<br><br>"
+    s += "Buying some reds that are going up can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
     s += "You could buy cheap reds as some sort of insurance if you think you won't be able to buy them at 0.<br><br>";
     s += "As ticks are about to end make sure you don't buy anything that won't earn you points and sell what you need to sell at the last tick.<br><br>";
-    s += "For instace selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
+    s += "For instace, selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
     s += "In the end, it's a game of picking an effective basic strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 
     msg(s);
