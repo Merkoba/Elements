@@ -1,4 +1,4 @@
-var version = "11.2";
+var version = "11.3";
 
 var elements = [
     {"name": "Adamant"},
@@ -465,7 +465,6 @@ function tick()
         {
             $(cont).removeClass('red');
             $(cont).addClass('green');
-
         }
         else
         {
@@ -1095,7 +1094,9 @@ function ended()
 
     if(!options.hints && points > hs[hs.length -1])
     {
-        if(points > hs[0])
+        var sum = hs.reduce((a, b) => a + b, 0);
+
+        if(sum > -999990 && points > hs[0])
         {
             msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
             play('highscore');
