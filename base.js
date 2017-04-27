@@ -1,4 +1,4 @@
-var version = "12";
+var version = "12.1";
 
 var elements = [
     {"name": "Adamant"},
@@ -642,7 +642,7 @@ function instructions()
     s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
     s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
-    s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied 5.<br><br>";
+    s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
     s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -658,7 +658,11 @@ function instructions()
     s += "If you don't buy at 0 you should still buy them when they're going up because they will still earn you points when sold at 1 million.<br><br>";
     s += "For example if you buy at 400,000 UP, you first spend 2 million, then earn 600,000 + 800,000 + 1,000,000 + 5,000,000, with a total of 5.4 million.<br><br>";
     s += "Buying at 800,000 UP will give you 2 million when sold at 1 million.<br><br>";
-    s += "Since selling the same kind of profit in trios gives you a bonus, sometimes it might make sense to wait for some alignments before selling.<br><br>";
+    s += "Selling trios is a good way to get ahead in the game.<br><br>";
+    s += "For example selling 3 elements of 1 million in a row will give you an extra 5 million bonus.<br><br>";
+    s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same number.<br><br>";
+    s += "It might make sense to wait for some trios to appear before selling.<br><br>";
+    s += "For example if there are two 600,000 UP elements and one 1 million DOWN, instead of selling the 1 million you could wait until they're all at 800,000.<br><br>";
     s += "You should sell any patent you own that is going down because it will only lose value or subtract you points if it gets in the reds.<br><br>"
     s += "For instance, it's better to sell at 800,000 DOWN that gives you 3.2 million. Instead of selling it until it reaches 200,000 DOWN which only gives you 1.4 million.<br><br>"
     s += "Buying some reds that are going up can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
