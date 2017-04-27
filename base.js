@@ -1,4 +1,4 @@
-var version = "12.1";
+var version = "12.2";
 
 var elements = [
     {"name": "Adamant"},
@@ -669,9 +669,8 @@ function instructions()
     s += "You could buy cheap reds as some sort of insurance if you think you won't be able to buy them at 0.<br><br>";
     s += "As ticks are about to end make sure you don't buy anything that won't earn you points and sell what you need to sell at the last tick.<br><br>";
     s += "For instace, selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
-    s += "For instance if you sell 800,000 UP, 800,000 DOWN and 800,000 UP in a row, you get all the normal earnings of the sells plus 4 million.";
-    s += "Instead of the 5 million you get by selling at 1 million, you can"
-    s += "In the end, it's a game of picking an effective basic strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
+    s += "For instance if you sell 800,000 UP, 800,000 DOWN and 800,000 UP in a row, you get all the normal earnings of the sells plus 4 million.<br><br>";
+    s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 
     msg(s);
 }
