@@ -388,11 +388,32 @@ input[type="checkbox"]
 	animation: pulse 1s infinite;
 }
 
+.pulsetrio
+{
+	animation: pulsetrio 0.8s;
+}
+
 @keyframes pulse 
 {
 	0% 
 	{
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 1) inset;
+	}
+	70% 
+	{
+		box-shadow: 0 0 0 1em rgba(204, 169, 44, 0) inset;
+	}
+	100% 
+	{
+		box-shadow: 0 0 0 0 rgba(204, 169, 44, 0) inset;
+	}
+}
+
+@keyframes pulsetrio
+{
+	0% 
+	{
+		box-shadow: 0 0 0 0 rgba(53, 45, 123, 1) inset;
 	}
 	70% 
 	{

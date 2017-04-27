@@ -1,4 +1,4 @@
-var version = "11.3";
+var version = "12";
 
 var elements = [
     {"name": "Adamant"},
@@ -91,6 +91,8 @@ var playing = false;
 
 var last_highscore = "";
 
+var sold_on_tick = [];
+
 function init()
 {
     get_speed();
@@ -152,6 +154,8 @@ function start()
     clear_started();
 
     last_highscore = "";
+
+    sold_on_tick = [];
 
     started_timeout = setTimeout(function()
     {
@@ -352,6 +356,44 @@ function patent_btn_events(parent)
 
         $(btn).removeClass('btn_sell');
         $(btn).html('Buy Patent');
+
+        sold_on_tick.push(element);
+
+        if(sold_on_tick.length > 3)
+        {
+            sold_on_tick.splice(0, 1)
+        }
+
+        if(sold_on_tick.length > 2)
+        {
+            if(sold_on_tick[0].profit > 0)
+            {
+                if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
+                {
+                    var id1 = sold_on_tick[0].id;
+                    var id2 = sold_on_tick[1].id;
+                    var id3 = sold_on_tick[2].id;
+
+                    if(id1 !== id2 && id1 !== id3 && id2 !== id3)
+                    {
+                        points += sold_on_tick[0].profit * 5;
+
+                        $($('.element_container').get(id1)).addClass('pulsetrio');
+                        $($('.element_container').get(id2)).addClass('pulsetrio');
+                        $($('.element_container').get(id3)).addClass('pulsetrio');
+
+                        setTimeout(function()
+                        {
+                            $($('.element_container').get(id1)).removeClass('pulsetrio');
+                            $($('.element_container').get(id2)).removeClass('pulsetrio');
+                            $($('.element_container').get(id3)).removeClass('pulsetrio');
+                        }, 800);
+                        
+                        sold_on_tick = [];
+                    }
+                }
+            }
+        }
     }
 
     update_points();
@@ -370,7 +412,7 @@ function get_element(name)
         {
             return elements[i];
         }
-	}
+    }
 }
 
 function change_profit(element)
@@ -401,15 +443,15 @@ function change_profit(element)
 
 function format(n)
 {
-	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function start_loop()
 {
-	setInterval(function()
-	{
-		tick();
-	}, speed);
+    setInterval(function()
+    {
+        tick();
+    }, speed);
 }
 
 function loop() 
@@ -451,15 +493,17 @@ function restart_loop()
 
 function tick()
 {
-	for(var i=0; i<elements.length; i++)
-	{
-		var element = elements[i];
+    sold_on_tick = [];
 
-		change_profit(element);
+    for(var i=0; i<elements.length; i++)
+    {
+        var element = elements[i];
 
-		var cont = $('.element_container').get(i);
+        change_profit(element);
 
-		$(cont).find('.element_profit').html(format(element.profit));
+        var cont = $('.element_container').get(i);
+
+        $(cont).find('.element_profit').html(format(element.profit));
 
         if(element.profit > 0)
         {
@@ -476,7 +520,7 @@ function tick()
         {
             points += element.profit;
         }
-	}
+    }
     
     update_points();
 
@@ -586,8 +630,8 @@ function instructions()
 {
     var s = "<b>Instructions</b><br>";
     s += "<img src='inst.gif' id='instgif'><br><br>"
-	s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
-	s += "Earn points by owning elements that have a positive profit.<br><br>";
+    s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
+    s += "Earn points by owning elements that have a positive profit.<br><br>";
     s += "You lose points when you own elements that have a negative profit.<br><br>";
     s += "You own an element by buying its patent.<br><br>";
     s += "You are only able to buy patents you can afford.<br><br>";
@@ -598,6 +642,7 @@ function instructions()
     s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
     s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
+    s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied 5.<br><br>";
     s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -613,12 +658,15 @@ function instructions()
     s += "If you don't buy at 0 you should still buy them when they're going up because they will still earn you points when sold at 1 million.<br><br>";
     s += "For example if you buy at 400,000 UP, you first spend 2 million, then earn 600,000 + 800,000 + 1,000,000 + 5,000,000, with a total of 5.4 million.<br><br>";
     s += "Buying at 800,000 UP will give you 2 million when sold at 1 million.<br><br>";
+    s += "Since selling the same kind of profit in trios gives you a bonus, sometimes it might make sense to wait for some alignments before selling.<br><br>";
     s += "You should sell any patent you own that is going down because it will only lose value or subtract you points if it gets in the reds.<br><br>"
     s += "For instance, it's better to sell at 800,000 DOWN that gives you 3.2 million. Instead of selling it until it reaches 200,000 DOWN which only gives you 1.4 million.<br><br>"
     s += "Buying some reds that are going up can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
     s += "You could buy cheap reds as some sort of insurance if you think you won't be able to buy them at 0.<br><br>";
     s += "As ticks are about to end make sure you don't buy anything that won't earn you points and sell what you need to sell at the last tick.<br><br>";
     s += "For instace, selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
+    s += "For instance if you sell 800,000 UP, 800,000 DOWN and 800,000 UP in a row, you get all the normal earnings of the sells plus 4 million.";
+    s += "Instead of the 5 million you get by selling at 1 million, you can"
     s += "In the end, it's a game of picking an effective basic strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 
     msg(s);
