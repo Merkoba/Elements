@@ -1,4 +1,4 @@
-var version = "12.2";
+var version = "13";
 
 var elements = [
     {"name": "Adamant"},
@@ -201,6 +201,10 @@ function generate_tiles()
 
         element.id = i;
 
+        element.soldonce = false;
+
+        element.frozen = false;
+
         if(isNaN(seed))
         {
             var index = 5;
@@ -335,6 +339,18 @@ function patent_btn_events(parent)
 
         element.owned = true;
 
+        if(element.soldonce)
+        {
+            if(!element.frozen)
+            {
+                element.frozen = true;
+
+                $($('.element_container').get(element.id)).removeClass('green');
+                $($('.element_container').get(element.id)).removeClass('red');
+                $($('.element_container').get(element.id)).addClass('blue');
+            }
+        }
+
         $(btn).addClass('btn_sell');
         $(btn).html('Sell Patent');
     }
@@ -353,6 +369,8 @@ function patent_btn_events(parent)
         points += price;
 
         element.owned = false;
+
+        element.soldonce = true;
 
         $(btn).removeClass('btn_sell');
         $(btn).html('Buy Patent');
@@ -499,9 +517,20 @@ function tick()
     {
         var element = elements[i];
 
-        change_profit(element);
-
         var cont = $('.element_container').get(i);
+
+        element.soldonce = false;
+
+        if(element.frozen)
+        {
+            element.frozen = false;
+            $(cont).removeClass('blue');
+        }
+
+        else
+        {
+            change_profit(element);
+        }
 
         $(cont).find('.element_profit').html(format(element.profit));
 
@@ -643,6 +672,7 @@ function instructions()
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
     s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
     s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
+    s += "Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state on the next tick.<br><br>";
     s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -661,15 +691,17 @@ function instructions()
     s += "Selling trios is a good way to get ahead in the game.<br><br>";
     s += "For example selling 3 elements of 1 million in a row will give you an extra 5 million bonus.<br><br>";
     s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same number.<br><br>";
-    s += "It might make sense to wait for some trios to appear before selling.<br><br>";
-    s += "For example if there are two 600,000 UP elements and one 1 million DOWN, instead of selling the 1 million you could wait until they're all at 800,000.<br><br>";
+    s += "You could take advantage of elements freezing by selling and buying in the same tick.<br><br>";
+    s += "For example if there are two -200,000 UP and one 0 UP, you could sell/buy the 0 UP so it aligns with the other 0 UPs on the next tick.<br><br>";
+    s += "This would allow you to sell them as a trio later on, giving you more points.<br><br>";
     s += "You should sell any patent you own that is going down because it will only lose value or subtract you points if it gets in the reds.<br><br>"
     s += "For instance, it's better to sell at 800,000 DOWN that gives you 3.2 million. Instead of selling it until it reaches 200,000 DOWN which only gives you 1.4 million.<br><br>"
     s += "Buying some reds that are going up can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
     s += "You could buy cheap reds as some sort of insurance if you think you won't be able to buy them at 0.<br><br>";
     s += "As ticks are about to end make sure you don't buy anything that won't earn you points and sell what you need to sell at the last tick.<br><br>";
     s += "For instace, selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
-    s += "For instance if you sell 800,000 UP, 800,000 DOWN and 800,000 UP in a row, you get all the normal earnings of the sells plus 4 million.<br><br>";
+    s += "It might make sense to wait for some trios to appear before selling.<br><br>";
+    s += "For example if there are 2 ticks left and there are two 600,000 UP elements and one 1 million DOWN, instead of selling the 1 million you could wait until they're all at 800,000 and sell them.<br><br>";
     s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 
     msg(s);
