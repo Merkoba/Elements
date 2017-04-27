@@ -1,4 +1,4 @@
-var version = "11";
+var version = "11.2";
 
 var elements = [
     {"name": "Adamant"},
@@ -151,7 +151,7 @@ function start()
 
     clear_started();
 
-    last_highscore = '';
+    last_highscore = "";
 
     started_timeout = setTimeout(function()
     {
@@ -515,12 +515,9 @@ function check_hint(element)
 
         else if(element.profit > 0 && element.profit < 1000000 && element.direction === "up" && !element.owned)
         {
-            if((element.profit / 200000) + count > 6)
+            if(points >= element.profit * 5)
             {
-                if(points >= element.profit * 5)
-                {
-                    $(cont).addClass('pulsating');
-                }
+                $(cont).addClass('pulsating');
             }
         }
     }
@@ -545,6 +542,14 @@ function check_hint(element)
             }
 
             $(cont).addClass('pulsating');
+        }
+
+        else
+        {
+            if(element.profit === 0 && element.direction === "up")
+            {
+                $(cont).addClass('pulsating');
+            }
         }
     }
 }
