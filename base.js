@@ -1,4 +1,4 @@
-var version = "13";
+var version = "13.4";
 
 var elements = [
     {"name": "Adamant"},
@@ -357,6 +357,11 @@ function patent_btn_events(parent)
 
     else
     {
+        if(element.frozen)
+        {
+            return;
+        }
+
         if(element.profit <= 0)
         {
             var price = 0;
@@ -667,12 +672,11 @@ function instructions()
     s += "Point earnings or losses of owned patents only occur after each tick.<br><br>";
     s += "The prices for each profit point are shown in the table below:<br><br>";
     s += "<table cellspacing=0><tr><th>Profit</th><th>Buy Price</th><th>Sell Price</th></tr><tr><td>-1,000,000</td><td>1,000,000</td><td>0</td></tr><tr><td>-800,000</td><td>800,000</td><td>0</td></tr><tr><td>-600,000</td><td>600,000</td><td>0</td></tr><tr><td>-400,000</td><td>400,000</td><td>0</td></tr><tr><td>-200,000</td><td>200,000</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>200,000</td><td>200,000 x 5</td><td>200,000</td></tr><tr><td>400,000</td><td>400,000 x 5</td><td>400,000 x 2</td></tr><tr><td>600,000</td><td>600,000 x 5</td><td>600,000 x 3</td></tr><tr><td>800,000</td><td>800,000 x 5</td><td>800,000 x 4</td></tr><tr><td>1,000,000</td><td>1,000,000 x 5</td><td>1,000,000 x 5</td></tr></table><br>";
-    s += "Buying low and selling high is a major source of points.<br><br>";
     s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
     s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
     s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
     s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
-    s += "Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state on the next tick.<br><br>";
+    s += "Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state in the next tick.<br><br>";
     s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
     s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
     s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -682,26 +686,17 @@ function instructions()
     s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get 0 or fewer points after a tick, you lose.<br><br>";
     s += "<br><b>Strategy</b><br><br>";
-    s += "The point is to maximize your points by selling at 1 million as much as you can while spending the least.<br><br>";
+    s += "The point is to maximize your points by selling as much as you can while spending the least.<br><br>";
     s += "The ideal is to buy at 0 UP because it costs you 0 points and sell at 1 million DOWN. Earning you 8 million in total.<br><br>";
     s += "200,000 + 400,000 + 600,000 + 800,000 + 1,000,000 + 5,000,000.<br><br>";
-    s += "If you don't buy at 0 you should still buy them when they're going up because they will still earn you points when sold at 1 million.<br><br>";
-    s += "For example if you buy at 400,000 UP, you first spend 2 million, then earn 600,000 + 800,000 + 1,000,000 + 5,000,000, with a total of 5.4 million.<br><br>";
-    s += "Buying at 800,000 UP will give you 2 million when sold at 1 million.<br><br>";
     s += "Selling trios is a good way to get ahead in the game.<br><br>";
-    s += "For example selling 3 elements of 1 million in a row will give you an extra 5 million bonus.<br><br>";
+    s += "For example, selling 3 elements of 1 million in a row will give you an extra 5 million bonus.<br><br>";
     s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same number.<br><br>";
-    s += "You could take advantage of elements freezing by selling and buying in the same tick.<br><br>";
-    s += "For example if there are two -200,000 UP and one 0 UP, you could sell/buy the 0 UP so it aligns with the other 0 UPs on the next tick.<br><br>";
-    s += "This would allow you to sell them as a trio later on, giving you more points.<br><br>";
-    s += "You should sell any patent you own that is going down because it will only lose value or subtract you points if it gets in the reds.<br><br>"
-    s += "For instance, it's better to sell at 800,000 DOWN that gives you 3.2 million. Instead of selling it until it reaches 200,000 DOWN which only gives you 1.4 million.<br><br>"
-    s += "Buying some reds that are going up can be a good idea. For example buying a -200,000 UP only costs you 200,000, much cheaper than buying a 200,000 UP which is 1 million.<br><br>";
-    s += "You could buy cheap reds as some sort of insurance if you think you won't be able to buy them at 0.<br><br>";
-    s += "As ticks are about to end make sure you don't buy anything that won't earn you points and sell what you need to sell at the last tick.<br><br>";
-    s += "For instace, selling a 0 UP or a 200,000 UP at the last tick doesn't make sense.<br><br>";
-    s += "It might make sense to wait for some trios to appear before selling.<br><br>";
-    s += "For example if there are 2 ticks left and there are two 600,000 UP elements and one 1 million DOWN, instead of selling the 1 million you could wait until they're all at 800,000 and sell them.<br><br>";
+    s += "Take advantage of elements freezing, which happens by selling and buying one in the same tick.<br><br>";
+    s += "You can lock trios as factories.<br><br>";
+    s += "For example, freezing three 1 million DOWN on consecutive ticks, getting 8 million on each tick.<br><br>";
+    s += "Then it's a matter of how many factories you can maintain effectively.<br><br>";
+    s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
     s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 
     msg(s);
