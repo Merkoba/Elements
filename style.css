@@ -17,11 +17,11 @@ body
 	background-position: center center;
 }
 
-#title
+#title_container
 {
+	font-size: 1.8em;
 	padding-top: 0.6em;
 	padding-bottom: 0.6em;
-	font-size: 1.8em;
 	position: fixed;
 	background-color: #fff;
 	width: 100%;
@@ -32,6 +32,12 @@ body
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;	
+}
+
+#title
+{
+	cursor: pointer;
+	display: inline-block;
 }
 
 #left_side

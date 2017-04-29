@@ -1,4 +1,4 @@
-var version = "15.1";
+var version = "16";
 
 var elements = [
     {"name": "Adamant"},
@@ -61,7 +61,7 @@ var start_points = 1000000;
 
 var start_count = 30;
 
-var loop_timeout;
+var tick_timer;
 
 var started_timeout;
 
@@ -88,6 +88,8 @@ var count = 0;
 var music_fadeout_interval;
 
 var playing = false;
+
+var started = false;
 
 var last_highscore = "";
 
@@ -121,6 +123,7 @@ function check_start()
 function start()
 { 
     playing = true;
+    started = false;
     count = 0;
     stop_loop();
     hide_overlay(true);
@@ -159,6 +162,7 @@ function start()
 
     started_timeout = setTimeout(function()
     {
+
         $('.element_patent_btn').each(function()
         {
             $(this).css('display', 'inline-block')
@@ -169,6 +173,8 @@ function start()
         update_points();
         update_counter();
         loop();
+        started = true;
+
     }, 3700);
 }
 
@@ -477,11 +483,32 @@ function start_loop()
     }, speed);
 }
 
+function TickTimer(callback, delay) 
+{
+    var timerId, start, remaining = delay;
+
+    this.pause = function() 
+    {
+        clearTimeout(timerId);
+        remaining -= new Date() - start;
+        this.active = false;
+    }
+
+    this.resume = function() 
+    {
+        start = new Date();
+        clearTimeout(timerId);
+        timerId = setTimeout(callback, remaining);
+        this.active = true;
+    }
+
+    this.resume();
+}
+
 function loop() 
 {
-    loop_timeout = setTimeout(function() 
+    tick_timer = new TickTimer(function() 
     {
-
         if(count > 0)
         {
             tick();
@@ -502,9 +529,9 @@ function loop()
 
 function stop_loop()
 {
-    if(loop_timeout !== undefined)
+    if(tick_timer !== undefined)
     {
-        clearTimeout(loop_timeout);
+        tick_timer.pause();
     }
 }
 
@@ -704,6 +731,7 @@ function instructions()
     s += "Escape closes dialogs or opens the seed picker.<br><br>";
     s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
     s += "You can select a seed with Enter when the seed picker input is focused.<br><br>";
+    s += "You can click the tick count on the top to pause or resume a game.<br><br>";
 
     msg(s);
 }
@@ -1365,6 +1393,19 @@ function music_control()
     };
 }
 
+function pause_music()
+{
+    $('#music')[0].pause();
+}
+
+function unpause_music()
+{
+    if(options.music)
+    {
+        $('#music')[0].play();
+    }
+}
+
 function start_music_fadeout()
 {
     music_fadeout_interval = setInterval(music_fadeout, 100);
@@ -1739,4 +1780,43 @@ function disable_hints()
     {
         $(this).removeClass('pulsating');
     });
+}
+
+function title_click()
+{
+    if(playing && started)
+    {
+        if(tick_timer !== undefined)
+        {
+            if(tick_timer.active)
+            {
+                tick_timer.pause();
+                pause_music();
+                $('#title').html('Paused');
+            }
+            else
+            {
+                tick_timer.resume();
+                unpause_music();
+                update_counter();
+            }
+        }
+    }
+    else
+    {
+        if($('#title').html() === "E l e m e n t s")
+        {
+            about();
+        }
+
+        else if($('#title').html() === "Game Ended")
+        {
+            show_highscores();
+        }
+
+        else if($('#title').html() === "You Lost")
+        {
+            instructions();
+        }
+    }
 }
