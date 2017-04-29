@@ -1,4 +1,4 @@
-var version = "16.1";
+var version = "16.3";
 
 var elements = [
     {"name": "Adamant"},
@@ -154,7 +154,6 @@ function start()
         clearInterval(music_fadeout_interval);
     }
 
-    $('#music')[0].volume = 1;
     play('music');
 
     clear_started();
@@ -813,6 +812,7 @@ function show_options()
         {
             fit();
         }
+
         else
         {
             $('#main_container').css('font-size', '1em');
@@ -837,14 +837,12 @@ function show_options()
 
         if(!options.music)
         {
-            stop_the_music();
+            mute_music();
         }
+
         else
-        {
-            if(playing)
-            {
-                play('music');
-            }
+        {   
+            unmute_music();
         }
     });
 
@@ -1371,10 +1369,17 @@ function play(what)
     {
         if(options.music)
         {
-            $('#music')[0].pause();
-            $('#music')[0].currentTime = 0;
-            $('#music')[0].play();
+            unmute_music();
         }
+        else
+        {
+            mute_music();
+        }
+
+        $('#music')[0].pause();
+        $('#music')[0].currentTime = 0;
+        $('#music')[0].play();
+
     }
 
     else if(options.sounds)
@@ -1403,10 +1408,17 @@ function pause_music()
 
 function unpause_music()
 {
-    if(options.music)
-    {
-        $('#music')[0].play();
-    }
+    $('#music')[0].play();
+}
+
+function mute_music()
+{
+    $('#music')[0].volume = 0;
+}
+
+function unmute_music()
+{
+    $('#music')[0].volume = 1;
 }
 
 function start_music_fadeout()
@@ -1798,6 +1810,7 @@ function title_click()
                 paused = true;
                 $('#title').html('Paused');
             }
+
             else
             {
                 tick_timer.resume();
@@ -1807,6 +1820,7 @@ function title_click()
             }
         }
     }
+
     else
     {
         if($('#title').html() === "E l e m e n t s")
