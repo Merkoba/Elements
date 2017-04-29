@@ -1,4 +1,4 @@
-var version = "16";
+var version = "16.1";
 
 var elements = [
     {"name": "Adamant"},
@@ -91,6 +91,8 @@ var playing = false;
 
 var started = false;
 
+var paused = false;
+
 var last_highscore = "";
 
 var sold_on_tick = [];
@@ -124,6 +126,7 @@ function start()
 { 
     playing = true;
     started = false;
+    paused = false;
     count = 0;
     stop_loop();
     hide_overlay(true);
@@ -289,7 +292,7 @@ function generate_tiles()
     {
         $(this).mousedown(function()
         {
-            if(count > 0)
+            if(playing && started && !paused)
             {
                 patent_btn_events(this);
             }
@@ -1792,6 +1795,7 @@ function title_click()
             {
                 tick_timer.pause();
                 pause_music();
+                paused = true;
                 $('#title').html('Paused');
             }
             else
@@ -1799,6 +1803,7 @@ function title_click()
                 tick_timer.resume();
                 unpause_music();
                 update_counter();
+                paused = false;
             }
         }
     }
