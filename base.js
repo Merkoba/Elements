@@ -1,4 +1,4 @@
-var version = "13.4";
+var version = "14";
 
 var elements = [
     {"name": "Adamant"},
@@ -1412,7 +1412,8 @@ function update_counter()
 function seed_picker()
 {
     var s = "0 to 999<br><br><input id='seed_input'><br><br><br>"
-    s += "<button class='dialog_btn' onclick='check_seed()'>Ok</button><br><br>";
+    s += "<button class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
+    s += "<button class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
     s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
     msg(s);
@@ -1505,6 +1506,28 @@ function change_seed(s)
     localStorage.setItem("seed", seed);
 
     start();
+}
+
+function get_random_seed()
+{
+    var r = get_random_int(0, 999);
+
+    if($('#seed_input').val() == r)
+    {
+        r += 1;
+
+        if(r > 999)
+        {
+            r = 0;
+        }
+    }
+
+    $('#seed_input').val(r).focus();
+}
+
+function get_random_int(min, max)
+{
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function check_firstime()
