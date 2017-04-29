@@ -1,4 +1,4 @@
-var version = "14";
+var version = "15";
 
 var elements = [
     {"name": "Adamant"},
@@ -698,18 +698,12 @@ function instructions()
     s += "Then it's a matter of how many factories you can maintain effectively.<br><br>";
     s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
     s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
-
-    msg(s);
-}
-
-function shortcuts()
-{
-    var s = "<b>Shortcuts</b><br><br>";
-    s += "You can use UpArrow or W to scroll to the top. And DownArrow or S to scroll to the bottom.<br><br>";
+    s += "<br><b>Shortcuts</b><br><br>";
+    s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
     s += "You can start/stop a game with Backspace.<br><br>";
     s += "Escape closes dialogs or opens the seed picker.<br><br>";
     s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
-    s += "You can select a seed with Enter when the seed picker input is focused.";
+    s += "You can select a seed with Enter when the seed picker input is focused.<br><br>";
 
     msg(s);
 }
@@ -1675,14 +1669,21 @@ function stop_all_audio()
     stop_the_music();
 }
 
-function info()
+function menu()
 {
     var s = "<button class='dialog_btn' onclick='instructions()'>Instructions</button><br><br>";
-    s += "<button class='dialog_btn' onclick='shortcuts()'>Shortcuts</button><br><br>";
+    s += "<button class='dialog_btn' onclick='show_highscores()'>High Scores</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
     s += "<button class='dialog_btn' onclick='about()'>About</button>";
 
     msg(s);
+
+    var w = $($('#msg').find('.dialog_btn').first()).outerWidth();
+
+    $('#msg').find('.dialog_btn').each(function()
+    {
+        $(this).css('width', w);
+    });
 }
 
 function clear_highscores()
