@@ -1,4 +1,4 @@
-var version = "15";
+var version = "15.1";
 
 var elements = [
     {"name": "Adamant"},
@@ -1678,7 +1678,7 @@ function menu()
 
     msg(s);
 
-    var w = $($('#msg').find('.dialog_btn').first()).outerWidth();
+    var w = $('#msg').find('.dialog_btn').first().outerWidth();
 
     $('#msg').find('.dialog_btn').each(function()
     {
