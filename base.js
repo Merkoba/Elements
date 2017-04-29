@@ -1,4 +1,4 @@
-var version = "16.3";
+var version = "17";
 
 var elements = [
     {"name": "Adamant"},
@@ -97,6 +97,8 @@ var last_highscore = "";
 
 var sold_on_tick = [];
 
+var report = [];
+
 function init()
 {
     get_speed();
@@ -161,6 +163,8 @@ function start()
     last_highscore = "";
 
     sold_on_tick = [];
+
+    report = [];
 
     started_timeout = setTimeout(function()
     {
@@ -345,6 +349,8 @@ function patent_btn_events(parent)
 
         points -= price;
 
+        report.push(-price);
+
         element.owned = true;
 
         if(element.soldonce)
@@ -381,6 +387,8 @@ function patent_btn_events(parent)
 
         points += price;
 
+        report.push(price);
+
         element.owned = false;
 
         element.soldonce = true;
@@ -407,7 +415,11 @@ function patent_btn_events(parent)
 
                     if(id1 !== id2 && id1 !== id3 && id2 !== id3)
                     {
-                        points += sold_on_tick[0].profit * 5;
+                        var pts = sold_on_tick[0].profit * 5;
+
+                        points += pts;
+
+                        report.push(pts);
 
                         $($('.element_container').get(id1)).addClass('pulsetrio');
                         $($('.element_container').get(id2)).addClass('pulsetrio');
@@ -547,6 +559,8 @@ function tick()
 {
     sold_on_tick = [];
 
+    report.push(';');
+
     for(var i=0; i<elements.length; i++)
     {
         var element = elements[i];
@@ -582,6 +596,7 @@ function tick()
         if(element.owned)
         {
             points += element.profit;
+            report.push(element.profit);
         }
     }
     
@@ -599,6 +614,7 @@ function tick()
     {
         check_all_hints();
     }
+
 }
 
 function check_hint(element)
@@ -689,7 +705,7 @@ function decrease_counter()
     }
 }
 
-function instructions()
+function show_instructions()
 {
     var s = "<b>Instructions</b><br>";
     s += "<img src='inst.gif' id='instgif'><br><br>"
@@ -734,6 +750,8 @@ function instructions()
     s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
     s += "You can select a seed with Enter when the seed picker input is focused.<br><br>";
     s += "You can click the tick count on the top to pause or resume a game.<br><br>";
+    s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
+    s += "Clicking on the game points shows the high scores.<br><br>";
 
     msg(s);
 }
@@ -858,7 +876,7 @@ function show_options()
     });
 }
 
-function about()
+function show_about()
 {
     var s = "<b>About</b><br><br>"
     s += "Idea and development by madprops<br><br>"
@@ -1023,6 +1041,82 @@ function show_highscores()
     });
 }
 
+function show_report()
+{
+    var s = "<b>Game Report</b><br>";
+
+    s += "<div>" + get_setting() + "</div><br>";
+
+    var pts = start_points
+
+    s += "<div class='grey_highlight'>" + start_count + " (" + format(pts) + ")</div><br>";
+
+    var cnt = start_count;
+
+    var tpts_positive = 0;
+    var tpts_negative = 0;
+
+    for(var i=0; i<report.length; i++)
+    {
+        var item = report[i];
+
+        if(item === ';')
+        {
+            cnt -= 1;
+
+            s += "<div>Positive: " + format(tpts_positive) + "</div><br>";
+            s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
+            s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>";
+
+            s += "<div class='grey_highlight'>" + cnt + " (" + format(pts) + ")</div><br>";
+
+            tpts_positive = 0;
+            tpts_negative = 0;
+        }
+
+        else
+        {
+            if(item !== 0)
+            {
+                pts += item;
+
+                if(item > 0)
+                {
+                    s += "<div class='green_color'>" + format(item) + "</div><br>";
+
+                    tpts_positive += item;
+                }
+                else
+                {
+                    s += "<div class='red_color'>" + format(item) + "</div><br>";
+
+                    tpts_negative += item;
+                }
+            }
+        }
+    }
+
+    s += "<div>Positive: " + format(tpts_positive) + "</div><br>";
+    s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
+    s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>";
+    s += "<div>Total: " + format(points) + "</div><br>";
+    
+    s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy to Clipboard</div>"
+
+    msg(s);
+}
+
+function copy_report_to_clipboard()
+{
+    var textareaEl = document.createElement('textarea');
+    document.body.appendChild(textareaEl);
+    textareaEl.value = document.getElementById('msg').innerText.replace('Game Report', '').replace('Copy to Clipboard', '').replace(/\n\s*\n/g, '\n').trim();
+    textareaEl.select();
+    document.execCommand('copy');
+    document.body.removeChild(textareaEl);
+    play('pup2');
+}
+
 function show_scores(setting)
 {
     var scores = get_setting_highscores(setting);
@@ -1049,7 +1143,7 @@ function show_scores(setting)
 
                 if(last_highscore !== "" && ss == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
                 {
-                    s += "<span class='highlighted_score'>" + format(hs) + "</span>";
+                    s += "<span class='grey_highlight'>" + format(hs) + "</span>";
                 }
                 else
                 {
@@ -1067,7 +1161,7 @@ function show_scores(setting)
         
         if(setting === "Overall")
         {
-            s += "<br><br><div id='play_again' onclick='clear_highscores()'>Clear High Scores</div>";
+            s += "<br><br><div class='linkydiv' onclick='clear_highscores()'>Clear High Scores</div>";
         }
     }
     
@@ -1086,7 +1180,7 @@ function show_scores(setting)
             {
                 if(last_highscore !== "" && setting == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
                 {
-                    s += "<span class='highlighted_score'>" + format(hs) + "</span>";
+                    s += "<span class='grey_highlight'>" + format(hs) + "</span>";
                 }
                 else
                 {
@@ -1097,7 +1191,7 @@ function show_scores(setting)
             }
         }
         
-        s += "<div id='play_again' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
+        s += "<div class='linkydiv' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
     }
     
     $('#scores').html(s);
@@ -1157,7 +1251,7 @@ function lost()
 
     count = 0;
 
-    var s = "You got " + format(points) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='instructions()'>Instructions</button>";
+    var s = "You got " + format(points) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_instructions()'>Instructions</button>";
     
     if(!options.hints)
     {
@@ -1584,7 +1678,7 @@ function check_firstime()
 {
     if(localStorage.getItem("firstime") === null)
     {
-        instructions();
+        show_instructions();
         localStorage.setItem("firstime", "check");
     }
 }
@@ -1725,12 +1819,12 @@ function stop_all_audio()
     stop_the_music();
 }
 
-function menu()
+function show_menu()
 {
-    var s = "<button class='dialog_btn' onclick='instructions()'>Instructions</button><br><br>";
+    var s = "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_highscores()'>High Scores</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
-    s += "<button class='dialog_btn' onclick='about()'>About</button>";
+    s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
 
     msg(s);
 
@@ -1825,17 +1919,17 @@ function title_click()
     {
         if($('#title').html() === "E l e m e n t s")
         {
-            about();
+            show_about();
         }
 
         else if($('#title').html() === "Game Ended")
         {
-            show_highscores();
+            show_report();
         }
 
         else if($('#title').html() === "You Lost")
         {
-            instructions();
+            show_instructions();
         }
     }
 }

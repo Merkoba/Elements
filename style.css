@@ -91,6 +91,7 @@ body
 {
 	display: inline-block;
 	padding-right: 2em;
+	cursor: pointer;
 	-webkit-touch-callout: auto;
 	-webkit-user-select: auto;
 	-khtml-user-select: auto;
@@ -248,6 +249,16 @@ body
 	background-color: #afaae2;
 }
 
+.green_color
+{
+	color: #4ca94d;
+}
+
+.red_color
+{
+	color: #cc414c;
+}
+
 .btn_sell
 {
 	background-color: #699DB6;
@@ -347,7 +358,7 @@ b
 	border: 1px solid grey;
 }
 
-#play_again
+.linkydiv
 {
 	text-decoration: underline;
 	cursor: pointer;
@@ -364,7 +375,7 @@ b
 	cursor: pointer;
 }
 
-.highlighted_score
+.grey_highlight
 {
 	background-color: #dcdcdc;
 }
