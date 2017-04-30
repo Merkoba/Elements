@@ -1,4 +1,4 @@
-var version = "17";
+var version = "17.1";
 
 var elements = [
     {"name": "Adamant"},
@@ -1053,6 +1053,9 @@ function show_report()
 
     var cnt = start_count;
 
+    var total_tpts_positive = 0;
+    var total_tpts_negative = 0;
+    
     var tpts_positive = 0;
     var tpts_negative = 0;
 
@@ -1085,21 +1088,24 @@ function show_report()
                     s += "<div class='green_color'>" + format(item) + "</div><br>";
 
                     tpts_positive += item;
+                    total_tpts_positive += item;
                 }
                 else
                 {
                     s += "<div class='red_color'>" + format(item) + "</div><br>";
 
                     tpts_negative += item;
+                    total_tpts_negative += item;
                 }
             }
         }
     }
 
-    s += "<div>Positive: " + format(tpts_positive) + "</div><br>";
-    s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
-    s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>";
-    s += "<div>Total: " + format(points) + "</div><br>";
+    s += "<div class='grey_highlight'>Overview</div><br>";
+
+    s += "<div>Total Positive: " + format(total_tpts_positive) + "</div><br>";
+    s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
+    s += "<div>Final Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>";
     
     s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy to Clipboard</div>"
 
