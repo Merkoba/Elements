@@ -1,4 +1,4 @@
-var version = "17.2";
+var version = "17.3";
 
 var elements = [
     {"name": "Adamant"},
@@ -1100,6 +1100,10 @@ function show_report()
             }
         }
     }
+
+    s += "<div>Positive: " + format(tpts_positive) + "</div><br>";
+    s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
+    s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>";
 
     s += "<div class='grey_highlight'>Overview</div><br>";
 
