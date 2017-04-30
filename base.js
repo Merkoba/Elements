@@ -1,4 +1,4 @@
-var version = "17.1";
+var version = "17.2";
 
 var elements = [
     {"name": "Adamant"},
@@ -1936,6 +1936,18 @@ function title_click()
         else if($('#title').html() === "You Lost")
         {
             show_instructions();
+        }
+
+        else if($('#title').html() === "Starting Game")
+        {
+            if(isNaN(seed))
+            {
+                change_seed('-1');
+            }
+            else
+            {
+                change_seed('.1');
+            }
         }
     }
 }
