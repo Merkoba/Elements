@@ -1,4 +1,4 @@
-var version = "17.3";
+var version = "18";
 
 var elements = [
     {"name": "Adamant"},
@@ -745,11 +745,12 @@ function show_instructions()
     s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
     s += "<br><b>Shortcuts</b><br><br>";
     s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
-    s += "You can start/stop a game with Backspace.<br><br>";
+    s += "You can start/stop a game with Enter.<br><br>";
+    s += "Backspace opens or closes the menu.<br><br>";
     s += "Escape closes dialogs or opens the seed picker.<br><br>";
     s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
     s += "You can select a seed with Enter when the seed picker input is focused.<br><br>";
-    s += "You can click the tick count on the top to pause or resume a game.<br><br>";
+    s += "You can click the tick count on the top or press Space to pause or resume a game.<br><br>";
     s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
     s += "Clicking on the game points shows the high scores.<br><br>";
 
@@ -1749,7 +1750,21 @@ function key_detection()
         {
             if(code === 8)
             {
+                toggle_menu();
+                e.preventDefault();
+                return;
+            }
+
+            else if(code === 13)
+            {
                 check_start();
+                e.preventDefault();
+                return;
+            }
+
+            else if(code === 32)
+            {
+                toggle_pause();
                 e.preventDefault();
                 return;
             }
@@ -1773,10 +1788,12 @@ function key_detection()
             {
                 $('body').scrollTop($(document).height() - $(window).height());
             }
+
             else if(code === 38 || code === 87)
             {
                 $('body').scrollTop(0);
             }
+
             else if(code === 27)
             {
                 seed_picker();
@@ -1831,7 +1848,8 @@ function stop_all_audio()
 
 function show_menu()
 {
-    var s = "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
+    var s = "<div id='msg_menu'></div>"
+    s += "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_highscores()'>High Scores</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
@@ -1844,6 +1862,18 @@ function show_menu()
     {
         $(this).css('width', w);
     });
+}
+
+function toggle_menu()
+{
+    if($('#msg_menu').length === 0)
+    {
+        show_menu();
+    }
+    else
+    {
+        hide_overlay();
+    }
 }
 
 function clear_highscores()
@@ -1905,24 +1935,7 @@ function title_click()
 {
     if(playing && started)
     {
-        if(tick_timer !== undefined)
-        {
-            if(tick_timer.active)
-            {
-                tick_timer.pause();
-                pause_music();
-                paused = true;
-                $('#title').html('Paused');
-            }
-
-            else
-            {
-                tick_timer.resume();
-                unpause_music();
-                update_counter();
-                paused = false;
-            }
-        }
+        toggle_pause();
     }
 
     else
@@ -1948,10 +1961,33 @@ function title_click()
             {
                 change_seed('-1');
             }
+
             else
             {
                 change_seed('.1');
             }
+        }
+    }
+}
+
+function toggle_pause()
+{    
+    if(tick_timer !== undefined && playing && started)
+    {
+        if(tick_timer.active)
+        {
+            tick_timer.pause();
+            pause_music();
+            paused = true;
+            $('#title').html('Paused');
+        }
+
+        else
+        {
+            tick_timer.resume();
+            unpause_music();
+            update_counter();
+            paused = false;
         }
     }
 }
