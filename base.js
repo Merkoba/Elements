@@ -1,4 +1,4 @@
-var version = "18.2";
+var version = "18.3";
 
 var elements = [
 	{"name": "Adamant"},
