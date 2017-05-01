@@ -237,6 +237,16 @@ body
 	background-color: #afaae2;
 }
 
+.yellow
+{
+	background-color: #d6ff6a;
+}
+
+.hidden
+{
+	visibility: hidden;
+}
+
 .green_color
 {
 	color: #4ca94d;

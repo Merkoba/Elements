@@ -217,6 +217,12 @@ function generate_tiles()
 
 		element.frozen = false;
 
+		element.freeze_chain = 0;
+
+		element.lit = false;
+
+		element.hidden = false;
+
 		if(isNaN(seed))
 		{
 			var index = 5;
@@ -362,13 +368,18 @@ function patent_btn_events(parent)
 
 		if(element.soldonce)
 		{
-			if(!element.frozen)
+			if(!element.frozen && !element.lit)
 			{
 				element.frozen = true;
 
 				$($('.element_container').get(element.id)).removeClass('green');
 				$($('.element_container').get(element.id)).removeClass('red');
 				$($('.element_container').get(element.id)).addClass('blue');
+
+				if(element.profit === 1000000)
+				{
+					element.freeze_chain += 1;
+				}
 			}
 		}
 
@@ -390,7 +401,15 @@ function patent_btn_events(parent)
 
 		else
 		{
-			var price = element.profit * (element.profit / 200000);
+			if(element.profit === 5000000)
+			{
+				var price = element.profit * 5;
+			}
+
+			else
+			{
+				var price = element.profit * (element.profit / 200000);
+			}
 		}
 
 		points += price;
@@ -555,33 +574,65 @@ function tick()
 	{
 		var element = elements[i];
 
+		if(element.hidden)
+		{
+			continue;
+		}
+
 		var cont = $('.element_container').get(i);
+
+		if(element.lit)
+		{
+			$(cont).removeClass('yellow');
+			$(cont).addClass('hidden');
+
+			element.hidden = true;
+
+			continue;
+		}
 
 		element.soldonce = false;
 
 		if(element.frozen)
 		{
 			element.frozen = false;
+
 			$(cont).removeClass('blue');
+
+			if(element.freeze_chain === 5)
+			{
+				element.lit = true;
+				element.profit = 5000000;
+			}
 		}
 
 		else
 		{
+			element.freeze_chain = 0;
 			change_profit(element);
 		}
 
 		$(cont).find('.element_profit').html(format(element.profit));
 
-		if(element.profit > 0)
+		if(element.lit)
 		{
-			$(cont).removeClass('red');
-			$(cont).addClass('green');
+			$(cont).addClass('yellow');
+			$(cont).find('.element_direction').get(0).innerHTML = "LIT";
 		}
 
 		else
 		{
-			$(cont).removeClass('green');
-			$(cont).addClass('red');                
+			if(element.profit > 0)
+			{
+				$(cont).removeClass('red');
+				$(cont).addClass('green');
+			}
+
+			else
+			{
+				$(cont).removeClass('green');
+				$(cont).addClass('red');                
+			}
 		}
 
 		if(element.owned)
@@ -693,8 +744,14 @@ function decrease_counter()
 
 	update_counter();
 
-	if(count <= 0)
-	{   
+	if(count === 0)
+	{
+		ended();
+	}
+	
+	else if($('.hidden').length === elements.length)
+	{
+		count = 0;
 		ended();
 	}
 
@@ -721,6 +778,7 @@ function show_instructions()
 	s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
 	s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
 	s += "Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state in the next tick.<br><br>";
+	s += "Freezing a 1,000,000 profit element 5 times in a row unlocks a special.<br><br>";
 	s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
 	s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
 	s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -738,8 +796,12 @@ function show_instructions()
 	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same number.<br><br>";
 	s += "Take advantage of elements freezing, which happens by selling and buying one in the same tick.<br><br>";
 	s += "You can lock trios as factories.<br><br>";
-	s += "For example, freezing three 1 million DOWN on consecutive ticks, getting 8 million on each tick.<br><br>";
-	s += "Then it's a matter of how many factories you can maintain effectively.<br><br>";
+	s += "For example, freezing three 1 million elements on consecutive ticks, getting 8 million on each tick.<br><br>";
+	s += "Freezing a 1 million element 5 times in a row makes it lit.<br><br>";
+	s += "When lit, its profit is 5 million, buys and sells at 25 million.<br><br>";
+	s += "Selling lit trios is a major source of points.<br><br>";
+	s += "Elements that become lit disappear from the game in the next tick and they're not usable anymore.<br><br>";
+	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
 	s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
