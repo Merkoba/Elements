@@ -75,7 +75,7 @@ var highscores;
 
 var ls_highscores = "highscores_v2";
 
-var ls_options = "options_v4";
+var ls_options = "options_v5";
 
 var msg_closeable = false;
 
@@ -366,19 +366,22 @@ function patent_btn_events(parent)
 
 		element.owned = true;
 
-		if(element.soldonce)
+		if(options.advanced)
 		{
-			if(!element.frozen && !element.lit)
+			if(element.soldonce)
 			{
-				element.frozen = true;
-
-				$($('.element_container').get(element.id)).removeClass('green');
-				$($('.element_container').get(element.id)).removeClass('red');
-				$($('.element_container').get(element.id)).addClass('blue');
-
-				if(element.profit === 1000000)
+				if(!element.frozen && !element.lit)
 				{
-					element.freeze_chain += 1;
+					element.frozen = true;
+
+					$($('.element_container').get(element.id)).removeClass('green');
+					$($('.element_container').get(element.id)).removeClass('red');
+					$($('.element_container').get(element.id)).addClass('blue');
+
+					if(element.profit === 1000000)
+					{
+						element.freeze_chain += 1;
+					}
 				}
 			}
 		}
@@ -418,41 +421,44 @@ function patent_btn_events(parent)
 
 		element.owned = false;
 
-		element.soldonce = true;
-
 		$(btn).removeClass('btn_sell');
 		$(btn).html('Buy Patent');
 
-		sold_on_tick.push(element);
-
-		if(sold_on_tick.length > 3)
+		if(options.advanced)
 		{
-			sold_on_tick.splice(0, 1);
-		}
+			element.soldonce = true;
 
-		if(sold_on_tick.length > 2)
-		{
-			if(sold_on_tick[0].profit > 0)
+			sold_on_tick.push(element);
+
+			if(sold_on_tick.length > 3)
 			{
-				if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
+				sold_on_tick.splice(0, 1);
+			}
+
+			if(sold_on_tick.length > 2)
+			{
+				if(sold_on_tick[0].profit > 0)
 				{
-					var id1 = sold_on_tick[0].id;
-					var id2 = sold_on_tick[1].id;
-					var id3 = sold_on_tick[2].id;
-
-					if(id1 !== id2 && id1 !== id3 && id2 !== id3)
+					if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
 					{
-						var pts = sold_on_tick[0].profit * 5;
+						var id1 = sold_on_tick[0].id;
+						var id2 = sold_on_tick[1].id;
+						var id3 = sold_on_tick[2].id;
 
-						points += pts;
+						if(id1 !== id2 && id1 !== id3 && id2 !== id3)
+						{
+							var pts = sold_on_tick[0].profit * 5;
 
-						report.push(pts);
+							points += pts;
 
-						$($('.element_container').get(id1)).addClass('pulsetrio');
-						$($('.element_container').get(id2)).addClass('pulsetrio');
-						$($('.element_container').get(id3)).addClass('pulsetrio');
-						
-						sold_on_tick = [];
+							report.push(pts);
+
+							$($('.element_container').get(id1)).addClass('pulsetrio');
+							$($('.element_container').get(id2)).addClass('pulsetrio');
+							$($('.element_container').get(id3)).addClass('pulsetrio');
+							
+							sold_on_tick = [];
+						}
 					}
 				}
 			}
@@ -776,9 +782,9 @@ function show_instructions()
 	s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
 	s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
 	s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
-	s += "Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
-	s += "Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state in the next tick.<br><br>";
-	s += "Freezing a 1,000,000 profit element 5 times in a row unlocks a special.<br><br>";
+	s += "[Advanced] Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
+	s += "[Advanced] Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state in the next tick.<br><br>";
+	s += "[Advanced] Freezing a 1,000,000 profit element 5 times in a row unlocks a special.<br><br>";
 	s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
 	s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
 	s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -791,7 +797,10 @@ function show_instructions()
 	s += "The point is to maximize your points by selling as much as you can while spending the least.<br><br>";
 	s += "The ideal is to buy at 0 UP because it costs you 0 points and sell at 1 million DOWN. Earning you 8 million in total.<br><br>";
 	s += "200,000 + 400,000 + 600,000 + 800,000 + 1,000,000 + 5,000,000.<br><br>";
-	s += "Selling trios is a good way to get ahead in the game.<br><br>";
+	s += "You should sell anything going down because it will only lose value or get in the reds and start subtracting points.<br><br>";
+	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
+	s += "<br><b>Advanced Strategy</b><br><br>";
+	s += "Enabling Advanced Mode in Options adds new mechanics to the game.<br><br>";
 	s += "For example, selling 3 elements of 1 million in a row will give you an extra 5 million bonus.<br><br>";
 	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same number.<br><br>";
 	s += "Take advantage of elements freezing, which happens by selling and buying one in the same tick.<br><br>";
@@ -802,8 +811,6 @@ function show_instructions()
 	s += "Selling lit trios is a major source of points.<br><br>";
 	s += "Elements that become lit disappear from the game in the next tick and they're not usable anymore.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
-	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
-	s += "In the end, it's a game of picking an effective strategy, scanning and clicking quickly, and be able to have an idea of the state of the game.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
 	s += "You can start/stop a game with Enter.<br><br>";
@@ -824,7 +831,7 @@ function get_options()
 
 	if(options === null)
 	{
-		options = {fit: true, sounds: true, music: true, hints: false};
+		options = {fit: true, sounds: true, music: true, hints: false, advanced: false};
 		localStorage.setItem(ls_options, JSON.stringify(options));
 	}
 }
@@ -881,6 +888,18 @@ function show_options()
 		s += "<input id='chk_hints' type='checkbox'>";
 	}
 
+	s += "<br><br><br>Advanced Mode<br><br>";
+
+	if(options.advanced)
+	{
+		s += "<input id='chk_advanced' type='checkbox' checked>";
+	}
+
+	else
+	{
+		s += "<input id='chk_advanced' type='checkbox'>";
+	}
+
 	msg(s);
 
 	$('#chk_fit').change(function()
@@ -929,6 +948,17 @@ function show_options()
 	$('#chk_hints').change(function()
 	{
 		options.hints = $(this).prop('checked');
+		localStorage.setItem(ls_options, JSON.stringify(options));
+
+		if(playing)
+		{
+			start();
+		}
+	});
+
+	$('#chk_advanced').change(function()
+	{
+		options.advanced = $(this).prop('checked');
 		localStorage.setItem(ls_options, JSON.stringify(options));
 
 		if(playing)
