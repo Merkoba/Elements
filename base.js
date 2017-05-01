@@ -1,4 +1,4 @@
-var version = "18";
+var version = "18.1";
 
 var elements = [
     {"name": "Adamant"},
@@ -118,6 +118,7 @@ function check_start()
     {
         stop();
     }
+
     else
     {
         start();
@@ -171,7 +172,7 @@ function start()
 
         $('.element_patent_btn').each(function()
         {
-            $(this).css('display', 'inline-block')
+            $(this).css('display', 'inline-block');
         });
 
         points = start_points;
@@ -188,7 +189,7 @@ function clear_started()
 {
     if(started_timeout !== undefined)
     {
-        clearTimeout(started_timeout)
+        clearTimeout(started_timeout);
     }
 }
 
@@ -200,6 +201,7 @@ function generate_tiles()
     {
         Math.seedrandom();
     }
+
     else
     {
         Math.seedrandom(seed);
@@ -221,6 +223,7 @@ function generate_tiles()
         {
             var index = 5;
         }
+
         else
         {
             var index = get_random_profit_index();
@@ -234,11 +237,13 @@ function generate_tiles()
             {
                 index = 1;
             }
+
             else
             {
                 index = 0;
             }
         }
+
         else
         {
             index = get_random_direction_index();
@@ -250,6 +255,7 @@ function generate_tiles()
         {
             element.direction = "down";
         }
+
         else if(element.profit === -1000000 && element.direction === "down")
         {
             element.direction = "up";
@@ -259,6 +265,7 @@ function generate_tiles()
         {
             var dir = "UP";
         }
+
         else
         {
             var dir = "DOWN";
@@ -270,6 +277,7 @@ function generate_tiles()
         {
             s +=  " green";
         }
+
         else
         {
             s += " red";
@@ -336,6 +344,7 @@ function patent_btn_events(parent)
         {
             var price = Math.abs(element.profit);
         }
+
         else
         {
             var price = element.profit * 5;
@@ -380,6 +389,7 @@ function patent_btn_events(parent)
         {
             var price = 0;
         }
+
         else
         {
             var price = element.profit * (element.profit / 200000);
@@ -400,7 +410,7 @@ function patent_btn_events(parent)
 
         if(sold_on_tick.length > 3)
         {
-            sold_on_tick.splice(0, 1)
+            sold_on_tick.splice(0, 1);
         }
 
         if(sold_on_tick.length > 2)
@@ -464,6 +474,7 @@ function change_profit(element)
     {
         var change = 200000;
     }
+
     else
     {
         var change = -200000;
@@ -587,6 +598,7 @@ function tick()
             $(cont).removeClass('red');
             $(cont).addClass('green');
         }
+
         else
         {
             $(cont).removeClass('green');
@@ -699,6 +711,7 @@ function decrease_counter()
     {   
         ended();
     }
+
     else
     {
         play('pup');
@@ -708,7 +721,7 @@ function decrease_counter()
 function show_instructions()
 {
     var s = "<b>Instructions</b><br>";
-    s += "<img src='inst.gif' id='instgif'><br><br>"
+    s += "<img src='inst.gif' id='instgif'><br><br>";
     s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
     s += "Earn points by owning elements that have a positive profit.<br><br>";
     s += "You lose points when you own elements that have a negative profit.<br><br>";
@@ -727,7 +740,7 @@ function show_instructions()
     s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
     s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
     s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
-    s += "You start with 1 million points.<br><br>"
+    s += "You start with 1 million points.<br><br>";
     s += "The game ends after 30 ticks have passed.<br><br>";
     s += "If you get 0 or fewer points after a tick, you lose.<br><br>";
     s += "<br><b>Strategy</b><br><br>";
@@ -763,7 +776,7 @@ function get_options()
 
     if(options === null)
     {
-        options = {fit: true, sounds: true, music: true, hints: false}
+        options = {fit: true, sounds: true, music: true, hints: false};
         localStorage.setItem(ls_options, JSON.stringify(options));
     }
 }
@@ -879,10 +892,10 @@ function show_options()
 
 function show_about()
 {
-    var s = "<b>About</b><br><br>"
-    s += "Idea and development by madprops<br><br>"
-    s += "Version " + version + "<br><br>"
-    s += "<a target='_blank' href='http://merkoba.com'>http://merkoba.com</a>"
+    var s = "<b>About</b><br><br>";
+    s += "Idea and development by madprops<br><br>";
+    s += "Version " + version + "<br><br>";
+    s += "<a target='_blank' href='http://merkoba.com'>http://merkoba.com</a>";
 
     msg(s);
 }
@@ -900,6 +913,7 @@ function get_highscores()
             "Overall - Fast":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
             "Overall - Linear":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']]
         };
+
         localStorage.setItem(ls_highscores, JSON.stringify(highscores));
     }
 
@@ -931,8 +945,10 @@ function get_setting_highscores(setting)
     if(scores === undefined)
     {
         highscores[setting] = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
+
         return highscores[setting];
     }
+
     else
     {
         return scores;
@@ -1048,7 +1064,7 @@ function show_report()
 
     s += "<div>" + get_setting() + "</div><br>";
 
-    var pts = start_points
+    var pts = start_points;
 
     s += "<div class='grey_highlight'>" + start_count + " (" + format(pts) + ")</div><br>";
 
@@ -1091,6 +1107,7 @@ function show_report()
                     tpts_positive += item;
                     total_tpts_positive += item;
                 }
+
                 else
                 {
                     s += "<div class='red_color'>" + format(item) + "</div><br>";
@@ -1112,7 +1129,7 @@ function show_report()
     s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
     s += "<div>Final Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>";
     
-    s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy to Clipboard</div>"
+    s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy to Clipboard</div>";
 
     msg(s);
 }
@@ -1156,6 +1173,7 @@ function show_scores(setting)
                 {
                     s += "<span class='grey_highlight'>" + format(hs) + "</span>";
                 }
+
                 else
                 {
                     s += "<span>" + format(hs) + "</span>";
@@ -1193,6 +1211,7 @@ function show_scores(setting)
                 {
                     s += "<span class='grey_highlight'>" + format(hs) + "</span>";
                 }
+
                 else
                 {
                     s += "<span>" + format(hs) + "</span>";
@@ -1239,10 +1258,12 @@ function set_speed()
     {
         loop_speed = 15000;
     }
+
     else if(speed === "Normal")
     {
         loop_speed = 10000;
     }
+
     else if(speed === "Fast")
     {
         loop_speed = 5000;
@@ -1305,17 +1326,20 @@ function ended()
         if(sum > -999990 && points > hs[0])
         {
             msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+            
             play('highscore');
 
             hs.push(points);
             hs.sort(function(a, b){return b-a});
             hs.splice(10, hs.length);
+
             localStorage.setItem(ls_highscores, JSON.stringify(highscores));
         }
 
         else
         {
             msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+            
             play('ended');
             
             if(hs.indexOf(points) === -1)
@@ -1323,6 +1347,7 @@ function ended()
                 hs.push(points);
                 hs.sort(function(a, b){return b-a});
                 hs.splice(10, hs.length);
+
                 localStorage.setItem(ls_highscores, JSON.stringify(highscores));
             }
         }
@@ -1331,6 +1356,7 @@ function ended()
     else
     {
         msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+        
         play('ended');
     }
 
@@ -1340,6 +1366,7 @@ function ended()
     {
         var x=a[0];
         var y=b[0];
+
         return y-x;
     });
 
@@ -1351,6 +1378,7 @@ function ended()
         {
             var x=a[0];
             var y=b[0];
+
             return y-x;
         });
 
@@ -1384,6 +1412,7 @@ function ended()
         {
             var x=a[0];
             var y=b[0];
+
             return y-x;
         });
 
@@ -1452,7 +1481,7 @@ function msg(txt, temp_disable=false)
             $('.dialog_btn').prop('disabled', false);
             msg_closeable = true;
 
-        }, 800)
+        }, 800);
     }
 
     else
@@ -1476,6 +1505,7 @@ function play(what)
         {
             unmute_music();
         }
+
         else
         {
             mute_music();
@@ -1566,7 +1596,7 @@ function update_counter()
 
 function seed_picker()
 {
-    var s = "0 to 999<br><br><input id='seed_input'><br><br><br>"
+    var s = "0 to 999<br><br><input id='seed_input'><br><br><br>";
     s += "<button class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
     s += "<button class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
     s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
@@ -1608,6 +1638,7 @@ function check_seed()
         $('#seed_input').focus();
         return false;
     }
+
     else
     {
         if(input < 0 || input > 999)
@@ -1615,6 +1646,7 @@ function check_seed()
             $('#seed_input').focus();
             return false;
         }
+
         else
         {
             change_seed(input);
@@ -1653,6 +1685,7 @@ function change_seed(s)
     {
         $('#seed').html('#');
     }
+
     else
     {
         $('#seed').html('# ' + seed);
@@ -1848,7 +1881,7 @@ function stop_all_audio()
 
 function show_menu()
 {
-    var s = "<div id='msg_menu'></div>"
+    var s = "<div id='msg_menu'></div>";
     s += "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_highscores()'>High Scores</button><br><br>";
     s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
@@ -1870,6 +1903,7 @@ function toggle_menu()
     {
         show_menu();
     }
+
     else
     {
         hide_overlay();
