@@ -432,13 +432,6 @@ function patent_btn_events(parent)
 						$($('.element_container').get(id1)).addClass('pulsetrio');
 						$($('.element_container').get(id2)).addClass('pulsetrio');
 						$($('.element_container').get(id3)).addClass('pulsetrio');
-
-						setTimeout(function()
-						{
-							$($('.element_container').get(id1)).removeClass('pulsetrio');
-							$($('.element_container').get(id2)).removeClass('pulsetrio');
-							$($('.element_container').get(id3)).removeClass('pulsetrio');
-						}, 800);
 						
 						sold_on_tick = [];
 					}
@@ -552,9 +545,11 @@ function stop_loop()
 
 function tick()
 {
+	report.push(';');
+	
 	sold_on_tick = [];
 
-	report.push(';');
+	remove_pulsetrios();
 
 	for(var i=0; i<elements.length; i++)
 	{
@@ -610,7 +605,14 @@ function tick()
 	{
 		check_all_hints();
 	}
+}
 
+function remove_pulsetrios()
+{
+	$('.pulsetrio').each(function()
+	{
+		$(this).removeClass('pulsetrio');
+	})
 }
 
 function check_hint(element)
