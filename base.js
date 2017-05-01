@@ -1,5 +1,3 @@
-var version = "18.3";
-
 var elements = [
 	{"name": "Adamant"},
 	{"name": "Adamantite"},
