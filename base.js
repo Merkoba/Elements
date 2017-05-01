@@ -704,8 +704,8 @@ function decrease_counter()
 
 function show_instructions()
 {
-	var s = "<b>Instructions</b><br>";
-	s += "<img src='inst.gif' id='instgif'><br><br>";
+	var s = "<b>Instructions</b><br><br>";
+	s += "<img src='inst.gif?v=2' id='instgif'><br><br>";
 	s += "The goal is to get as much points as you can before the counter reaches 0.<br><br>";
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
 	s += "You lose points when you own elements that have a negative profit.<br><br>";
