@@ -1542,6 +1542,11 @@ function unmute_music()
 
 function start_music_fadeout()
 {
+	if(music_fadeout_interval !== undefined)
+	{
+		clearInterval(music_fadeout_interval);
+	}
+	
 	music_fadeout_interval = setInterval(music_fadeout, 100);
 }
 
