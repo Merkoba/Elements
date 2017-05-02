@@ -1091,6 +1091,11 @@ function get_setting()
 		var s = "#";
 	}
 
+	else if(options.seed === 0.1)
+	{
+		var s = "#NaN";
+	}
+
 	else
 	{
 		var s = "#" + parseInt(options.seed);
