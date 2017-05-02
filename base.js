@@ -63,8 +63,6 @@ var tick_timer;
 
 var started_timeout;
 
-var seed = -1;
-
 var profits = [-1000000, -800000, -600000, -400000, -200000, 0, 200000, 400000, 600000, 800000, 1000000];
 
 var directions = ["up", "down"];
@@ -77,7 +75,7 @@ var ls_highscores = "highscores_v3";
 
 var ls_highscores_advanced = "highscores_advanced_v3";
 
-var ls_options = "options_v5";
+var ls_options = "options_v6";
 
 var msg_closeable = false;
 
@@ -101,10 +99,8 @@ var report = [];
 
 function init()
 {
-	get_speed();
 	get_options();
 	speed_changed();
-	get_seed();
 	overlay_clicked();
 	key_detection();
 	resize_events();
@@ -206,14 +202,14 @@ function generate_tiles()
 {
 	$('#main_container').html('');
 
-	if(seed === -1)
+	if(options.seed === -1)
 	{
 		Math.seedrandom();
 	}
 
 	else
 	{
-		Math.seedrandom(seed);
+		Math.seedrandom(options.seed);
 	}
 
 	for(var i=0; i<elements.length; i++)
@@ -234,7 +230,7 @@ function generate_tiles()
 
 		element.hidden = false;
 
-		if(isNaN(seed))
+		if(isNaN(options.seed))
 		{
 			var index = 5;
 		}
@@ -246,7 +242,7 @@ function generate_tiles()
 
 		element.profit = profits[index];
 
-		if(isNaN(seed))
+		if(isNaN(options.seed))
 		{
 			if(i % 2 === 0)
 			{
@@ -553,6 +549,7 @@ function loop()
 {
 	tick_timer = new TickTimer(function() 
 	{
+
 		if(count > 0)
 		{
 			tick();
@@ -560,7 +557,7 @@ function loop()
 
 		if(count > 0)
 		{
-			if(speed === "Linear")
+			if(options.speed === "Linear")
 			{
 				loop_speed -= linear_diff;
 			}
@@ -838,9 +835,26 @@ function get_options()
 
 	if(options === null)
 	{
-		options = {fit: true, sounds: true, music: true, hints: false, advanced: false};
-		localStorage.setItem(ls_options, JSON.stringify(options));
+		options = {fit: true, sounds: true, music: true, hints: false, advanced: false, seed: -1, speed: "Normal"};
+		update_options();
 	}
+
+	if(options.seed === -1)
+	{
+		$('#seed').html('#');
+	}
+
+	else
+	{
+		$('#seed').html('# ' + options.seed);
+	}
+
+	$('#speed_select').val(options.speed);
+}
+
+function update_options()
+{
+	localStorage.setItem(ls_options, JSON.stringify(options));
 }
 
 function show_options()
@@ -912,7 +926,7 @@ function show_options()
 	$('#chk_fit').change(function()
 	{
 		options.fit = $(this).prop('checked');
-		localStorage.setItem(ls_options, JSON.stringify(options));
+		update_options();
 
 		if(options.fit)
 		{
@@ -928,7 +942,7 @@ function show_options()
 	$('#chk_sounds').change(function()
 	{
 		options.sounds = $(this).prop('checked');
-		localStorage.setItem(ls_options, JSON.stringify(options));
+		update_options();
 
 		if(!options.sounds)
 		{
@@ -939,7 +953,7 @@ function show_options()
 	$('#chk_music').change(function()
 	{
 		options.music = $(this).prop('checked');
-		localStorage.setItem(ls_options, JSON.stringify(options));
+		update_options();
 
 		if(!options.music)
 		{
@@ -955,7 +969,7 @@ function show_options()
 	$('#chk_hints').change(function()
 	{
 		options.hints = $(this).prop('checked');
-		localStorage.setItem(ls_options, JSON.stringify(options));
+		update_options();
 
 		if(playing)
 		{
@@ -966,7 +980,7 @@ function show_options()
 	$('#chk_advanced').change(function()
 	{
 		options.advanced = $(this).prop('checked');
-		localStorage.setItem(ls_options, JSON.stringify(options));
+		update_options();
 
 		last_highscore = "";
 
@@ -1061,17 +1075,17 @@ function get_setting_highscores(setting, advanced)
 
 function get_setting()
 {
-	if(seed === -1)
+	if(options.seed === -1)
 	{
 		var s = "#";
 	}
 
 	else
 	{
-		var s = "#" + parseInt(seed);
+		var s = "#" + parseInt(options.seed);
 	}
 
-	s += " - " + speed;
+	s += " - " + options.speed;
 
 	return s;
 }
@@ -1082,28 +1096,25 @@ function start_setting(setting, advanced)
 
 	if(sd === '')
 	{
-		seed = -1;
+		options.seed = -1;
 		$('#seed').html('#');
 	}
 
 	else
 	{
-		seed = parseInt(sd);
-		$('#seed').html('# ' + seed);
+		options.seed = parseInt(sd);
+		$('#seed').html('# ' + options.seed);
 	}
-
-	localStorage.setItem("seed", seed);
-
-	options.advanced = advanced;
-	localStorage.setItem(ls_options, JSON.stringify(options));		
 
 	var split = setting.split(" ");
 
-	speed = split[split.length - 1];
+	options.speed = split[split.length - 1];
 
-	$('#speed_select').val(speed);
+	$('#speed_select').val(options.speed);
 
-	localStorage.setItem("speed", speed);
+	options.advanced = advanced;	
+
+	update_options();
 
 	start();
 }
@@ -1360,40 +1371,19 @@ function copy_report_to_clipboard()
 	play('pup2');
 }
 
-function get_speed()
-{
-	var speeds = ["Slow", "Normal", "Fast", "Linear"];
-
-	speed = localStorage.getItem("speed");
-
-	if(speed === null)
-	{
-		speed = "Normal";
-		localStorage.setItem("speed", speed);
-	}
-
-	else if(speeds.indexOf(speed) === -1)
-	{
-		speed = "Normal";
-		localStorage.setItem("speed", speed);
-	}
-
-	$('#speed_select').val(speed);
-}
-
 function set_speed()
 {
-	if(speed === "Slow" || speed === "Linear")
+	if(options.speed === "Slow" || options.speed === "Linear")
 	{
 		loop_speed = 15000;
 	}
 
-	else if(speed === "Normal")
+	else if(options.speed === "Normal")
 	{
 		loop_speed = 10000;
 	}
 
-	else if(speed === "Fast")
+	else if(options.speed === "Fast")
 	{
 		loop_speed = 5000;
 	}
@@ -1447,7 +1437,7 @@ function ended()
 	var hs = get_setting_highscores(setting, options.advanced);
 	
 	var overall = highscores.Overall;
-	var overall_speed = highscores["Overall - " + speed];
+	var overall_speed = highscores["Overall - " + options.speed];
 
 	if(!options.hints && points > hs[hs.length -1])
 	{
@@ -1545,7 +1535,7 @@ function ended()
 			}
 		}
 
-		highscores["Overall - " + speed] = counted;
+		highscores["Overall - " + options.speed] = counted;
 
 		if(options.advanced)
 		{
@@ -1782,9 +1772,9 @@ function seed_picker()
 		}
 	});
 
-	if(seed !== -1)
+	if(options.seed !== -1)
 	{
-		$('#seed_input').val(seed);
+		$('#seed_input').val(options.seed);
 	}
 
 	$('#seed_input').focus();
@@ -1821,44 +1811,21 @@ function check_seed()
 	}
 }
 
-function get_seed()
-{
-	seed = localStorage.getItem("seed");
-
-	if(seed === null)
-	{
-		seed = -1;
-		localStorage.setItem("seed", seed);
-	}
-
-	seed = parseInt(seed);
-
-	if(seed === -1)
-	{
-		$('#seed').html('#');
-	}
-
-	else
-	{
-		$('#seed').html('# ' + seed);
-	}
-}
-
 function change_seed(s)
 {
-	seed = parseInt(s);
+	options.seed = parseInt(s);
 
-	if(seed === -1)
+	if(options.seed === -1)
 	{
 		$('#seed').html('#');
 	}
 
 	else
 	{
-		$('#seed').html('# ' + seed);
+		$('#seed').html('# ' + options.seed);
 	}
 
-	localStorage.setItem("seed", seed);
+	update_options();
 
 	start();
 }
@@ -1934,8 +1901,8 @@ function speed_changed()
 {
 	$('#speed_select').change(function()
 	{
-		speed = $('#speed_select option:selected').val(); 
-		localStorage.setItem("speed", speed);
+		options.speed = $('#speed_select option:selected').val(); 
+		update_options();
 		start();
 	});
 }
@@ -2115,14 +2082,14 @@ function resize_events()
 function play_with_hints()
 {
 	options.hints = true;
-	localStorage.setItem(ls_options, JSON.stringify(options));
+	update_options();
 	start();
 }
 
 function disable_hints()
 {
 	options.hints = false;
-	localStorage.setItem(ls_options, JSON.stringify(options));
+	update_options();
 
 	$('#hint_dis').remove();
 
@@ -2167,7 +2134,7 @@ function title_click()
 function toggle_mode()
 {
 	options.advanced = !options.advanced;
-	localStorage.setItem(ls_options, JSON.stringify(options));
+	update_options();
 	last_highscore = "";
 }
 
