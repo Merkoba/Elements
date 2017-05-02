@@ -1071,7 +1071,7 @@ function get_setting()
 	return s;
 }
 
-function start_setting(setting)
+function start_setting(setting, advanced)
 {
 	var sd = setting.split(" ")[0].replace('#', '');
 
@@ -1088,6 +1088,9 @@ function start_setting(setting)
 	}
 
 	localStorage.setItem("seed", seed);
+
+	options.advanced = advanced;
+	localStorage.setItem(ls_options, JSON.stringify(options));		
 
 	var split = setting.split(" ");
 
@@ -1270,7 +1273,7 @@ function show_scores(setting, advanced)
 			}
 		}
 		
-		s += "<div class='linkydiv unselectable' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
+		s += "<div class='linkydiv unselectable' onclick='start_setting(\"" + setting + "\"," + advanced + ")'>Play Again</div>";
 	}
 	
 	$('#scores').html(s);
