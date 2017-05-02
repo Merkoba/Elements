@@ -142,7 +142,16 @@ function start()
 
 	set_speed();
 
-	$('#title').html('Starting Game');
+	if(options.advanced)
+	{
+		$('#title').html('Starting Game (Advanced)');
+	}
+
+	else
+	{
+		$('#title').html('Starting Game');
+	}
+
 	$('#points').html('');
 	$('#start').html('Stop');
 	$('body').css('background-image', 'none');
@@ -782,11 +791,8 @@ function show_instructions()
 	s += "The prices for each profit point are shown in the table below:<br><br>";
 	s += "<table cellspacing=0><tr><th>Profit</th><th>Buy Price</th><th>Sell Price</th></tr><tr><td>-1,000,000</td><td>1,000,000</td><td>0</td></tr><tr><td>-800,000</td><td>800,000</td><td>0</td></tr><tr><td>-600,000</td><td>600,000</td><td>0</td></tr><tr><td>-400,000</td><td>400,000</td><td>0</td></tr><tr><td>-200,000</td><td>200,000</td><td>0</td></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>200,000</td><td>200,000 x 5</td><td>200,000</td></tr><tr><td>400,000</td><td>400,000 x 5</td><td>400,000 x 2</td></tr><tr><td>600,000</td><td>600,000 x 5</td><td>600,000 x 3</td></tr><tr><td>800,000</td><td>800,000 x 5</td><td>800,000 x 4</td></tr><tr><td>1,000,000</td><td>1,000,000 x 5</td><td>1,000,000 x 5</td></tr></table><br>";
 	s += "Changes in profit are either +200,000 or -200,000 per tick.<br><br>";
-	s += "Check the direction to see if the profit is going to increase or decrease.<br><br>";
+	s += "The direction, UP or DOWN, shows if the profit is going to increase or decrease.<br><br>";
 	s += "The direction changes when an element reaches 1,000,000 or -1,000,000 profit.<br><br>";
-	s += "[Advanced] Selling the same kind of positive profit, from different elements, 3 times in a row before it ticks, gives a bonus of that kind of profit multiplied by 5.<br><br>";
-	s += "[Advanced] Selling a patent and buying it again in the same tick freezes an element which makes it remain at the same state in the next tick.<br><br>";
-	s += "[Advanced] Freezing a 1,000,000 profit element 5 times in a row unlocks a special.<br><br>";
 	s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
 	s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
 	s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
@@ -801,16 +807,13 @@ function show_instructions()
 	s += "200,000 + 400,000 + 600,000 + 800,000 + 1,000,000 + 5,000,000.<br><br>";
 	s += "You should sell anything going down because it will only lose value or get in the reds and start subtracting points.<br><br>";
 	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
-	s += "<br><b>Advanced Strategy</b><br><br>";
+	s += "<br><b>Advanced Mode</b><br><br>";
 	s += "Enabling Advanced Mode in Options adds new mechanics to the game.<br><br>";
-	s += "For example, selling 3 elements of 1 million in a row will give you an extra 5 million bonus.<br><br>";
-	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same number.<br><br>";
-	s += "Take advantage of elements freezing, which happens by selling and buying one in the same tick.<br><br>";
-	s += "You can lock trios as factories.<br><br>";
-	s += "For example, freezing three 1 million elements on consecutive ticks, getting 8 million on each tick.<br><br>";
+	s += "For example, selling 3 elements with the same profit in a row, a trio, will give you that profit multiplied by 5.<br><br>";
+	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same profit.<br><br>";
+	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
 	s += "Freezing a 1 million element 5 times in a row makes it lit.<br><br>";
 	s += "When lit, its profit is 5 million, buys and sells at 25 million.<br><br>";
-	s += "Selling lit trios is a major source of points.<br><br>";
 	s += "Elements that become lit disappear from the game in the next tick and they're not usable anymore.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
@@ -821,8 +824,10 @@ function show_instructions()
 	s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
 	s += "You can select a seed with Enter when the seed picker input is focused.<br><br>";
 	s += "You can click the tick count on the top or press Space to pause or resume a game.<br><br>";
+	s += "Clicking on \"Starting Game\" switches between Core and Advanced mode.<br><br>";
 	s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
 	s += "Clicking on the game points shows the high scores.<br><br>";
+	s += "Clicking on Core or Advanced at the top of High Scores toggles between Core High Scores and Advanced High Scores.<br><br>";
 
 	msg(s);
 }
@@ -2151,19 +2156,19 @@ function title_click()
 			show_instructions();
 		}
 
-		else if($('#title').html() === "Starting Game")
+		else if($('#title').html().startsWith("Starting Game"))
 		{
-			if(isNaN(seed))
-			{
-				change_seed('-1');
-			}
-
-			else
-			{
-				change_seed('.1');
-			}
+			toggle_mode();
+			start();
 		}
 	}
+}
+
+function toggle_mode()
+{
+	options.advanced = !options.advanced;
+	localStorage.setItem(ls_options, JSON.stringify(options));
+	last_highscore = "";
 }
 
 function toggle_pause()

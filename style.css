@@ -91,13 +91,7 @@ body
 {
 	display: inline-block;
 	padding-right: 2em;
-	cursor: pointer;
-	-webkit-touch-callout: auto;
-	-webkit-user-select: auto;
-	-khtml-user-select: auto;
-	-moz-user-select: auto;
-	-ms-user-select: auto;
-	user-select: auto;	
+	cursor: pointer;	
 }
 
 #start
