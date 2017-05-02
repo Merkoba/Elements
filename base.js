@@ -1638,7 +1638,6 @@ function hide_overlay(force=false)
 		$('#msg').html('');
 		msg_open = false;
 		msg_closeable = false;
-		hs_setting = null;
 	}
 }
 
@@ -1670,6 +1669,8 @@ function msg(txt, temp_disable=false)
 		msg_closeable = true;
 	}
 
+	hs_setting = null;
+	
 	msg_open = true;
 }
 
