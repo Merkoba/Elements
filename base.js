@@ -55,6 +55,8 @@ var elements = [
 	{"name": "Xithricite"}
 ];
 
+var main_title = "E l e m e n t s";
+
 var start_points = 1000000;
 
 var start_count = 30;
@@ -108,7 +110,6 @@ var hs_setting = null;
 function init()
 {
 	get_options();
-	speed_changed();
 	overlay_clicked();
 	key_detection();
 	resize_events();
@@ -126,6 +127,19 @@ function check_start()
 	else
 	{
 		start();
+	}
+}
+
+function check_stop()
+{
+	if(msg_open)
+	{
+		hide_overlay(true);
+	}
+
+	if($('#title').html() !== main_title)
+	{
+		stop();
 	}
 }
 
@@ -818,12 +832,9 @@ function show_instructions()
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
-	s += "You can start/stop a game with Enter.<br><br>";
+	s += "You can start a game with Enter.<br><br>";
+	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
 	s += "Backspace opens or closes the menu.<br><br>";
-	s += "Escape closes dialogs or opens the seed picker.<br><br>";
-	s += "You can move up or down seeds with UpArrow and DownArrow when the seed picker input is focused.<br><br>";
-	s += "You can select a seed with Enter when the seed picker input is focused.<br><br>";
-	s += "You can click the tick count on the top or press Space to pause or resume a game.<br><br>";
 	s += "Clicking on \"Starting Game\" switches between Core and Advanced mode.<br><br>";
 	s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
 	s += "Clicking on the game points shows the high scores.<br><br>";
@@ -1133,7 +1144,7 @@ function show_highscores(advanced)
 
 	s += "<b class='unselectable'>High Scores</b>";
 
-	s += "<div class='select-style2 unselectable'><select id='hs_setting_select'>";
+	s += "<div class='hs_select unselectable'><select id='hs_setting_select'>";
 
 	s += "<option value='Overall'>Overall</option>";
 	s += "<option value='Overall - Slow'>Overall - Slow</option>";
@@ -1763,7 +1774,10 @@ function update_counter()
 
 function seed_picker()
 {
-	var s = "0 to 999<br><br><input id='seed_input'><br><br><br>";
+	check_stop();
+
+	var s = "<b>Seed</b><br>";
+	s += "0 to 999<br><br><input id='seed_input'><br><br><br>";
 	s += "<button class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
 	s += "<button class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
@@ -1847,7 +1861,7 @@ function change_seed(s)
 
 	update_options();
 
-	start();
+	hide_overlay();
 }
 
 function get_random_seed()
@@ -1865,6 +1879,76 @@ function get_random_seed()
 	}
 
 	$('#seed_input').val(r).focus();
+}
+
+function speed_picker()
+{
+	check_stop();
+
+	var s = "<b>Speed</b><br><br>";
+	s += "<button class='dialog_btn' onclick='change_speed(\"Slow\")'>Slow</button><br><br>";
+	s += "<button class='dialog_btn' onclick='change_speed(\"Normal\")'>Normal</button><br><br>";
+	s += "<button class='dialog_btn' onclick='change_speed(\"Fast\")'>Fast</button><br><br>";
+	s += "<button class='dialog_btn' onclick='change_speed(\"Linear\")'>Linear</button>";
+
+	msg(s);
+
+	var w = $($('#msg').find('.dialog_btn').get(1)).outerWidth();
+
+	$('#msg').find('.dialog_btn').each(function()
+	{
+		$(this).width(w);
+	});
+
+}
+
+function change_speed(what)
+{
+	options.speed = what;
+
+	$('#speed').html(what);
+
+	update_options();
+
+	hide_overlay();
+}
+
+function mode_picker()
+{
+	check_stop();
+
+	var s = "<b>Mode</b><br><br>";
+	s += "<button class='dialog_btn' onclick='change_mode(false)'>Core</button><br><br>";
+	s += "<button class='dialog_btn' onclick='change_mode(true)'>Advanced</button><br><br>";
+
+	msg(s);
+
+	var w = $('#msg').find('.dialog_btn').last().outerWidth();
+
+	$('#msg').find('.dialog_btn').each(function()
+	{
+		$(this).width(w);
+	});
+
+}
+
+function change_mode(advanced)
+{
+	options.advanced = advanced;
+
+	if(options.advanced)
+	{
+		$('#mode').html("Advanced");
+	}
+
+	else
+	{
+		$('#mode').html("Core");
+	}
+
+	update_options();
+
+	hide_overlay();	
 }
 
 function get_random_int(min, max)
@@ -1917,16 +2001,6 @@ function get_random_direction_index()
 	return n;
 }
 
-function speed_changed()
-{
-	$('#speed_select').change(function()
-	{
-		options.speed = $('#speed_select option:selected').val(); 
-		update_options();
-		start();
-	});
-}
-
 function key_detection()
 {
 	$(document).keydown(function(e)
@@ -1944,7 +2018,7 @@ function key_detection()
 
 			else if(code === 13)
 			{
-				check_start();
+				start();
 				e.preventDefault();
 				return;
 			}
@@ -1983,7 +2057,7 @@ function key_detection()
 
 			else if(code === 27)
 			{
-				seed_picker();
+				check_stop();
 			}
 		}
 
@@ -2006,7 +2080,7 @@ function stop()
 	stop_all_audio();
 	hide_overlay(true);
 	$('#main_container').html('');
-	$('#title').html('E l e m e n t s');
+	$('#title').html(main_title);
 	$('#points').html('');
 	$('#start').html('Start');
 	$('body').css('background-image', 'url(splash.jpg)');
@@ -2128,7 +2202,7 @@ function title_click()
 
 	else
 	{
-		if($('#title').html() === "E l e m e n t s")
+		if($('#title').html() === main_title)
 		{
 			show_about();
 		}
@@ -2156,27 +2230,6 @@ function title_click()
 			}
 		}
 	}
-}
-
-function toggle_mode()
-{
-	options.advanced = !options.advanced;
-
-	if(options.advanced)
-	{
-		$('#mode').html("Advanced");
-	}
-
-	else
-	{
-		$('#mode').html("Core");
-	}
-
-	update_options();
-
-	last_highscore = "";
-
-	start();
 }
 
 function toggle_pause()
