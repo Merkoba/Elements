@@ -146,19 +146,14 @@ function start()
 
 	set_speed();
 
-	if(options.advanced)
-	{
-		$('#title').html('Starting Game (Advanced)');
-	}
-
-	else
-	{
-		$('#title').html('Starting Game');
-	}
+	$('#title').html('Starting Game');
 
 	$('#points').html('');
+
 	$('#start').html('Stop');
+
 	$('body').css('background-image', 'none');
+
 	$('#main_container').focus();
 
 	to_top();
@@ -860,6 +855,16 @@ function get_options()
 	else
 	{
 		$('#seed').html('# ' + options.seed);
+	}
+
+	if(options.advanced)
+	{
+		$('#mode').html("Advanced");
+	}
+
+	else
+	{
+		$('#mode').html("Core");
 	}
 
 	$('#speed_select').val(options.speed);
@@ -2163,10 +2168,17 @@ function title_click()
 			show_instructions();
 		}
 
-		else if($('#title').html().startsWith("Starting Game"))
+		else if($('#title').html() === ("Starting Game"))
 		{
-			toggle_mode();
-			start();
+			if(options.seed === 0.1)
+			{
+				change_seed('-1');
+			}
+
+			else
+			{
+				change_seed(NaN);
+			}
 		}
 	}
 }
@@ -2174,8 +2186,22 @@ function title_click()
 function toggle_mode()
 {
 	options.advanced = !options.advanced;
+
+	if(options.advanced)
+	{
+		$('#mode').html("Advanced");
+	}
+
+	else
+	{
+		$('#mode').html("Core");
+	}
+
 	update_options();
+
 	last_highscore = "";
+
+	start();
 }
 
 function toggle_pause()

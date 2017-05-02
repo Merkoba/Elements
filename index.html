@@ -9,15 +9,15 @@
 		<script src='jquery.js'></script>
 		<script src='seedrandom.js'></script>
 
-		<script src='base.js?v=219'></script>
-		<link rel="stylesheet" href="style.css?v=58">
+		<script src='base.js?v=220'></script>
+		<link rel="stylesheet" href="style.css?v=59">
 
 		<script>
 
 			$(function()
 			{
 
-				version = "26.2";
+				version = "27";
 
 				init();
 				
@@ -38,8 +38,9 @@
 	<body>
 
 		<div id="left_side">
-
+			
 			<span id="seed" onclick="seed_picker()">#</span>
+
 			<span class="select-style">
 				<select id='speed_select'>
 					<option value="Slow">Slow</option>
@@ -47,9 +48,10 @@
 					<option value="Fast">Fast</option>
 					<option value="Linear">Linear</option>
 				</select>
-			</span>
 
-			<span id='start' onclick="check_start()">Start</span>
+			<span id='mode' onclick="toggle_mode()">Core</span>
+
+			</span>
 
 		</div>
 
@@ -62,6 +64,7 @@
 		<div id="right_side">
 
 			<span id='points' onclick="show_highscores(options.advanced)"></span>
+			<span id='start' onclick="check_start()">Start</span>
 			<span id="menu" onclick="show_menu()">Menu</span>
 
 		</div>

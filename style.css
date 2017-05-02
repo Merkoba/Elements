@@ -96,7 +96,14 @@ body
 
 #start
 {
+	padding-right: 2em;
 	cursor: pointer;
+}
+
+#mode
+{
+	cursor: pointer;
+	padding-left: 2em;
 }
 
 .select-style 
@@ -106,7 +113,6 @@ body
 	overflow: hidden;
 	background-color: #fff;
 	white-space:nowrap;
-	padding-right: 2em;
 }
 
 .select-style select
