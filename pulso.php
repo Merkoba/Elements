@@ -11,6 +11,6 @@
 
 	chdir("/var/www/elements/");
 	exec('sudo -u gitdude git pull  2>&1', $output);
-	echo implode("<br/>\n", $output);
+	echo implode("Ver=1<br/>\n", $output);
 
 ?>
