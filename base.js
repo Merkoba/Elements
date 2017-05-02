@@ -79,7 +79,13 @@ var ls_options = "options_v6";
 
 var msg_closeable = false;
 
-var linear_diff = 7000 / (start_count - 1);
+var speed_slow = 12000;
+
+var speed_normal = 8000;
+
+var speed_fast = 5000;
+
+var linear_diff = (speed_slow - speed_fast) / (start_count - 1);
 
 var count = 0;
 
@@ -1380,17 +1386,17 @@ function set_speed()
 {
 	if(options.speed === "Slow" || options.speed === "Linear")
 	{
-		loop_speed = 12000;
+		loop_speed = speed_slow;
 	}
 
 	else if(options.speed === "Normal")
 	{
-		loop_speed = 8000;
+		loop_speed = speed_normal;
 	}
 
 	else if(options.speed === "Fast")
 	{
-		loop_speed = 5000;
+		loop_speed = speed_fast;
 	}
 }
 
