@@ -1103,21 +1103,6 @@ function start_setting(setting, advanced)
 	start();
 }
 
-function highscores_picker()
-{
-	var s = "<button class='dialog_btn' onclick='show_highscores(false)'>Core Mode High Scores</button><br><br>";
-	s += "<button class='dialog_btn' onclick='show_highscores(true)'>Advanced Mode High Scores</button>";
-
-	msg(s);
-
-	var w = $('#msg').find('.dialog_btn').last().outerWidth();
-
-	$('#msg').find('.dialog_btn').each(function()
-	{
-		$(this).width(w);
-	});
-}
-
 function show_highscores(advanced)
 {
 	get_highscores(advanced);
@@ -2060,7 +2045,7 @@ function show_menu()
 {
 	var s = "<div id='msg_menu'></div>";
 	s += "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
-	s += "<button class='dialog_btn' onclick='highscores_picker()'>High Scores</button><br><br>";
+	s += "<button class='dialog_btn' onclick='show_highscores(options.advanced)'>High Scores</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
 
