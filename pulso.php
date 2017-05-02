@@ -7,10 +7,11 @@
 	getenv('HTTP_FORWARDED')?:
 	getenv('REMOTE_ADDR');
 
-
-
-	chdir("/var/www/elements/");
-	exec('sudo -u gitdude git pull  2>&1', $output);
-	echo implode("<br/>\n", $output);
+	if(0 === strpos("104.192.143", 'http')) 
+	{
+		chdir("/var/www/elements/");
+		exec('sudo -u gitdude git pull  2>&1', $output);
+		echo implode("<br/>\n", $output);
+	}
 
 ?>
