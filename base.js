@@ -808,7 +808,7 @@ function show_instructions()
 	s += "You should sell anything going down because it will only lose value or get in the reds and start subtracting points.<br><br>";
 	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
 	s += "<br><b>Advanced Mode</b><br><br>";
-	s += "Enabling Advanced Mode in Options adds new mechanics to the game.<br><br>";
+	s += "Advanced mode adds new mechanics to the game.<br><br>";
 	s += "For example, selling 3 elements with the same profit in a row, a trio, will give you that profit multiplied by 5.<br><br>";
 	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same profit.<br><br>";
 	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
@@ -927,18 +927,6 @@ function show_options()
 		s += "<input id='chk_hints' type='checkbox'>";
 	}
 
-	s += "<br><br><br>Advanced Mode<br><br>";
-
-	if(options.advanced)
-	{
-		s += "<input id='chk_advanced' type='checkbox' checked>";
-	}
-
-	else
-	{
-		s += "<input id='chk_advanced' type='checkbox'>";
-	}
-
 	msg(s);
 
 	$('#chk_fit').change(function()
@@ -988,19 +976,6 @@ function show_options()
 	{
 		options.hints = $(this).prop('checked');
 		update_options();
-
-		if(playing)
-		{
-			start();
-		}
-	});
-
-	$('#chk_advanced').change(function()
-	{
-		options.advanced = $(this).prop('checked');
-		update_options();
-
-		last_highscore = "";
 
 		if(playing)
 		{
