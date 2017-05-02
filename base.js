@@ -79,7 +79,7 @@ var ls_options = "options_v6";
 
 var msg_closeable = false;
 
-var linear_diff = 10000 / (start_count - 1);
+var linear_diff = 7000 / (start_count - 1);
 
 var count = 0;
 
@@ -230,7 +230,7 @@ function generate_tiles()
 
 		element.hidden = false;
 
-		if(isNaN(options.seed))
+		if(options.seed === 0.1)
 		{
 			var index = 5;
 		}
@@ -242,7 +242,7 @@ function generate_tiles()
 
 		element.profit = profits[index];
 
-		if(isNaN(options.seed))
+		if(options.seed === 0.1)
 		{
 			if(i % 2 === 0)
 			{
@@ -793,8 +793,8 @@ function show_instructions()
 	s += "You can click any part of the tile to buy or sell, not just the button.<br><br>";
 	s += "You can change the seed (#) to have predictable initial configurations.<br><br>";
 	s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
-	s += "Ticks happen every 5, 10 or 15 seconds depending on your speed setting.<br><br>";
-	s += "Linear speed mode starts at 15 seconds and ends at 5 seconds.<br><br>";
+	s += "Ticks happen every 5, 8 or 12 seconds depending on your speed setting.<br><br>";
+	s += "Linear speed mode starts at 12 seconds and ends at 5 seconds.<br><br>";
 	s += "You start with 1 million points.<br><br>";
 	s += "The game ends after 30 ticks have passed.<br><br>";
 	s += "If you get 0 or fewer points after a tick, you lose.<br><br>";
@@ -842,6 +842,11 @@ function get_options()
 	if(options.seed === -1)
 	{
 		$('#seed').html('#');
+	}
+
+	else if(options.seed === 0.1)
+	{
+		$('#seed').html('#NaN');
 	}
 
 	else
@@ -1375,12 +1380,12 @@ function set_speed()
 {
 	if(options.speed === "Slow" || options.speed === "Linear")
 	{
-		loop_speed = 15000;
+		loop_speed = 12000;
 	}
 
 	else if(options.speed === "Normal")
 	{
-		loop_speed = 10000;
+		loop_speed = 8000;
 	}
 
 	else if(options.speed === "Fast")
@@ -1815,9 +1820,19 @@ function change_seed(s)
 {
 	options.seed = parseInt(s);
 
+	if(isNaN(options.seed))
+	{
+		options.seed = 0.1;
+	}
+
 	if(options.seed === -1)
 	{
 		$('#seed').html('#');
+	}
+
+	else if(options.seed === 0.1)
+	{
+		$('#seed').html('#NaN');
 	}
 
 	else
