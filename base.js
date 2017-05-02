@@ -103,6 +103,8 @@ var sold_on_tick = [];
 
 var report = [];
 
+var hs_setting = null;
+
 function init()
 {
 	get_options();
@@ -1161,7 +1163,15 @@ function show_highscores(advanced)
 
 	var keys = Object.keys(highscores);
 
-	var setting = get_setting();
+	if(hs_setting === null)
+	{
+		var setting = get_setting();
+	}
+
+	else
+	{
+		var setting = hs_setting;
+	}
 	
 	if(keys.indexOf(setting) === -1)
 	{
@@ -1216,6 +1226,8 @@ function show_highscores(advanced)
 
 function show_scores(setting, advanced)
 {
+	hs_setting = setting;
+
 	var scores = get_setting_highscores(setting, advanced);
 
 	var s = "";
@@ -1626,6 +1638,7 @@ function hide_overlay(force=false)
 		$('#msg').html('');
 		msg_open = false;
 		msg_closeable = false;
+		hs_setting = null;
 	}
 }
 
