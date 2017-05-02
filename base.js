@@ -1102,8 +1102,8 @@ function start_setting(setting)
 
 function highscores_picker()
 {
-	var s = "<button class='dialog_btn' onclick='show_highscores(false)'>Core Mode</button><br><br>";
-	s += "<button class='dialog_btn' onclick='show_highscores(true)'>Advanced Mode</button>";
+	var s = "<button class='dialog_btn' onclick='show_highscores(false)'>Core Mode High Scores</button><br><br>";
+	s += "<button class='dialog_btn' onclick='show_highscores(true)'>Advanced Mode High Scores</button>";
 
 	msg(s);
 
@@ -1121,17 +1121,17 @@ function show_highscores(advanced)
 
 	if(advanced)
 	{
-		var s = "<div class='hs_type' onclick='show_highscores(false)'>Advanced</div>";
+		var s = "<div class='hs_type unselectable' onclick='show_highscores(false)'>Advanced</div>";
 	}
 
 	else
 	{
-		var s = "<div class='hs_type' onclick='show_highscores(true)'>Core</div>";
+		var s = "<div class='hs_type unselectable' onclick='show_highscores(true)'>Core</div>";
 	}
 
-	s += "<b>High Scores</b>";
+	s += "<b class='unselectable'>High Scores</b>";
 
-	s += "<div class='select-style2'><select id='hs_setting_select'>";
+	s += "<div class='select-style2 unselectable'><select id='hs_setting_select'>";
 
 	s += "<option value='Overall'>Overall</option>";
 	s += "<option value='Overall - Slow'>Overall - Slow</option>";
@@ -1239,7 +1239,7 @@ function show_scores(setting, advanced)
 		
 		if(setting === "Overall")
 		{
-			s += "<br><br><div class='linkydiv' onclick='clear_highscores()'>Clear High Scores</div>";
+			s += "<br><br><div class='linkydiv unselectable' onclick='clear_highscores()'>Clear High Scores</div>";
 		}
 	}
 	
@@ -1270,7 +1270,7 @@ function show_scores(setting, advanced)
 			}
 		}
 		
-		s += "<div class='linkydiv' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
+		s += "<div class='linkydiv unselectable' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
 	}
 	
 	$('#scores').html(s);
