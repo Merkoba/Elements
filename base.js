@@ -868,6 +868,8 @@ function get_options()
 		$('#seed').html('# ' + options.seed);
 	}
 
+	$('#speed').html(options.speed);
+
 	if(options.advanced)
 	{
 		$('#mode').html("Advanced");
