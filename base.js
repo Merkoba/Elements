@@ -2110,6 +2110,7 @@ function stop_all_audio()
 function show_menu()
 {
 	var s = "<div id='msg_menu'></div>";
+	s += "<b>Menu</b><br><br>";
 	s += "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_highscores(options.advanced)'>High Scores</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
