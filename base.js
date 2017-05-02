@@ -73,7 +73,9 @@ var msg_open = false;
 
 var highscores;
 
-var ls_highscores = "highscores_v2";
+var ls_highscores = "highscores_v3";
+
+var ls_highscores_advanced = "highscores_advanced_v3";
 
 var ls_options = "options_v5";
 
@@ -961,6 +963,8 @@ function show_options()
 		options.advanced = $(this).prop('checked');
 		localStorage.setItem(ls_options, JSON.stringify(options));
 
+		last_highscore = "";
+
 		if(playing)
 		{
 			start();
@@ -978,9 +982,17 @@ function show_about()
 	msg(s);
 }
 
-function get_highscores()
+function get_highscores(advanced)
 {
-	highscores = JSON.parse(localStorage.getItem(ls_highscores));
+	if(advanced)
+	{
+		highscores = JSON.parse(localStorage.getItem(ls_highscores_advanced));
+	}
+	
+	else
+	{
+		highscores = JSON.parse(localStorage.getItem(ls_highscores));
+	}
 
 	if(highscores === null)
 	{
@@ -992,7 +1004,15 @@ function get_highscores()
 			"Overall - Linear":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']]
 		};
 
-		localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+		if(advanced)
+		{
+			localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores));		
+		}
+
+		else
+		{
+			localStorage.setItem(ls_highscores, JSON.stringify(highscores));		
+		}
 	}
 
 	else
@@ -1016,14 +1036,15 @@ function get_highscores()
 	}
 }
 
-function get_setting_highscores(setting)
+function get_setting_highscores(setting, advanced)
 {
+	get_highscores(advanced);
+
 	var scores = highscores[setting];
 
 	if(scores === undefined)
 	{
 		highscores[setting] = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
-
 		return highscores[setting];
 	}
 
@@ -1079,11 +1100,36 @@ function start_setting(setting)
 	start();
 }
 
-function show_highscores()
+function highscores_picker()
 {
-	get_highscores();
+	var s = "<button class='dialog_btn' onclick='show_highscores(false)'>Core Mode</button><br><br>";
+	s += "<button class='dialog_btn' onclick='show_highscores(true)'>Advanced Mode</button>";
 
-	var s = "<b>High Scores</b>";
+	msg(s);
+
+	var w = $('#msg').find('.dialog_btn').last().outerWidth();
+
+	$('#msg').find('.dialog_btn').each(function()
+	{
+		$(this).width(w);
+	});
+}
+
+function show_highscores(advanced)
+{
+	get_highscores(advanced);
+
+	if(advanced)
+	{
+		var s = "<div class='hs_type' onclick='show_highscores(false)'>Advanced</div>";
+	}
+
+	else
+	{
+		var s = "<div class='hs_type' onclick='show_highscores(true)'>Core</div>";
+	}
+
+	s += "<b>High Scores</b>";
 
 	s += "<div class='select-style2'><select id='hs_setting_select'>";
 
@@ -1128,12 +1174,110 @@ function show_highscores()
 
 	msg(s);
 	
-	show_scores($('#hs_setting_select option:selected').val());
+	show_scores($('#hs_setting_select option:selected').val(), advanced);
 
-	$('#hs_setting_select').change(function()
+	if(advanced)
 	{
-		show_scores($('#hs_setting_select option:selected').val());
-	});
+		$('#hs_setting_select').change(function()
+		{
+			show_scores($('#hs_setting_select option:selected').val(), true);
+		});
+	}
+
+	else
+	{
+		$('#hs_setting_select').change(function()
+		{
+			show_scores($('#hs_setting_select option:selected').val(), false);
+		});	
+	}
+
+}
+
+function show_scores(setting, advanced)
+{
+	var scores = get_setting_highscores(setting, advanced);
+
+	var s = "";
+
+	if(setting.indexOf("Overall") !== -1)
+	{
+		for(var i=0; i<scores.length; i++)
+		{
+			var hs = scores[i][0];
+			var ss = scores[i][1];
+
+			if(hs === -99999)
+			{
+				s += "----";
+			}
+
+			else
+			{
+				s += "<span class='clickable_score'";
+				s += " onclick='show_scores(\"" + ss + "\"," + advanced + ")'>";
+				s += "<div class='setting_small'>" + ss + "</div>";
+
+				if(last_highscore !== "" && ss == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
+				{
+					s += "<span class='grey_highlight'>" + format(hs) + "</span>";
+				}
+
+				else
+				{
+					s += "<span>" + format(hs) + "</span>";
+				}
+
+				s += "</span>";
+			}
+
+			if(i < scores.length - 1)
+			{
+				s += "<br><br>";
+			}
+		}
+		
+		if(setting === "Overall")
+		{
+			s += "<br><br><div class='linkydiv' onclick='clear_highscores()'>Clear High Scores</div>";
+		}
+	}
+	
+	else
+	{
+		for(var i=0; i<scores.length; i++)
+		{
+			var hs = scores[i];
+
+			if(hs === -99999)
+			{
+				s += "----<br><br>";
+			}
+
+			else
+			{
+				if(last_highscore !== "" && setting == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
+				{
+					s += "<span class='grey_highlight'>" + format(hs) + "</span>";
+				}
+
+				else
+				{
+					s += "<span>" + format(hs) + "</span>";
+				}
+
+				s += "<br><br>";
+			}
+		}
+		
+		s += "<div class='linkydiv' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
+	}
+	
+	$('#scores').html(s);
+	
+	$('#hs_setting_select').val(setting);
+
+	$('#msg').scrollTop(0);
 }
 
 function show_report()
@@ -1223,92 +1367,6 @@ function copy_report_to_clipboard()
 	play('pup2');
 }
 
-function show_scores(setting)
-{
-	var scores = get_setting_highscores(setting);
-
-	var s = "";
-
-	if(setting.indexOf("Overall") !== -1)
-	{
-		for(var i=0; i<scores.length; i++)
-		{
-			var hs = scores[i][0];
-			var ss = scores[i][1];
-
-			if(hs === -99999)
-			{
-				s += "----";
-			}
-
-			else
-			{
-				s += "<span class='clickable_score'";
-				s += " onclick='show_scores(\"" + ss + "\")'>";
-				s += "<div class='setting_small'>" + ss + "</div>";
-
-				if(last_highscore !== "" && ss == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
-				{
-					s += "<span class='grey_highlight'>" + format(hs) + "</span>";
-				}
-
-				else
-				{
-					s += "<span>" + format(hs) + "</span>";
-				}
-
-				s += "</span>";
-			}
-
-			if(i < scores.length - 1)
-			{
-				s += "<br><br>";
-			}
-		}
-		
-		if(setting === "Overall")
-		{
-			s += "<br><br><div class='linkydiv' onclick='clear_highscores()'>Clear High Scores</div>";
-		}
-	}
-	
-	else
-	{
-		for(var i=0; i<scores.length; i++)
-		{
-			var hs = scores[i];
-
-			if(hs === -99999)
-			{
-				s += "----<br><br>";
-			}
-
-			else
-			{
-				if(last_highscore !== "" && setting == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
-				{
-					s += "<span class='grey_highlight'>" + format(hs) + "</span>";
-				}
-
-				else
-				{
-					s += "<span>" + format(hs) + "</span>";
-				}
-
-				s += "<br><br>";
-			}
-		}
-		
-		s += "<div class='linkydiv' onclick='start_setting(\"" + setting + "\")'>Play Again</div>";
-	}
-	
-	$('#scores').html(s);
-	
-	$('#hs_setting_select').val(setting);
-
-	$('#msg').scrollTop(0);
-}
-
 function get_speed()
 {
 	var speeds = ["Slow", "Normal", "Fast", "Linear"];
@@ -1390,10 +1448,11 @@ function ended()
 		return;
 	}
 
-	get_highscores();
+	var shs = "<br><br><button class='dialog_btn' onclick='show_highscores(" + options.advanced + ")'>High Scores</button>";
 
 	var setting = get_setting();
-	var hs = get_setting_highscores(setting);
+	var hs = get_setting_highscores(setting, options.advanced);
+	
 	var overall = highscores.Overall;
 	var overall_speed = highscores["Overall - " + speed];
 
@@ -1403,7 +1462,7 @@ function ended()
 
 		if(sum > -999990 && points > hs[0])
 		{
-			msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+			msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
 			
 			play('highscore');
 
@@ -1411,12 +1470,20 @@ function ended()
 			hs.sort(function(a, b){return b-a});
 			hs.splice(10, hs.length);
 
-			localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+			if(options.advanced)
+			{
+				localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores));
+			}
+
+			else
+			{
+				localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+			}
 		}
 
 		else
 		{
-			msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+			msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
 			
 			play('ended');
 			
@@ -1426,14 +1493,22 @@ function ended()
 				hs.sort(function(a, b){return b-a});
 				hs.splice(10, hs.length);
 
-				localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+				if(options.advanced)
+				{
+					localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores));
+				}
+
+				else
+				{
+					localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+				}
 			}
 		}
 	}
 
 	else
 	{
-		msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_highscores()'>High Scores</button>", true);
+		msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
 		
 		play('ended');
 	}
@@ -1479,7 +1554,15 @@ function ended()
 
 		highscores["Overall - " + speed] = counted;
 
-		localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+		if(options.advanced)
+		{
+			localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores));
+		}
+
+		else
+		{
+			localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+		}	
 	}
 
 	if(points > overall[overall.length -1][0])
@@ -1513,7 +1596,15 @@ function ended()
 
 		highscores.Overall = counted;
 
-		localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+		if(options.advanced)
+		{
+			localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores));
+		}
+
+		else
+		{
+			localStorage.setItem(ls_highscores, JSON.stringify(highscores));
+		}	
 	}
 
 	last_highscore = setting + "=" + points;
@@ -1966,7 +2057,7 @@ function show_menu()
 {
 	var s = "<div id='msg_menu'></div>";
 	s += "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
-	s += "<button class='dialog_btn' onclick='show_highscores()'>High Scores</button><br><br>";
+	s += "<button class='dialog_btn' onclick='highscores_picker()'>High Scores</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
 
@@ -1976,7 +2067,7 @@ function show_menu()
 
 	$('#msg').find('.dialog_btn').each(function()
 	{
-		$(this).css('width', w);
+		$(this).width(w);
 	});
 }
 

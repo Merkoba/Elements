@@ -436,3 +436,10 @@ input[type="checkbox"]
 {
 	margin: auto;
 }
+
+.hs_type
+{
+	font-size: 0.7em;
+	padding-bottom: 0.2em;
+	cursor: pointer;
+}
