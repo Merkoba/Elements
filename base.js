@@ -1732,7 +1732,7 @@ function fmsg(txt, el)
 	$('#fmsg').css('top', oh);
 
 	var ml = $('#fmsg').outerWidth();
-	var l = $('#' + el).offset().left + ($('#' + el).width() / 2) - (ml / 2);
+	var l = $('#' + el).offset().left + ($('#' + el).width() /4) - (ml / 2);
 
 	if(l < 0)
 	{
