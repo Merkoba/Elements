@@ -11,7 +11,7 @@
 
 	$k = $_GET['k'];
 
-	if(k == 4863)
+	if($k == 4863)
 	{
 		chdir("/var/www/elements/");
 		exec('sudo git pull  2>&1', $output);
