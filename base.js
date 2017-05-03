@@ -1722,24 +1722,31 @@ function fmsg(txt, el)
 		return;
 	}
 
+	$('#fmsg').css('display', 'block');
 	$('#fmsg').css('left', 'auto');
 	$('#fmsg').css('right', 'auto');
-
 	$('#fmsg').html(txt);
+	$('#foverlay').css('display', 'block');
+	$('#fmsg').scrollTop(0);
+	$('#fmsg').focus();
+	
+	fmsg_open = true;
 
-	var oh = $('#title_container').outerHeight();
+	fmsg_mode = el;
+}
 
-	$('#fmsg').css('top', oh);
+function fit_fmsg(el)
+{
+	$('#fmsg').css('top', $('#title_container').outerHeight());
 
-	var ml = $('#fmsg').outerWidth();
-	var l = $('#' + el).offset().left + ($('#' + el).width() / 4) - (ml / 2);
+	var left = $('#' + el).offset().left - ($('#fmsg').outerWidth() / 2) + ($('#' + el).width() / 2);
 
-	if(l < 0)
+	if(left < 0)
 	{
-		l = 0;
+		left = 0;
 	}
 
-	if((l + ml) > document.documentElement.clientWidth)
+	if((left + $('#fmsg').outerWidth()) > document.documentElement.clientWidth)
 	{
 		$('#fmsg').css('left', 'auto');
 		$('#fmsg').css('right', 0);
@@ -1747,17 +1754,8 @@ function fmsg(txt, el)
 
 	else
 	{
-		$('#fmsg').css('left', l);
+		$('#fmsg').css('left', left);
 	}
-
-	$('#foverlay').css('display', 'block');
-	$('#fmsg').css('display', 'block');
-	$('#fmsg').scrollTop(0);
-	$('#fmsg').focus();
-	
-	fmsg_open = true;
-
-	fmsg_mode = el;
 }
 
 function refresh()
@@ -1875,6 +1873,7 @@ function seed_picker()
 	s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
 	fmsg(s, 'seed');
+	fit_fmsg('seed');
 
 	$('#seed_input').attr('type', 'number');
 	$('#seed_input').attr('max', 999);
@@ -1994,6 +1993,7 @@ function speed_picker()
 		$(this).width(w);
 	});
 
+	fit_fmsg('speed');
 }
 
 function change_speed(what)
@@ -2023,6 +2023,8 @@ function mode_picker()
 	{
 		$(this).width(w);
 	});
+
+	fit_fmsg('mode');
 }
 
 function change_mode(advanced)
