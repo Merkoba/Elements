@@ -9,8 +9,13 @@
 
 	// if(0 === strpos("104.192.143", $ip)) 
 
-	chdir("/var/www/elements/");
-	exec('sudo git pull  2>&1', $output);
-	echo implode("<br/>\n", $output);
+	$k = $_GET['k'];
+
+	if(k == 4863)
+	{
+		chdir("/var/www/elements/");
+		exec('sudo git pull  2>&1', $output);
+		echo implode("<br/>\n", $output);
+	}
 
 ?>
