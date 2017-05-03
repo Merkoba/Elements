@@ -2242,6 +2242,8 @@ function title_click()
 			{
 				change_seed(NaN);
 			}
+
+			start();
 		}
 	}
 }
