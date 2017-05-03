@@ -71,6 +71,8 @@ var directions = ["up", "down"];
 
 var msg_open = false;
 
+var fmsg_open = false;
+
 var highscores;
 
 var ls_highscores = "highscores_v4";
@@ -107,6 +109,8 @@ var report = [];
 
 var hs_setting = null;
 
+var fmsg_mode = null;
+
 function init()
 {
 	get_options();
@@ -130,11 +134,30 @@ function check_start()
 	}
 }
 
-function check_stop()
+function check_escape()
 {
-	if(msg_open)
+	if(msg_open || fmsg_open)
 	{
 		hide_overlay(true);
+		hide_foverlay();
+	}
+
+	else
+	{
+		if($('#title').html() !== main_title)
+		{
+			stop();
+		}
+	}
+
+}
+
+function hide_and_stop()
+{
+	if(msg_open || fmsg_open)
+	{
+		hide_overlay(true);
+		hide_foverlay();
 	}
 
 	if($('#title').html() !== main_title)
@@ -150,7 +173,7 @@ function start()
 	paused = false;
 	count = 0;
 	stop_loop();
-	hide_overlay(true);
+	hide_overlays();
 	generate_tiles();
 
 	if(options.fit)
@@ -1617,12 +1640,23 @@ function overlay_clicked()
 	$('#overlay').click(function()
 	{
 		hide_overlay();
-	})
+	});
+
+	$('#foverlay').click(function()
+	{
+		hide_foverlay();
+	});
+}
+
+function hide_overlays()
+{
+	hide_overlay(true);
+	hide_foverlay();
 }
 
 function hide_overlay(force=false)
 {
-	if(msg_closeable || force)
+	if(msg_open && (msg_closeable || force))
 	{
 		$('#overlay').css('display', 'none');
 		$('#msg').css('display', 'none');
@@ -1634,7 +1668,7 @@ function hide_overlay(force=false)
 
 function msg(txt, temp_disable=false)
 {
-	to_top();
+	hide_foverlay();
 	
 	$('#overlay').css('display', 'block');
 	$('#msg').html(txt);
@@ -1663,6 +1697,67 @@ function msg(txt, temp_disable=false)
 	hs_setting = null;
 	
 	msg_open = true;
+}
+
+function hide_foverlay()
+{
+	if(fmsg_open)
+	{
+		$('#foverlay').css('display', 'none');
+		$('#fmsg').css('display', 'none');
+		$('#fmsg').html('');
+		fmsg_open = false;
+		msg_closeable = false;
+		fmsg_mode = null;
+	}
+}
+
+function fmsg(txt, el)
+{
+	hide_overlay();	
+
+	if(el === fmsg_mode)
+	{
+		hide_foverlay();
+		return;
+	}
+
+	$('#fmsg').css('left', 'auto');
+	$('#fmsg').css('right', 'auto');
+
+	$('#fmsg').html(txt);
+
+	var oh = $('#title_container').outerHeight();
+
+	$('#fmsg').css('top', oh);
+
+	var ml = $('#fmsg').outerWidth();
+	var l = $('#' + el).offset().left + ($('#' + el).width() / 2) - (ml / 2);
+
+	if(l < 0)
+	{
+		l = 0;
+	}
+
+	if((l + ml) > document.documentElement.clientWidth)
+	{
+		$('#fmsg').css('left', 'auto');
+		$('#fmsg').css('right', 0);
+	}
+
+	else
+	{
+		$('#fmsg').css('left', l);
+	}
+
+	$('#foverlay').css('display', 'block');
+	$('#fmsg').css('display', 'block');
+	$('#fmsg').scrollTop(0);
+	$('#fmsg').focus();
+	
+	fmsg_open = true;
+
+	fmsg_mode = el;
 }
 
 function refresh()
@@ -1774,15 +1869,12 @@ function update_counter()
 
 function seed_picker()
 {
-	check_stop();
-
-	var s = "<b>Seed</b><br>";
-	s += "0 to 999<br><br><input id='seed_input'><br><br><br>";
+	var s = "0 to 999<br><br><input id='seed_input'><br><br>";
 	s += "<button class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
 	s += "<button class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
-	msg(s);
+	fmsg(s, 'seed');
 
 	$('#seed_input').attr('type', 'number');
 	$('#seed_input').attr('max', 999);
@@ -1866,7 +1958,7 @@ function change_seed(s)
 		update_options();
 	}
 
-	hide_overlay();
+	hide_and_stop();
 }
 
 function get_random_seed()
@@ -1888,19 +1980,16 @@ function get_random_seed()
 
 function speed_picker()
 {
-	check_stop();
-
-	var s = "<b>Speed</b><br><br>";
-	s += "<button class='dialog_btn' onclick='change_speed(\"Slow\")'>Slow</button><br><br>";
+	var s = "<button class='dialog_btn' onclick='change_speed(\"Slow\")'>Slow</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_speed(\"Normal\")'>Normal</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_speed(\"Fast\")'>Fast</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_speed(\"Linear\")'>Linear</button>";
 
-	msg(s);
+	fmsg(s, 'speed');
 
-	var w = $($('#msg').find('.dialog_btn').get(1)).outerWidth();
+	var w = $($('#fmsg').find('.dialog_btn').get(1)).outerWidth();
 
-	$('#msg').find('.dialog_btn').each(function()
+	$('#fmsg').find('.dialog_btn').each(function()
 	{
 		$(this).width(w);
 	});
@@ -1918,26 +2007,22 @@ function change_speed(what)
 		update_options();
 	}
 
-	hide_overlay();
+	hide_and_stop();
 }
 
 function mode_picker()
 {
-	check_stop();
+	var s = "<button class='dialog_btn' onclick='change_mode(false)'>Core</button><br><br>";
+	s += "<button class='dialog_btn' onclick='change_mode(true)'>Advanced</button>";
 
-	var s = "<b>Mode</b><br><br>";
-	s += "<button class='dialog_btn' onclick='change_mode(false)'>Core</button><br><br>";
-	s += "<button class='dialog_btn' onclick='change_mode(true)'>Advanced</button><br><br>";
+	fmsg(s, 'mode');
 
-	msg(s);
+	var w = $('#fmsg').find('.dialog_btn').last().outerWidth();
 
-	var w = $('#msg').find('.dialog_btn').last().outerWidth();
-
-	$('#msg').find('.dialog_btn').each(function()
+	$('#fmsg').find('.dialog_btn').each(function()
 	{
 		$(this).width(w);
 	});
-
 }
 
 function change_mode(advanced)
@@ -1957,9 +2042,9 @@ function change_mode(advanced)
 		}
 
 		update_options();
-	}
+	}	
 
-	hide_overlay();	
+	hide_and_stop();
 }
 
 function get_random_int(min, max)
@@ -2053,8 +2138,13 @@ function key_detection()
 				}
 			}
 		}
+		
+		if(code === 27)
+		{
+			check_escape();
+		}
 
-		if(!msg_open)
+		if(!msg_open && !fmsg_open)
 		{
 			if(code === 40 || code === 83)
 			{
@@ -2066,18 +2156,6 @@ function key_detection()
 				$('body').scrollTop(0);
 			}
 
-			else if(code === 27)
-			{
-				check_stop();
-			}
-		}
-
-		else
-		{
-			if(code === 27)
-			{
-				hide_overlay();
-			}
 		}
 	});
 }
@@ -2089,7 +2167,7 @@ function stop()
 	count = 0;
 	stop_loop();
 	stop_all_audio();
-	hide_overlay(true);
+	hide_overlays();
 	$('#main_container').html('');
 	$('#title').html(main_title);
 	$('#points').html('');
@@ -2121,13 +2199,12 @@ function stop_all_audio()
 function show_menu()
 {
 	var s = "<div id='msg_menu'></div>";
-	s += "<b>Menu</b><br><br>";
 	s += "<button class='dialog_btn' onclick='show_instructions()'>Instructions</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_highscores(options.advanced)'>High Scores</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
 
-	msg(s);
+	msg(s, 'menu');
 
 	var w = $('#msg').find('.dialog_btn').first().outerWidth();
 

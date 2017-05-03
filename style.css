@@ -256,16 +256,46 @@ body
 	display: none;
 }
 
+#foverlay
+{
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	z-index: 0;
+	background-color: rgba(0, 0, 0, 0);
+	display: none;
+}
+
 #msg
 {
 	font-size: 1.7em;
 	text-align: center;
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
 	background: white;
 	padding: 1.6em;
+	overflow: auto;
+	max-height: 80vh;
+	overflow-x: hidden;
+	overflow-y: auto;
+	display: none;
+	z-index: 499399259;
+	outline: 0;
+}
+
+#fmsg
+{
+	position: fixed;
+	font-size: 1.7em;
+	text-align: center;
+	background: white;
+	padding: 1.6em;
+	padding-top: 0.2em;
+	padding-bottom: 1em;
 	overflow: auto;
 	max-height: 80vh;
 	overflow-x: hidden;
