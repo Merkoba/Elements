@@ -1737,7 +1737,7 @@ function fmsg(txt, el)
 
 function fit_fmsg(el)
 {
-	$('#fmsg').css('top', $('#title_container').outerHeight());
+	$('#fmsg').css('top', $('#title_container').outerHeight() - 1);
 
 	var left = $('#' + el).offset().left - ($('#fmsg').outerWidth() / 2) + ($('#' + el).width() / 2);
 
