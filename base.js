@@ -872,7 +872,7 @@ function get_options()
 
 	if(options.advanced)
 	{
-		$('#mode').html("Advanced");
+		$('#mode').html("Adv");
 	}
 
 	else
@@ -1839,29 +1839,34 @@ function check_seed()
 
 function change_seed(s)
 {
-	options.seed = parseInt(s);
+	var s = parseInt(s);
 
-	if(isNaN(options.seed))
+	if(isNaN(s))
 	{
-		options.seed = 0.1;
+		s = 0.1;
 	}
 
-	if(options.seed === -1)
+	if(options.seed !== s)
 	{
-		$('#seed').html('#');
-	}
+		options.seed = s;
 
-	else if(options.seed === 0.1)
-	{
-		$('#seed').html('#NaN');
-	}
+		if(options.seed === -1)
+		{
+			$('#seed').html('#');
+		}
 
-	else
-	{
-		$('#seed').html('# ' + options.seed);
-	}
+		else if(options.seed === 0.1)
+		{
+			$('#seed').html('#NaN');
+		}
 
-	update_options();
+		else
+		{
+			$('#seed').html('# ' + options.seed);
+		}
+
+		update_options();
+	}
 
 	hide_overlay();
 }
@@ -1906,11 +1911,14 @@ function speed_picker()
 
 function change_speed(what)
 {
-	options.speed = what;
+	if(options.speed !== what)
+	{
+		options.speed = what;
 
-	$('#speed').html(what);
+		$('#speed').html(what);
 
-	update_options();
+		update_options();
+	}
 
 	hide_overlay();
 }
@@ -1936,19 +1944,22 @@ function mode_picker()
 
 function change_mode(advanced)
 {
-	options.advanced = advanced;
-
-	if(options.advanced)
+	if(options.advanced !== advanced)
 	{
-		$('#mode').html("Advanced");
-	}
+		options.advanced = advanced;
 
-	else
-	{
-		$('#mode').html("Core");
-	}
+		if(options.advanced)
+		{
+			$('#mode').html("Adv");
+		}
 
-	update_options();
+		else
+		{
+			$('#mode').html("Core");
+		}
+
+		update_options();
+	}
 
 	hide_overlay();	
 }
