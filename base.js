@@ -73,9 +73,9 @@ var msg_open = false;
 
 var highscores;
 
-var ls_highscores = "highscores_v3";
+var ls_highscores = "highscores_v4";
 
-var ls_highscores_advanced = "highscores_advanced_v3";
+var ls_highscores_advanced = "highscores_advanced_v4";
 
 var ls_options = "options_v6";
 
@@ -1022,11 +1022,11 @@ function get_highscores(advanced)
 	if(highscores === null)
 	{
 		highscores = {
-			"Overall":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
-			"Overall - Slow":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
-			"Overall - Normal":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
-			"Overall - Fast":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']],
-			"Overall - Linear":[[-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, ''], [-99999, '']]
+			"Overall":[[0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, '']],
+			"Overall - Slow":[[0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, '']],
+			"Overall - Normal":[[0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, '']],
+			"Overall - Fast":[[0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, '']],
+			"Overall - Linear":[[0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, ''], [0, '']]
 		};
 
 		if(advanced)
@@ -1053,7 +1053,7 @@ function get_highscores(advanced)
 
 			var sum = highscores[keys[i]].reduce((a, b) => a + b, 0);
 
-			if(sum === -999990)
+			if(sum === 0)
 			{
 				delete highscores[keys[i]];
 			}
@@ -1069,7 +1069,7 @@ function get_setting_highscores(setting, advanced)
 
 	if(scores === undefined)
 	{
-		highscores[setting] = [-99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999, -99999];
+		highscores[setting] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		return highscores[setting];
 	}
 
@@ -1232,7 +1232,7 @@ function show_scores(setting, advanced)
 			var hs = scores[i][0];
 			var ss = scores[i][1];
 
-			if(hs === -99999)
+			if(hs === 0)
 			{
 				s += "----";
 			}
@@ -1274,7 +1274,7 @@ function show_scores(setting, advanced)
 		{
 			var hs = scores[i];
 
-			if(hs === -99999)
+			if(hs === 0)
 			{
 				s += "----<br><br>";
 			}
@@ -1462,9 +1462,7 @@ function ended()
 
 	if(!options.hints && points > hs[hs.length -1])
 	{
-		var sum = hs.reduce((a, b) => a + b, 0);
-
-		if(sum > -999990 && points > hs[0])
+		if(points > hs[0])
 		{
 			msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
 			
