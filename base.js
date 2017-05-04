@@ -171,7 +171,6 @@ function start()
 	playing = true;
 	started = false;
 	paused = false;
-	count = 0;
 	stop_loop();
 	hide_overlays();
 	generate_tiles();
@@ -610,6 +609,8 @@ function loop()
 
 function stop_loop()
 {
+	count = 0;
+
 	if(tick_timer !== undefined)
 	{
 		tick_timer.pause();
@@ -619,6 +620,8 @@ function stop_loop()
 function tick()
 {
 	report.push(';');
+
+	decrease_counter();
 	
 	sold_on_tick = [];
 
@@ -698,18 +701,12 @@ function tick()
 	
 	update_points();
 
-	if(points <= 0)
-	{ 
-		lost();
-		return;
-	}
-
-	decrease_counter();
-
 	if(options.hints)
 	{
 		check_all_hints();
 	}
+
+	check_state();
 }
 
 function remove_pulsetrios()
@@ -787,25 +784,33 @@ function check_all_hints()
 	}
 }
 
+function decrease_counter()
+{
+	count -= 1;
+	update_counter();
+}
+
 function update_points()
 {
 	$('#points').html(format(points));
 }
 
-function decrease_counter()
+function check_state()
 {
-	count -= 1;
+	if(points <= 0)
+	{ 
+		stop_loop();
+		lost();
+	}
 
-	update_counter();
-
-	if(count === 0)
+	else if(count === 0)
 	{
 		ended();
 	}
-	
+
 	else if($('.hidden').length === elements.length)
 	{
-		count = 0;
+		stop_loop();
 		ended();
 	}
 
@@ -1439,11 +1444,7 @@ function lost()
 
 	start_music_fadeout();
 
-	count -= 1;
-
 	$('#title').html('You Lost');
-
-	count = 0;
 
 	var s = "You got " + format(points) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_instructions()'>Instructions</button>";
 	
@@ -2165,7 +2166,6 @@ function stop()
 {
 	playing = false;
 	clear_started();
-	count = 0;
 	stop_loop();
 	stop_all_audio();
 	hide_overlays();
