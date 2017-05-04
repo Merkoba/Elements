@@ -2206,7 +2206,7 @@ function show_menu()
 	s += "<button class='dialog_btn' onclick='show_options()'>Options</button><br><br>";
 	s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
 
-	msg(s, 'menu');
+	msg(s);
 
 	var w = $('#msg').find('.dialog_btn').first().outerWidth();
 
