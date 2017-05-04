@@ -1696,19 +1696,30 @@ function msg(txt, temp_disable=false)
 	msg_open = true;
 }
 
-function msg_align_btns()
+function msg_align_btns(alt=false)
 {
-	var w = 0;
-
-	$('#msg').find('.dialog_btn').each(function()
+	if(alt)
 	{
-		w = Math.max(w, $(this).width());
-	});
+		$('#msg').find('.dialog_btn').each(function()
+		{
+			$(this).width($(this).outerWidth());
+		});		
+	}
 
-	$('#msg').find('.dialog_btn').each(function()
+	else
 	{
-		$(this).width(w);
-	});
+		var w = 0;
+
+		$('#msg').find('.dialog_btn').each(function()
+		{
+			w = Math.max(w, $(this).outerWidth());
+		});
+
+		$('#msg').find('.dialog_btn').each(function()
+		{
+			$(this).width(w);
+		});
+	}
 }
 
 function hide_foverlay()
@@ -1747,19 +1758,30 @@ function fmsg(txt, el)
 	fmsg_mode = el;
 }
 
-function fmsg_align_btns()
+function fmsg_align_btns(alt=false)
 {
-	var w = 0;
-
-	$('#fmsg').find('.dialog_btn').each(function()
+	if(alt)
 	{
-		w = Math.max(w, $(this).width());
-	});
+		$('#fmsg').find('.dialog_btn').each(function()
+		{
+			$(this).width($(this).outerWidth());
+		});		
+	}
 
-	$('#fmsg').find('.dialog_btn').each(function()
+	else
 	{
-		$(this).width(w);
-	});
+		var w = 0;
+
+		$('#fmsg').find('.dialog_btn').each(function()
+		{
+			w = Math.max(w, $(this).outerWidth());
+		});
+
+		$('#fmsg').find('.dialog_btn').each(function()
+		{
+			$(this).width(w);
+		});
+	}
 }
 
 function position_fmsg(el)
@@ -1895,11 +1917,15 @@ function update_counter()
 function seed_picker()
 {
 	var s = "0 to 999<br><br><input id='seed_input'><br><br>";
-	s += "<button class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
-	s += "<button class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
-	s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
+	s += "<button id='seed_btn_1' class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
+	s += "<button id='seed_btn_2' class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
+	s += "<button id='seed_btn_3' class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
 	fmsg(s, 'seed');
+	fmsg_align_btns(true);
+
+	$('#seed_btn_3').outerWidth(($('#seed_btn_2').offset().left + $('#seed_btn_2').outerWidth()) - $('#seed_btn_1').offset().left);
+	
 	position_fmsg('seed');
 
 	$('#seed_input').attr('type', 'number');
