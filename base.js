@@ -1449,6 +1449,7 @@ function lost()
 	}
 
 	msg(s, true);
+	msg_align_btns();
 
 	$('#start').html('Play Again');
 
@@ -1466,6 +1467,7 @@ function ended()
 	if(options.hints)
 	{
 		msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>", true);
+		msg_align_btns();
 		play('ended');
 		return;
 	}
@@ -1483,7 +1485,7 @@ function ended()
 		if(points > hs[0])
 		{
 			msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
-			
+			msg_align_btns();
 			play('highscore');
 
 			hs.push(points);
@@ -1504,7 +1506,7 @@ function ended()
 		else
 		{
 			msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
-			
+			msg_align_btns();
 			play('ended');
 			
 			if(hs.indexOf(points) === -1)
@@ -1529,7 +1531,7 @@ function ended()
 	else
 	{
 		msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button>" + shs, true);
-		
+		msg_align_btns();
 		play('ended');
 	}
 
@@ -1694,6 +1696,21 @@ function msg(txt, temp_disable=false)
 	msg_open = true;
 }
 
+function msg_align_btns()
+{
+	var w = 0;
+
+	$('#msg').find('.dialog_btn').each(function()
+	{
+		w = Math.max(w, $(this).outerWidth());
+	});
+
+	$('#msg').find('.dialog_btn').each(function()
+	{
+		$(this).width(w);
+	});
+}
+
 function hide_foverlay()
 {
 	if(fmsg_open)
@@ -1730,7 +1747,22 @@ function fmsg(txt, el)
 	fmsg_mode = el;
 }
 
-function fit_fmsg(el)
+function fmsg_align_btns()
+{
+	var w = 0;
+
+	$('#fmsg').find('.dialog_btn').each(function()
+	{
+		w = Math.max(w, $(this).outerWidth());
+	});
+
+	$('#fmsg').find('.dialog_btn').each(function()
+	{
+		$(this).width(w);
+	});
+}
+
+function position_fmsg(el)
 {
 	$('#fmsg').css('top', $('#title_container').outerHeight() - 1);
 
@@ -1868,7 +1900,7 @@ function seed_picker()
 	s += "<button class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
 	fmsg(s, 'seed');
-	fit_fmsg('seed');
+	position_fmsg('seed');
 
 	$('#seed_input').attr('type', 'number');
 	$('#seed_input').attr('max', 999);
@@ -1980,15 +2012,8 @@ function speed_picker()
 	s += "<button class='dialog_btn' onclick='change_speed(\"Linear\")'>Linear</button>";
 
 	fmsg(s, 'speed');
-
-	var w = $($('#fmsg').find('.dialog_btn').get(1)).outerWidth();
-
-	$('#fmsg').find('.dialog_btn').each(function()
-	{
-		$(this).width(w);
-	});
-
-	fit_fmsg('speed');
+	fmsg_align_btns();
+	position_fmsg('speed');
 }
 
 function change_speed(what)
@@ -2011,15 +2036,8 @@ function mode_picker()
 	s += "<button class='dialog_btn' onclick='change_mode(true)'>Advanced</button>";
 
 	fmsg(s, 'mode');
-
-	var w = $('#fmsg').find('.dialog_btn').last().outerWidth();
-
-	$('#fmsg').find('.dialog_btn').each(function()
-	{
-		$(this).width(w);
-	});
-
-	fit_fmsg('mode');
+	fmsg_align_btns();
+	position_fmsg('mode');
 }
 
 function change_mode(advanced)
@@ -2201,13 +2219,7 @@ function show_menu()
 	s += "<button class='dialog_btn' onclick='show_about()'>About</button>";
 
 	msg(s);
-
-	var w = $('#msg').find('.dialog_btn').first().outerWidth();
-
-	$('#msg').find('.dialog_btn').each(function()
-	{
-		$(this).width(w);
-	});
+	msg_align_btns();
 }
 
 function toggle_menu()
