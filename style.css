@@ -294,9 +294,10 @@ body
 	font-size: 1.7em;
 	text-align: center;
 	background: white;
-	padding: 1.6em;
 	padding-top: 0.5em;
 	padding-bottom: 1em;
+	padding-left: 1em;
+	padding-right: 1em;
 	overflow: auto;
 	max-height: 80vh;
 	overflow-x: hidden;
