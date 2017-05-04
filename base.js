@@ -1742,7 +1742,7 @@ function fmsg(txt, el)
 	if(el === fmsg_mode)
 	{
 		hide_foverlay();
-		return;
+		return false;
 	}
 
 	$('#fmsg').css('display', 'block');
@@ -1756,6 +1756,8 @@ function fmsg(txt, el)
 	fmsg_open = true;
 
 	fmsg_mode = el;
+
+	return true;
 }
 
 function fmsg_align_btns(alt=false)
@@ -1921,15 +1923,17 @@ function seed_picker()
 	s += "<button id='seed_btn_2' class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
 	s += "<button id='seed_btn_3' class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
-	fmsg(s, 'seed');
-	fmsg_align_btns(true);
+	if(fmsg(s, 'seed'))
+	{
+		fmsg_align_btns(true);
 
-	var bw = ($('#seed_btn_2').offset().left + $('#seed_btn_2').outerWidth()) - $('#seed_btn_1').offset().left;
+		var bw = ($('#seed_btn_2').offset().left + $('#seed_btn_2').outerWidth()) - $('#seed_btn_1').offset().left;
 
-	$('#seed_input').outerWidth(bw);
-	$('#seed_btn_3').outerWidth(bw);
+		$('#seed_input').outerWidth(bw);
+		$('#seed_btn_3').outerWidth(bw);
 
-	position_fmsg('seed');
+		position_fmsg('seed');
+	}
 
 	$('#seed_input').attr('type', 'number');
 	$('#seed_input').attr('max', 999);
@@ -2040,9 +2044,11 @@ function speed_picker()
 	s += "<button class='dialog_btn' onclick='change_speed(\"Fast\")'>Fast</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_speed(\"Linear\")'>Linear</button>";
 
-	fmsg(s, 'speed');
-	fmsg_align_btns();
-	position_fmsg('speed');
+	if(fmsg(s, 'speed'))
+	{
+		fmsg_align_btns();
+		position_fmsg('speed');
+	}
 }
 
 function change_speed(what)
@@ -2064,9 +2070,11 @@ function mode_picker()
 	var s = "<button class='dialog_btn' onclick='change_mode(false)'>Core</button><br><br>";
 	s += "<button class='dialog_btn' onclick='change_mode(true)'>Advanced</button>";
 
-	fmsg(s, 'mode');
-	fmsg_align_btns();
-	position_fmsg('mode');
+	if(fmsg(s, 'mode'))
+	{
+		fmsg_align_btns();
+		position_fmsg('mode');
+	}
 }
 
 function change_mode(advanced)
