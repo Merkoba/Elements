@@ -621,7 +621,7 @@ function tick()
 {
 	report.push(';');
 
-	decrease_counter();
+	count -= 1;
 	
 	sold_on_tick = [];
 
@@ -699,6 +699,7 @@ function tick()
 		}
 	}
 	
+	update_counter();
 	update_points();
 
 	if(options.hints)
@@ -782,12 +783,6 @@ function check_all_hints()
 	{
 		check_hint(elements[i]);
 	}
-}
-
-function decrease_counter()
-{
-	count -= 1;
-	update_counter();
 }
 
 function update_points()
