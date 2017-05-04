@@ -119,6 +119,7 @@ function init()
 	resize_events();
 	music_control();
 	check_firstime();
+	succ();
 }
 
 function check_start()
@@ -2388,4 +2389,9 @@ function toggle_pause()
 			paused = false;
 		}
 	}
+}
+
+function succ()
+{
+	console.log("%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and will give them access to your memes.", "color: red; font-size: x-large");
 }
