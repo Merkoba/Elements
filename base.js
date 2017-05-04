@@ -1702,7 +1702,7 @@ function msg_align_btns()
 
 	$('#msg').find('.dialog_btn').each(function()
 	{
-		w = Math.max(w, $(this).outerWidth());
+		w = Math.max(w, $(this).width());
 	});
 
 	$('#msg').find('.dialog_btn').each(function()
@@ -1753,7 +1753,7 @@ function fmsg_align_btns()
 
 	$('#fmsg').find('.dialog_btn').each(function()
 	{
-		w = Math.max(w, $(this).outerWidth());
+		w = Math.max(w, $(this).width());
 	});
 
 	$('#fmsg').find('.dialog_btn').each(function()

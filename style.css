@@ -320,6 +320,8 @@ b
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	padding: 0.7em;
+	padding-left: 1.1em;
+	padding-right: 1.1em;
 	border-radius: 5px;
 	border: 1px solid rgba(0,0,0,0.3);
 	border-bottom-width: 3px;
