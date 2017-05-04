@@ -1924,8 +1924,11 @@ function seed_picker()
 	fmsg(s, 'seed');
 	fmsg_align_btns(true);
 
-	$('#seed_btn_3').outerWidth(($('#seed_btn_2').offset().left + $('#seed_btn_2').outerWidth()) - $('#seed_btn_1').offset().left);
-	
+	var bw = ($('#seed_btn_2').offset().left + $('#seed_btn_2').outerWidth()) - $('#seed_btn_1').offset().left;
+
+	$('#seed_input').outerWidth(bw);
+	$('#seed_btn_3').outerWidth(bw);
+
 	position_fmsg('seed');
 
 	$('#seed_input').attr('type', 'number');
