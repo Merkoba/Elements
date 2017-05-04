@@ -859,6 +859,7 @@ function show_instructions()
 	s += "You can start a game with Enter.<br><br>";
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
 	s += "Backspace opens or closes the menu.<br><br>";
+	s += "Clicking on the tick counter pauses or resumes a game.<br><br>";
 	s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
 	s += "Clicking on the game points shows the high scores.<br><br>";
 	s += "Clicking on Core or Advanced at the top of High Scores toggles between Core High Scores and Advanced High Scores.<br><br>";
