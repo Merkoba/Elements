@@ -857,7 +857,6 @@ function show_instructions()
 	s += "Elements that become lit disappear from the game in the next tick and they're not usable anymore.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
-	s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
 	s += "You can start a game with Enter.<br><br>";
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
 	s += "Backspace opens or closes the menu.<br><br>";
@@ -865,6 +864,7 @@ function show_instructions()
 	s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
 	s += "Clicking on the game points shows the high scores.<br><br>";
 	s += "Clicking on Core or Advanced at the top of High Scores toggles between Core High Scores and Advanced High Scores.<br><br>";
+	s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
 
 	msg(s);
 }
