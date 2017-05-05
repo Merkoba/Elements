@@ -608,7 +608,7 @@ function loop()
 		}
 
 	}, loop_speed);
-};
+}
 
 function stop_loop()
 {
@@ -1129,29 +1129,28 @@ function get_setting()
 
 function start_setting(setting, advanced)
 {
-	var sd = setting.split(" ")[0].replace('#', '');
+	var sd = setting.split(" - ")[0].replace('#', '').trim();
 
 	if(sd === '')
 	{
-		options.seed = -1;
-		$('#seed').html('#');
+		change_seed('-1', false);
+	}
+
+	else if(sd === 'NaN')
+	{
+		change_seed(NaN, false)
 	}
 
 	else
 	{
-		options.seed = parseInt(sd);
-		$('#seed').html('# ' + options.seed);
+		change_seed(sd, false);
 	}
 
-	var split = setting.split(" ");
+	change_speed(setting.split(" - ")[1].trim(), false);
 
-	options.speed = split[split.length - 1];
+	change_mode(advanced, false);
 
-	$('#speed_select').val(options.speed);
-
-	options.advanced = advanced;	
-
-	update_options();
+	update_options();	
 
 	start();
 }
@@ -1208,20 +1207,20 @@ function show_highscores(advanced)
 			continue;
 		}
 
-		if(key === setting)
-		{
-			s += "<option value='" + key + "' selected>" + key + "</option>";
-		}
-
-		else
-		{
-			s += "<option value='" + key + "'>" + key + "</option>";
-		}
+		s += "<option value='" + key + "'>" + key + "</option>";
 	}
 
 	s += "</select></div><div id='scores'></div>";
 
 	msg(s);
+
+	$('#msg').find('option').each(function()
+	{
+		if($(this).val() === setting)
+		{
+			$(this).prop('selected', true);
+		}
+	});
 	
 	show_scores($('#hs_setting_select option:selected').val(), advanced);
 
@@ -1290,7 +1289,14 @@ function show_scores(setting, advanced)
 		
 		if(setting === "Overall")
 		{
-			s += "<br><br><div class='linkydiv unselectable' onclick='clear_highscores()'>Clear High Scores</div>";
+			if(advanced)
+			{
+				s += "<br><br><div class='linkydiv unselectable' onclick='clear_highscores(true)'>Clear High Scores</div>";
+			}
+			else
+			{
+				s += "<br><br><div class='linkydiv unselectable' onclick='clear_highscores(false)'>Clear High Scores</div>";
+			}
 		}
 	}
 	
@@ -1990,7 +1996,7 @@ function check_seed()
 	}
 }
 
-function change_seed(s)
+function change_seed(s, save=true)
 {
 	var s = parseInt(s);
 
@@ -2018,7 +2024,10 @@ function change_seed(s)
 			$('#seed').html('#' + options.seed);
 		}
 
-		update_options();
+		if(save)
+		{
+			update_options();
+		}
 	}
 
 	hide_and_stop();
@@ -2055,7 +2064,7 @@ function speed_picker()
 	}
 }
 
-function change_speed(what)
+function change_speed(what, save=true)
 {
 	if(options.speed !== what)
 	{
@@ -2063,7 +2072,10 @@ function change_speed(what)
 
 		$('#speed').html(what);
 
-		update_options();
+		if(save)
+		{
+			update_options();
+		}
 	}
 
 	hide_and_stop();
@@ -2081,7 +2093,7 @@ function mode_picker()
 	}
 }
 
-function change_mode(advanced)
+function change_mode(advanced, save=true)
 {
 	if(options.advanced !== advanced)
 	{
@@ -2097,7 +2109,10 @@ function change_mode(advanced)
 			$('#mode').html("Core");
 		}
 
-		update_options();
+		if(save)
+		{
+			update_options();
+		}
 	}	
 
 	hide_and_stop();
@@ -2276,14 +2291,31 @@ function toggle_menu()
 	}
 }
 
-function clear_highscores()
+function clear_highscores(advanced)
 {
-	var conf = confirm("This will delete all your high scores. Are you sure?");
+	if(advanced)
+	{
+		var conf = confirm("This will delete all your Advanced high scores. Are you sure?");
+	}
+
+	else
+	{
+		var conf = confirm("This will delete all your Core high scores. Are you sure?");
+	}
 
 	if(conf) 
 	{
-		localStorage.removeItem(ls_highscores);
-		show_highscores();
+		if(advanced)
+		{
+			localStorage.removeItem(ls_highscores_advanced);
+		}
+
+		else
+		{
+			localStorage.removeItem(ls_highscores);
+		}
+
+		show_highscores(advanced);
 	}
 }
 
