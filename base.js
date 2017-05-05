@@ -396,6 +396,11 @@ function patent_btn_events(parent)
 			var price = Math.abs(element.profit);
 		}
 
+		else if(element.profit === 5000000)
+		{
+			var price = 50000000;
+		}
+
 		else
 		{
 			var price = element.profit * 5;
@@ -449,17 +454,14 @@ function patent_btn_events(parent)
 			var price = 0;
 		}
 
+		else if(element.profit === 5000000)
+		{
+			var price = 25000000;
+		}
+
 		else
 		{
-			if(element.profit === 5000000)
-			{
-				var price = element.profit * 5;
-			}
-
-			else
-			{
-				var price = element.profit * (element.profit / 200000);
-			}
+			var price = element.profit * (element.profit / 200000);
 		}
 
 		points += price;
@@ -851,7 +853,7 @@ function show_instructions()
 	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same profit.<br><br>";
 	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
 	s += "Freezing a 1 million element 5 times in a row makes it lit.<br><br>";
-	s += "When lit, its profit is 5 million, buys and sells at 25 million.<br><br>";
+	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit disappear from the game in the next tick and they're not usable anymore.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
