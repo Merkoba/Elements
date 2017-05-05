@@ -891,7 +891,7 @@ function get_options()
 
 	else
 	{
-		$('#seed').html('# ' + options.seed);
+		$('#seed').html('#' + options.seed);
 	}
 
 	$('#speed').html(options.speed);
@@ -2015,7 +2015,7 @@ function change_seed(s)
 
 		else
 		{
-			$('#seed').html('# ' + options.seed);
+			$('#seed').html('#' + options.seed);
 		}
 
 		update_options();
