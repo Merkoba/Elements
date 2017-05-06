@@ -879,34 +879,9 @@ function get_options()
 		update_options();
 	}
 
-	if(options.seed === -1)
-	{
-		$('#seed').html('#');
-	}
-
-	else if(options.seed === 0.1)
-	{
-		$('#seed').html('#NaN');
-	}
-
-	else
-	{
-		$('#seed').html('#' + options.seed);
-	}
-
-	$('#speed').html(options.speed);
-
-	if(options.advanced)
-	{
-		$('#mode').html("Adv");
-	}
-
-	else
-	{
-		$('#mode').html("Core");
-	}
-
-	$('#speed_select').val(options.speed);
+	change_seed(options.seed, false);
+	change_speed(options.speed, false);
+	change_mode(options.advanced, false);
 }
 
 function update_options()
@@ -2022,7 +1997,7 @@ function check_seed()
 
 function change_seed(s, save=true)
 {
-	if(s > 0 && s < 1)
+	if(s == '0.1')
 	{
 		var seed = 0.1;
 	}
@@ -2033,33 +2008,31 @@ function change_seed(s, save=true)
 
 		if(isNaN(seed))
 		{
-			seed  = 0.1
+			$('#seed_input').focus();
+			return false;
 		}
 	}
 
-	if(options.seed !== seed)
+	options.seed = seed;
+
+	if(options.seed === -1)
 	{
-		options.seed = seed;
+		$('#seed').html('#');
+	}
 
-		if(options.seed === -1)
-		{
-			$('#seed').html('#');
-		}
+	else if(options.seed === 0.1)
+	{
+		$('#seed').html('#NaN');
+	}
 
-		else if(options.seed === 0.1)
-		{
-			$('#seed').html('#NaN');
-		}
+	else
+	{
+		$('#seed').html('#' + options.seed);
+	}
 
-		else
-		{
-			$('#seed').html('#' + options.seed);
-		}
-
-		if(save)
-		{
-			update_options();
-		}
+	if(save)
+	{
+		update_options();
 	}
 
 	hide_and_stop();
@@ -2098,16 +2071,13 @@ function speed_picker()
 
 function change_speed(what, save=true)
 {
-	if(options.speed !== what)
+	options.speed = what;
+
+	$('#speed').html(what);
+
+	if(save)
 	{
-		options.speed = what;
-
-		$('#speed').html(what);
-
-		if(save)
-		{
-			update_options();
-		}
+		update_options();
 	}
 
 	hide_and_stop();
@@ -2127,24 +2097,21 @@ function mode_picker()
 
 function change_mode(advanced, save=true)
 {
-	if(options.advanced !== advanced)
+	options.advanced = advanced;
+
+	if(options.advanced)
 	{
-		options.advanced = advanced;
+		$('#mode').html("Adv");
+	}
 
-		if(options.advanced)
-		{
-			$('#mode').html("Adv");
-		}
+	else
+	{
+		$('#mode').html("Core");
+	}
 
-		else
-		{
-			$('#mode').html("Core");
-		}
-
-		if(save)
-		{
-			update_options();
-		}
+	if(save)
+	{
+		update_options();
 	}	
 
 	hide_and_stop();
@@ -2428,7 +2395,7 @@ function title_click()
 
 			else
 			{
-				change_seed(NaN);
+				change_seed('0.1');
 			}
 
 			start();
