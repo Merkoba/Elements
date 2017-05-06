@@ -875,7 +875,7 @@ function get_options()
 
 	if(options === null)
 	{
-		options = {fit: true, sounds: true, music: true, hints: false, advanced: false, seed: -1, speed: "Normal"};
+		options = {fit: true, sounds: true, music: true, hints: false, advanced: false, seed: 1, speed: "Slow"};
 		update_options();
 	}
 
@@ -2022,16 +2022,24 @@ function check_seed()
 
 function change_seed(s, save=true)
 {
-	var s = parseInt(s);
-
-	if(isNaN(s))
+	if(s > 0 && s < 1)
 	{
-		s = 0.1;
+		var seed = 0.1;
 	}
 
-	if(options.seed !== s)
+	else
 	{
-		options.seed = s;
+		var seed = parseInt(s);
+
+		if(isNaN(seed))
+		{
+			seed  = 0.1
+		}
+	}
+
+	if(options.seed !== seed)
+	{
+		options.seed = seed;
 
 		if(options.seed === -1)
 		{
