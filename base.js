@@ -1268,7 +1268,14 @@ function show_scores(setting, advanced)
 				s += " onclick='show_scores(\"" + ss + "\"," + advanced + ")'>";
 				s += "<div class='setting_small'>" + ss + "</div>";
 
-				if(last_highscore !== "" && ss == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
+				if(last_highscore !== "")
+				{
+					var t = last_highscore.split("=")[0];
+					var p = last_highscore.split("=")[1];
+					var m = last_highscore.split("=")[2];
+				}
+				
+				if(last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && ss == t && hs == p)
 				{
 					s += "<span class='grey_highlight'>" + format(hs) + "</span>";
 				}
@@ -1313,7 +1320,14 @@ function show_scores(setting, advanced)
 
 			else
 			{
-				if(last_highscore !== "" && setting == last_highscore.split('=')[0] && hs == last_highscore.split('=')[1])
+				if(last_highscore !== "")
+				{
+					var t = last_highscore.split("=")[0];
+					var p = last_highscore.split("=")[1];
+					var m = last_highscore.split("=")[2];
+				}
+				
+				if(last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && setting == t && hs == p)
 				{
 					s += "<span class='grey_highlight'>" + format(hs) + "</span>";
 				}
@@ -1640,6 +1654,16 @@ function ended()
 	}
 
 	last_highscore = setting + "=" + points;
+
+	if(options.advanced)
+	{
+		last_highscore += "=Advanced";
+	}
+
+	else
+	{
+		last_highscore += "=Core";
+	}
 }
 
 function overlay_clicked()
