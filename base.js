@@ -74,6 +74,7 @@ var speed_normal = 8000;
 var speed_fast = 5000;
 var linear_diff = (speed_slow - speed_fast) / (start_count - 1);
 var count = 0;
+var points = 0;
 var music_fadeout_interval;
 var playing = false;
 var started = false;
