@@ -1113,7 +1113,7 @@ function start_setting(setting, advanced)
 
 	else if(sd === 'NaN')
 	{
-		change_seed(NaN, false)
+		change_seed('0.1', false)
 	}
 
 	else
