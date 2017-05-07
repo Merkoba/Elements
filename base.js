@@ -56,59 +56,32 @@ var elements = [
 ];
 
 var main_title = "E l e m e n t s";
-
 var start_points = 1000000;
-
 var start_count = 30;
-
 var tick_timer;
-
 var started_timeout;
-
 var profits = [-1000000, -800000, -600000, -400000, -200000, 0, 200000, 400000, 600000, 800000, 1000000];
-
 var directions = ["up", "down"];
-
 var msg_open = false;
-
 var fmsg_open = false;
-
 var highscores;
-
 var ls_highscores = "highscores_v4";
-
 var ls_highscores_advanced = "highscores_advanced_v4";
-
 var ls_options = "options_v6";
-
 var msg_closeable = false;
-
 var speed_slow = 12000;
-
 var speed_normal = 8000;
-
 var speed_fast = 5000;
-
 var linear_diff = (speed_slow - speed_fast) / (start_count - 1);
-
 var count = 0;
-
 var music_fadeout_interval;
-
 var playing = false;
-
 var started = false;
-
 var paused = false;
-
 var last_highscore = "";
-
 var sold_on_tick = [];
-
 var report = [];
-
 var hs_setting = null;
-
 var fmsg_mode = null;
 
 function init()
