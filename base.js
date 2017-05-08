@@ -1410,7 +1410,6 @@ function set_speed()
 
 function lost()
 {
-
 	playing = false;
 
 	start_music_fadeout();
