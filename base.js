@@ -449,38 +449,41 @@ function patent_btn_events(parent)
 
 		if(options.advanced)
 		{
-			element.soldonce = true;
-
-			sold_on_tick.push(element);
-
-			if(sold_on_tick.length > 3)
+			if(!element.soldonce)
 			{
-				sold_on_tick.splice(0, 1);
-			}
+				element.soldonce = true;
 
-			if(sold_on_tick.length > 2)
-			{
-				if(sold_on_tick[0].profit > 0)
+				sold_on_tick.push(element);
+
+				if(sold_on_tick.length > 3)
 				{
-					if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
+					sold_on_tick.splice(0, 1);
+				}
+
+				if(sold_on_tick.length > 2)
+				{
+					if(sold_on_tick[0].profit > 0)
 					{
-						var id1 = sold_on_tick[0].id;
-						var id2 = sold_on_tick[1].id;
-						var id3 = sold_on_tick[2].id;
-
-						if(id1 !== id2 && id1 !== id3 && id2 !== id3)
+						if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
 						{
-							var pts = sold_on_tick[0].profit * 5;
+							var id1 = sold_on_tick[0].id;
+							var id2 = sold_on_tick[1].id;
+							var id3 = sold_on_tick[2].id;
 
-							points += pts;
+							if(id1 !== id2 && id1 !== id3 && id2 !== id3)
+							{
+								var pts = sold_on_tick[0].profit * 5;
 
-							report.push(pts);
+								points += pts;
 
-							$($('.element_container').get(id1)).addClass('pulsetrio');
-							$($('.element_container').get(id2)).addClass('pulsetrio');
-							$($('.element_container').get(id3)).addClass('pulsetrio');
-							
-							sold_on_tick = [];
+								report.push(pts);
+
+								$($('.element_container').get(id1)).addClass('pulsetrio');
+								$($('.element_container').get(id2)).addClass('pulsetrio');
+								$($('.element_container').get(id3)).addClass('pulsetrio');
+								
+								sold_on_tick = [];
+							}
 						}
 					}
 				}
