@@ -93,6 +93,7 @@ function init()
 	resize_events();
 	music_control();
 	check_firstime();
+	Math.seedrandom();
 	succ();
 }
 
@@ -2018,6 +2019,8 @@ function change_seed(s, save=true)
 
 function get_random_seed()
 {
+	Math.seedrandom();
+
 	var r = get_random_int(0, 999);
 
 	if($('#seed_input').val() == r)
@@ -2036,9 +2039,12 @@ function get_random_seed()
 function get_daily()
 {
 	var d = new Date();
+	
 	var s = d.getDate() + (d.getMonth() * 100) + d.getYear();
+
 	Math.seedrandom(s);
-	change_seed(get_random_int(0, 1000));
+
+	change_seed(get_random_int(0, 999));
 }
 
 function speed_picker()
