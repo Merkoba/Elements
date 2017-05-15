@@ -1906,7 +1906,8 @@ function seed_picker()
 	var s = "0 to 999<br><br><input id='seed_input'><br><br>";
 	s += "<button id='seed_btn_1' class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
 	s += "<button id='seed_btn_2' class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
-	s += "<button id='seed_btn_3' class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
+	s += "<button id='seed_btn_3' class='dialog_btn' onclick='get_daily()'>Daily</button><br><br>";
+	s += "<button id='seed_btn_4' class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
 	if(fmsg(s, 'seed'))
 	{
@@ -1916,6 +1917,7 @@ function seed_picker()
 
 		$('#seed_input').outerWidth(bw);
 		$('#seed_btn_3').outerWidth(bw);
+		$('#seed_btn_4').outerWidth(bw);
 
 		position_fmsg('seed');
 	}
@@ -2029,6 +2031,14 @@ function get_random_seed()
 	}
 
 	$('#seed_input').val(r).focus();
+}
+
+function get_daily()
+{
+	var d = new Date();
+	var s = d.getDate() + (d.getMonth() * 100) + d.getYear();
+	Math.seedrandom(s);
+	change_seed(get_random_int(0, 1000));
 }
 
 function speed_picker()
