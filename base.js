@@ -148,15 +148,10 @@ function start()
 	started = false;
 	paused = false;
 	stop_loop();
+	set_speed();
 	hide_overlays();
 	generate_tiles();
-
-	if(options.fit)
-	{
-		fit();
-	}
-
-	set_speed();
+	fit();
 
 	$('#title').html('Starting Game');
 
@@ -339,65 +334,68 @@ function generate_tiles()
 
 function fit()
 {
-	$('.breaker').each(function()
-	{
-		$(this).remove();
-	});
-
 	if($('#main_container').html() !== "")
 	{
+		$('.breaker').each(function()
+		{
+			$(this).remove();
+		});
+
 		var size = 1;
 
 		$('#main_container').css('font-size', size + 'em');
 
-		for(var i=0; i<20; i++)
+		if(options.fit)
 		{
-			if(document.body.scrollHeight > document.body.clientHeight)
+			for(var i=0; i<20; i++)
 			{
-				size -= 0.025;
-				
-				$('#main_container').css('font-size', size + 'em');
+				if(document.body.scrollHeight > document.body.clientHeight)
+				{
+					size -= 0.025;
+					
+					$('#main_container').css('font-size', size + 'em');
+				}
 			}
-		}
 
-		if(document.body.scrollHeight <= document.body.clientHeight)
-		{
-			var last = $('.element_container').last();
-
-			var qheight = last.outerHeight() / 4;
-
-			var top1 = last.offset().top;
-
-			var top2 = top1 - last.outerHeight(); 
-
-			var row1 = [];
-
-			var row2 = [];
-
-			$('.element_container').each(function()
+			if(document.body.scrollHeight <= document.body.clientHeight)
 			{
-				var top = $(this).offset().top;
+				var last = $('.element_container').last();
 
-				var t1 = top - qheight;
+				var qheight = last.outerHeight() / 4;
 
-				var t2 = top + qheight;
+				var top1 = last.offset().top;
 
-				if(top1 > t1 && top1 < t2)
+				var top2 = top1 - last.outerHeight(); 
+
+				var row1 = [];
+
+				var row2 = [];
+
+				$('.element_container').each(function()
 				{
-					row1.push($(this));
-				}
+					var top = $(this).offset().top;
 
-				else if(top2 > t1 && top2 < t2)
+					var t1 = top - qheight;
+
+					var t2 = top + qheight;
+
+					if(top1 > t1 && top1 < t2)
+					{
+						row1.push($(this));
+					}
+
+					else if(top2 > t1 && top2 < t2)
+					{
+						row2.push($(this));
+					}
+				});
+
+				var diff = row2.length - row1.length;
+
+				if(diff > 0)
 				{
-					row2.push($(this));
+					$("<div class='breaker'></div>").insertAfter($(row2[row2.length - (Math.floor(diff / 2))]));
 				}
-			});
-
-			var diff = row2.length - row1.length;
-
-			if(diff > 0)
-			{
-				$("<div class='breaker'></div>").insertAfter($(row2[row2.length - (Math.floor(diff / 2))]));
 			}
 		}
 	}
@@ -971,16 +969,7 @@ function show_options()
 	{
 		options.fit = $(this).prop('checked');
 		update_options();
-
-		if(options.fit)
-		{
-			fit();
-		}
-
-		else
-		{
-			$('#main_container').css('font-size', '1em');
-		}
+		fit();
 	});
 
 	$('#chk_sounds').change(function()
@@ -2373,10 +2362,7 @@ function resize_events()
 {
 	$(window).resize(function()
 	{
-		if(options.fit)
-		{
-			resize_timer();
-		}
+		resize_timer();
 	});
 }
 
