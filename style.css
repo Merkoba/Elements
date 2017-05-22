@@ -223,9 +223,10 @@ body
 	background-color: #d6ff6a;
 }
 
-.hidden
+.gone
 {
-	visibility: hidden;
+	background-color: #808080;
+	cursor: default;
 }
 
 .green_color

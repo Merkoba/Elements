@@ -238,7 +238,7 @@ function generate_tiles()
 
 		element.lit = false;
 
-		element.hidden = false;
+		element.gone = false;
 
 		if(options.seed === 0.1)
 		{
@@ -320,6 +320,8 @@ function generate_tiles()
 		$('#main_container').append(s);
 	}
 
+	var id = 0;
+
 	$('.element_container').each(function()
 	{
 		$(this).mousedown(function()
@@ -328,7 +330,11 @@ function generate_tiles()
 			{
 				patent_btn_events(this);
 			}
-		})
+		});
+
+		$(this).data('id', id);
+
+		id += 1;
 	});
 }
 
@@ -397,10 +403,14 @@ function fit()
 
 function patent_btn_events(parent)
 {
-	var name = $(parent).find('.element_name').get(0).innerHTML;
-	var btn = $(parent).find('.element_patent_btn').get(0);
+	var element = elements[$(parent).data('id')];
 
-	var element = get_element(name);
+	if(element.gone)
+	{
+		return;
+	}
+
+	var btn = $(parent).find('.element_patent_btn').get(0);
 
 	if(btn.innerHTML === 'Buy Patent')
 	{
@@ -538,17 +548,6 @@ function patent_btn_events(parent)
 	}
 }
 
-function get_element(name)
-{
-	for(var i=0; i<elements.length; i++)
-	{
-		if(elements[i].name === name)
-		{
-			return elements[i];
-		}
-	}
-}
-
 function change_profit(element)
 {
 	if(element.direction === "up")
@@ -650,7 +649,7 @@ function tick()
 	{
 		var element = elements[i];
 
-		if(element.hidden)
+		if(element.gone)
 		{
 			continue;
 		}
@@ -660,10 +659,9 @@ function tick()
 		if(element.lit)
 		{
 			$(cont).removeClass('yellow');
-			$(cont).addClass('hidden');
-
-			element.hidden = true;
-
+			$(cont).addClass('gone');
+			$(cont).html('');
+			element.gone = true;
 			continue;
 		}
 
@@ -822,7 +820,7 @@ function check_state()
 		ended();
 	}
 
-	else if($('.hidden').length === elements.length)
+	else if($('.gone').length === elements.length)
 	{
 		stop_loop();
 		ended();
@@ -870,7 +868,7 @@ function show_instructions()
 	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
 	s += "Freezing a 1 million element 5 times in a row makes it lit.<br><br>";
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
-	s += "Elements that become lit disappear from the game in the next tick and they're not usable anymore.<br><br>";
+	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "You can start a game with Enter.<br><br>";
