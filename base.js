@@ -360,23 +360,16 @@ function fit()
 			if(document.body.scrollHeight <= document.body.clientHeight)
 			{
 				var last = $('.element_container').last();
-
 				var qheight = last.outerHeight() / 4;
-
 				var top1 = last.offset().top;
-
 				var top2 = top1 - last.outerHeight(); 
-
 				var row1 = [];
-
 				var row2 = [];
 
 				$('.element_container').each(function()
 				{
 					var top = $(this).offset().top;
-
 					var t1 = top - qheight;
-
 					var t2 = top + qheight;
 
 					if(top1 > t1 && top1 < t2)
@@ -391,10 +384,9 @@ function fit()
 				});
 
 				var diff = row2.length - row1.length;
-
 				var n = Math.floor(diff / 2);
 
-				if(n > 2)
+				if(n > 1)
 				{
 					$("<div class='breaker'></div>").insertAfter($(row2[row2.length - n]));
 				}
