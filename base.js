@@ -339,6 +339,11 @@ function generate_tiles()
 
 function fit()
 {
+	$('.breaker').each(function()
+	{
+		$(this).remove();
+	});
+
 	if($('#main_container').html() !== "")
 	{
 		var size = 1;
@@ -352,6 +357,47 @@ function fit()
 				size -= 0.025;
 				
 				$('#main_container').css('font-size', size + 'em');
+			}
+		}
+
+		if(document.body.scrollHeight <= document.body.clientHeight)
+		{
+			var last = $('.element_container').last();
+
+			var qheight = last.outerHeight() / 4;
+
+			var top1 = last.offset().top;
+
+			var top2 = top1 - last.outerHeight(); 
+
+			var row1 = [];
+
+			var row2 = [];
+
+			$('.element_container').each(function()
+			{
+				var top = $(this).offset().top;
+
+				var t1 = top - qheight;
+
+				var t2 = top + qheight;
+
+				if(top1 > t1 && top1 < t2)
+				{
+					row1.push($(this));
+				}
+
+				else if(top2 > t1 && top2 < t2)
+				{
+					row2.push($(this));
+				}
+			});
+
+			var diff = row2.length - row1.length;
+
+			if(diff > 0)
+			{
+				$("<div class='breaker'></div>").insertAfter($(row2[row2.length - (Math.floor(diff / 2))]));
 			}
 		}
 	}
