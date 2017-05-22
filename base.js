@@ -392,9 +392,11 @@ function fit()
 
 				var diff = row2.length - row1.length;
 
-				if(diff > 0)
+				var n = Math.floor(diff / 2);
+
+				if(n > 2)
 				{
-					$("<div class='breaker'></div>").insertAfter($(row2[row2.length - (Math.floor(diff / 2))]));
+					$("<div class='breaker'></div>").insertAfter($(row2[row2.length - n]));
 				}
 			}
 		}
