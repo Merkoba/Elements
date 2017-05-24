@@ -194,6 +194,7 @@ function start()
 		count = start_count;
 		update_points();
 		update_counter();
+		set_cursors_pointer();
 		loop();
 		started = true;
 
@@ -292,7 +293,7 @@ function generate_tiles()
 			var dir = "DOWN";
 		}
 
-		var s = "<div class='element_container";
+		var s = "<div class='element_container cursor_default";
 
 		if(element.profit > 0)
 		{
@@ -659,6 +660,8 @@ function tick()
 		if(element.lit)
 		{
 			$(cont).removeClass('yellow');
+			$(cont).removeClass('cursor_pointer');
+			$(cont).addClass('cursor_default');
 			$(cont).addClass('gone');
 			$(cont).html('');
 			element.gone = true;
@@ -811,7 +814,6 @@ function check_state()
 {
 	if(points <= 0)
 	{ 
-		stop_loop();
 		lost();
 	}
 
@@ -822,7 +824,6 @@ function check_state()
 
 	else if($('.gone').length === elements.length)
 	{
-		stop_loop();
 		ended();
 	}
 
@@ -1402,7 +1403,7 @@ function show_report()
 	s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
 	s += "<div>Final Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>";
 	
-	s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy to Clipboard</div>";
+	s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy To Clipboard</div>";
 
 	msg(s);
 }
@@ -1411,7 +1412,7 @@ function copy_report_to_clipboard()
 {
 	var textareaEl = document.createElement('textarea');
 	document.body.appendChild(textareaEl);
-	textareaEl.value = document.getElementById('msg').innerText.replace('Game Report', '').replace('Copy to Clipboard', '').replace(/\n\s*\n/g, '\n').trim();
+	textareaEl.value = document.getElementById('msg').innerText.replace('Game Report', '').replace('Copy To Clipboard', '').replace(/\n\s*\n/g, '\n').trim();
 	textareaEl.select();
 	document.execCommand('copy');
 	document.body.removeChild(textareaEl);
@@ -1436,11 +1437,21 @@ function set_speed()
 	}
 }
 
+function on_finish()
+{
+	if(count > 0)
+	{
+		stop_loop();
+	}
+
+	playing = false;
+	start_music_fadeout();
+	set_cursors_default();
+}
+
 function lost()
 {
-	playing = false;
-
-	start_music_fadeout();
+	on_finish();
 
 	$('#title').html('You Lost');
 
@@ -1461,11 +1472,9 @@ function lost()
 
 function ended()
 {
+	on_finish();
+
 	$('#title').html('Game Ended');
-
-	playing = false;
-
-	start_music_fadeout();
 
 	if(options.hints)
 	{
@@ -2429,6 +2438,7 @@ function toggle_pause()
 			pause_music();
 			paused = true;
 			$('#title').html('Paused');
+			set_cursors_default();
 		}
 
 		else
@@ -2437,8 +2447,31 @@ function toggle_pause()
 			unpause_music();
 			update_counter();
 			paused = false;
+			set_cursors_pointer();
 		}
 	}
+}
+
+function set_cursors_pointer()
+{
+	$('.element_container').each(function()
+	{
+		if(!$(this).hasClass('gone'))
+		{
+			$(this).removeClass('cursor_default').addClass('cursor_pointer');
+		}
+	});
+}
+
+function set_cursors_default()
+{
+	$('.element_container').each(function()
+	{
+		if(!$(this).hasClass('gone'))
+		{
+			$(this).removeClass('cursor_pointer').addClass('cursor_default');
+		}
+	});
 }
 
 function succ()

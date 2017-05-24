@@ -166,7 +166,6 @@ body
 	height: 7em;
 	overflow: hidden;
 	outline: 0;
-	cursor: pointer;
 }
 
 .element_name
@@ -199,8 +198,18 @@ body
 	border: 0.15em solid rgba(0,0,0,0.3);
 	border-bottom-width: 0.2em;
 	font-size: 0.7em;
-	cursor: pointer;
 	outline: 0;
+	cursor: inherit;
+}
+
+.cursor_pointer
+{
+	cursor: pointer;
+}
+
+.cursor_default
+{
+	cursor: default;
 }
 
 .green
@@ -226,7 +235,6 @@ body
 .gone
 {
 	background-color: #808080;
-	cursor: default;
 }
 
 .green_color
