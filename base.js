@@ -876,7 +876,7 @@ function show_instructions()
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
 	s += "Backspace opens or closes the menu.<br><br>";
 	s += "Clicking on the tick counter, or pressing Space, pauses or resumes the game.<br><br>";
-	s += "Clicking on \"Game Ended\" shows a report of the game.<br><br>";
+	s += "Clicking on \"Game Ended\" shows the game report.<br><br>";
 	s += "Clicking on the game points shows the high scores.<br><br>";
 	s += "Clicking on Core or Advanced at the top of High Scores toggles between Core High Scores and Advanced High Scores.<br><br>";
 	s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
@@ -1484,7 +1484,7 @@ function ended()
 		return;
 	}
 
-	var shs = "<br><br><button class='dialog_btn' onclick='show_highscores(" + options.advanced + ")'>High Scores</button>";
+	var shs = "<br><br><button class='dialog_btn' onclick='show_highscores(" + options.advanced + ")'>High Scores</button><br><br><button class='dialog_btn' onclick='show_report()'>Game Report</button>";
 
 	var setting = get_setting();
 	var hs = get_setting_highscores(setting, options.advanced);
