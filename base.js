@@ -1336,7 +1336,7 @@ function show_report()
 {
 	var s = "<b>Game Report</b><br>";
 
-	s += "<div>" + get_setting() + "</div><br>";
+	s += "<div id='report_setting'>" + get_setting() + "</div>";
 
 	var pts = start_points;
 
@@ -1397,15 +1397,17 @@ function show_report()
 	s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
 	s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>";
 
-	s += "<div class='grey_highlight'>Overview</div><br>";
+	s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy To Clipboard</div>";
+
+	msg(s);
+
+	var s = "<br><div class='grey_highlight'>Overview</div><br>";
 
 	s += "<div>Total Positive: " + format(total_tpts_positive) + "</div><br>";
 	s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
 	s += "<div>Final Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>";
 	
-	s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy To Clipboard</div>";
-
-	msg(s);
+	$(s).insertAfter($('#report_setting'));
 }
 
 function copy_report_to_clipboard()
