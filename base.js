@@ -1418,13 +1418,7 @@ function show_report()
 
 function copy_report()
 {
-	var textareaEl = document.createElement('textarea');
-	document.body.appendChild(textareaEl);
-	textareaEl.value = document.getElementById('msg').innerText.replace('Game Report', '').replace('Copy To Clipboard', '').replace(/\n\s*\n/g, '\n').trim();
-	textareaEl.select();
-	document.execCommand('copy');
-	document.body.removeChild(textareaEl);
-	play('pup2');
+	copy_to_clipboard(document.getElementById('msg').innerText.replace('Game Report', '').replace('Copy To Clipboard', '').replace(/\n\s*\n/g, '\n').trim());
 }
 
 function set_speed()
@@ -2547,9 +2541,14 @@ function start_title_context_menu()
 
 function copy_setting()
 {
+	copy_to_clipboard(get_setting_title());
+}
+
+function copy_to_clipboard(s)
+{
 	var textareaEl = document.createElement('textarea');
 	document.body.appendChild(textareaEl);
-	textareaEl.value = get_setting_title();
+	textareaEl.value = s;
 	textareaEl.select();
 	document.execCommand('copy');
 	document.body.removeChild(textareaEl);
