@@ -1280,16 +1280,19 @@ function show_scores(setting, advanced)
 				s += "<br><br>";
 			}
 		}
+
+		s += "<br>";
 		
 		if(setting === "Overall")
 		{
 			if(advanced)
 			{
-				s += "<br><br><div class='linkydiv unselectable' onclick='clear_highscores(true)'>Clear High Scores</div>";
+				s += "<br><div class='linkydiv unselectable' onclick='clear_highscores(true)'>Clear High Scores</div>";
 			}
+
 			else
 			{
-				s += "<br><br><div class='linkydiv unselectable' onclick='clear_highscores(false)'>Clear High Scores</div>";
+				s += "<br><div class='linkydiv unselectable' onclick='clear_highscores(false)'>Clear High Scores</div>";
 			}
 		}
 	}
@@ -1327,15 +1330,77 @@ function show_scores(setting, advanced)
 				s += "<br><br>";
 			}
 		}
-		
+
 		s += "<div class='linkydiv unselectable' onclick='start_setting(\"" + setting + "\"," + advanced + ")'>Play Again</div>";
 	}
+
+	s += "<br><div class='linkydiv' onclick='copy_highscores(\"" + setting + "\", " + advanced + ")'>Copy To Clipboard</div>";
 	
 	$('#scores').html(s);
 	
 	$('#hs_setting_select').val(setting);
 
 	$('#msg').scrollTop(0);
+}
+
+function copy_highscores(setting, advanced)
+{
+	var scores = get_setting_highscores(setting, advanced);
+
+	var s = setting;
+
+	if(advanced)
+	{
+		s += " : Adv\n";
+	}
+
+	else
+	{
+		s += " : Core\n";
+	}
+
+	if(setting.indexOf("Overall") !== -1)
+	{
+		for(var i=0; i<scores.length; i++)
+		{
+			var hs = scores[i][0];
+			var ss = scores[i][1];
+			
+			if(hs === 0)
+			{
+				s += "----";
+			}
+
+			else
+			{
+				s += format(hs) + " (" + ss + ")";
+			}
+
+			s += "\n";
+		}
+	}
+
+	else
+	{
+		for(var i=0; i<scores.length; i++)
+		{
+			var hs = scores[i];
+
+			if(hs === 0)
+			{
+				s += "----";
+			}
+
+			else
+			{
+				s += format(hs);
+			}
+
+			s += "\n";
+		}
+	}
+
+	copy_to_clipboard(s);
 }
 
 function show_report()
