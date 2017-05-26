@@ -94,6 +94,7 @@ function init()
 	music_control();
 	check_firstime();
 	Math.seedrandom();
+	disable_context_menu();
 	succ();
 }
 
@@ -2479,4 +2480,9 @@ function set_cursors_default()
 function succ()
 {
 	console.log("%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and will give them access to your memes.", "color: red; font-size: x-large");
+}
+
+function disable_context_menu()
+{
+	$('#main_container')[0].addEventListener('contextmenu', event => event.preventDefault());
 }
