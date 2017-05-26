@@ -94,7 +94,8 @@ function init()
 	music_control();
 	check_firstime();
 	Math.seedrandom();
-	disable_context_menu();
+	disable_game_context_menu();
+	start_title_context_menu();
 	update_title();
 	succ();
 }
@@ -883,6 +884,7 @@ function show_instructions()
 	s += "Clicking on \"Game Ended\" shows the game report.<br><br>";
 	s += "Clicking on the game points shows the high scores.<br><br>";
 	s += "Clicking on Core or Advanced at the top of High Scores toggles between Core High Scores and Advanced High Scores.<br><br>";
+	s += "\"Right clicking\" on the title opens a context menu.<br><br>";
 	s += "If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>";
 
 	msg(s);
@@ -1401,7 +1403,7 @@ function show_report()
 	s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
 	s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>";
 
-	s += "<div class='linkydiv' onclick='copy_report_to_clipboard()'>Copy To Clipboard</div>";
+	s += "<div class='linkydiv' onclick='copy_report()'>Copy To Clipboard</div>";
 
 	msg(s);
 
@@ -1414,7 +1416,7 @@ function show_report()
 	$(s).insertAfter($('#report_setting'));
 }
 
-function copy_report_to_clipboard()
+function copy_report()
 {
 	var textareaEl = document.createElement('textarea');
 	document.body.appendChild(textareaEl);
@@ -2485,12 +2487,12 @@ function succ()
 	console.log("%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and will give them access to your memes.", "color: red; font-size: x-large");
 }
 
-function disable_context_menu()
+function disable_game_context_menu()
 {
 	$('#main_container')[0].addEventListener('contextmenu', event => event.preventDefault());
 }
 
-function update_title()
+function get_setting_title()
 {
 	if(options.seed == -1)
 	{
@@ -2517,5 +2519,39 @@ function update_title()
 		var m = "Core";
 	}
 
-	document.title = "Elements (" + s + " - " + options.speed + " : " + m + ")";
+	return "Elements (" + s + " - " + options.speed + " : " + m + ")";
+}
+
+function update_title()
+{
+	document.title = get_setting_title();
+}
+
+function start_title_context_menu()
+{
+	$.contextMenu(
+	{
+		selector: '#title',
+		items: 
+		{
+			lsc1: 
+			{
+				name: "Copy Setting To Clipboard", callback: function(key, opt)
+				{
+					copy_setting();
+				}
+			}
+		}
+	});
+}
+
+function copy_setting()
+{
+	var textareaEl = document.createElement('textarea');
+	document.body.appendChild(textareaEl);
+	textareaEl.value = get_setting_title();
+	textareaEl.select();
+	document.execCommand('copy');
+	document.body.removeChild(textareaEl);
+	play('pup2');
 }
