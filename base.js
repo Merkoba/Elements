@@ -95,6 +95,7 @@ function init()
 	check_firstime();
 	Math.seedrandom();
 	disable_context_menu();
+	update_title();
 	succ();
 }
 
@@ -141,6 +142,8 @@ function hide_and_stop()
 	{
 		stop();
 	}
+
+	update_title();
 }
 
 function start()
@@ -2485,4 +2488,34 @@ function succ()
 function disable_context_menu()
 {
 	$('#main_container')[0].addEventListener('contextmenu', event => event.preventDefault());
+}
+
+function update_title()
+{
+	if(options.seed == -1)
+	{
+		var s = "#";
+	}
+
+	else if(options.seed == 0.1)
+	{
+		var s = "#NaN";
+	}
+
+	else 
+	{
+		var s = "#" + options.seed;
+	}
+
+	if(options.advanced)
+	{
+		var m = "Adv";
+	}
+
+	else
+	{
+		var m = "Core";
+	}
+
+	document.title = "Elements (" + s + " - " + options.speed + " : " + m + ")";
 }
