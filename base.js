@@ -1772,7 +1772,7 @@ function msg(txt, temp_disable=false)
 			$('.dialog_btn').prop('disabled', false);
 			msg_closeable = true;
 
-		}, 500);
+		}, 1000);
 	}
 
 	else
