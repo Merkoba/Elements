@@ -681,7 +681,7 @@ function tick()
 
 			$(cont).removeClass('blue');
 
-			if(element.freeze_chain === 5)
+			if(element.freeze_chain === 3)
 			{
 				element.lit = true;
 				element.profit = 5000000;
@@ -872,10 +872,11 @@ function show_instructions()
 	s += "For example, selling 3 elements with the same profit in a row, a trio, will give you that profit multiplied by 5.<br><br>";
 	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same profit.<br><br>";
 	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
-	s += "Freezing a 1 million element 5 times in a row makes it lit.<br><br>";
+	s += "Freezing a 1 million element 3 times in a row makes it lit.<br><br>";
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
+	s += "A good strategy is aligning three elements to become 1 million at the same time, so they can get lit at the same time, giving you a bonus when sold.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "You can start a game with Enter.<br><br>";
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
