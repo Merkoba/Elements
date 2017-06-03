@@ -876,7 +876,7 @@ function show_instructions()
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
-	s += "A good strategy is aligning 3 elements to become 1 million at the same time, so they can get lit at the same time, giving you a bonus when sold as a trio.<br><br>";
+	s += "A good strategy is aligning 3 elements to become 1 million at the same time, so they can get lit at the same time, giving you a 25 million bonus when sold as a lit trio.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "You can start a game with Enter.<br><br>";
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
