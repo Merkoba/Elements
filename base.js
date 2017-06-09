@@ -699,6 +699,7 @@ function tick()
 				element.lit = true;
 				element.profit = 5000000;
 				num_lit += 1;
+				gained_from_lit += element.profit;
 			}
 		}
 
