@@ -1130,6 +1130,26 @@ function get_setting()
 	return s;
 }
 
+function get_mode_text()
+{
+	if(options.advanced)
+	{
+		var m = "Adv";
+	}
+
+	else
+	{
+		var m = "Core";
+	}
+
+	return m;
+}
+
+function get_full_setting()
+{
+	return get_setting() + " : " + get_mode_text();
+}
+
 function start_setting(setting, advanced)
 {
 	var sd = setting.split(" - ")[0].replace('#', '').trim();
@@ -1423,7 +1443,7 @@ function show_report()
 {
 	var s = "<b>Game Report</b><br>";
 
-	s += "<div id='report_setting'>" + get_setting() + "</div>";
+	s += "<div id='report_setting'>" + get_full_setting() + "</div>";
 
 	var pts = start_points;
 
@@ -2217,15 +2237,7 @@ function change_mode(advanced, save=true)
 {
 	options.advanced = advanced;
 
-	if(options.advanced)
-	{
-		$('#mode').html("Adv");
-	}
-
-	else
-	{
-		$('#mode').html("Core");
-	}
+	$('#mode').html(get_mode_text());
 
 	if(save)
 	{
@@ -2576,32 +2588,7 @@ function disable_game_context_menu()
 
 function get_setting_title()
 {
-	if(options.seed == -1)
-	{
-		var s = "#";
-	}
-
-	else if(options.seed == 0.1)
-	{
-		var s = "#NaN";
-	}
-
-	else 
-	{
-		var s = "#" + options.seed;
-	}
-
-	if(options.advanced)
-	{
-		var m = "Adv";
-	}
-
-	else
-	{
-		var m = "Core";
-	}
-
-	return "Elements (" + s + " - " + options.speed + " : " + m + ")";
+	return "Elements (" + get_full_setting() + ")";
 }
 
 function update_title()
