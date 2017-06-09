@@ -84,6 +84,8 @@ var sold_on_tick = [];
 var report = [];
 var hs_setting = null;
 var fmsg_mode = null;
+var num_lit;
+var gained_from_lit;
 
 function init()
 {
@@ -186,6 +188,10 @@ function start()
 	sold_on_tick = [];
 
 	report = [];
+
+	num_lit = 0;
+
+	gained_from_lit = 0;
 
 	started_timeout = setTimeout(function()
 	{
@@ -334,7 +340,7 @@ function generate_tiles()
 		{
 			if(playing && started && !paused)
 			{
-				patent_btn_events(this);
+				click_events(this);
 			}
 		});
 
@@ -407,7 +413,7 @@ function fit()
 	}
 }
 
-function patent_btn_events(parent)
+function click_events(parent)
 {
 	var element = elements[$(parent).data('id')];
 
@@ -428,6 +434,7 @@ function patent_btn_events(parent)
 		else if(element.profit === 5000000)
 		{
 			var price = 50000000;
+			gained_from_lit -= price;
 		}
 
 		else
@@ -486,6 +493,7 @@ function patent_btn_events(parent)
 		else if(element.profit === 5000000)
 		{
 			var price = 25000000;
+			gained_from_lit += price;
 		}
 
 		else
@@ -532,6 +540,11 @@ function patent_btn_events(parent)
 								points += pts;
 
 								report.push(pts);
+
+								if(pts === 25000000)
+								{
+									gained_from_lit += pts;
+								}
 
 								$($('.element_container').get(id1)).addClass('pulsetrio');
 								$($('.element_container').get(id2)).addClass('pulsetrio');
@@ -685,6 +698,7 @@ function tick()
 			{
 				element.lit = true;
 				element.profit = 5000000;
+				num_lit += 1;
 			}
 		}
 
@@ -1475,9 +1489,16 @@ function show_report()
 
 	var s = "<br><div class='grey_highlight'>Overview</div><br>";
 
+	if(options.advanced)
+	{
+		s += "<div>Elements Lit: " + num_lit + "</div><br>";
+		s += "<div>Lit Points: " + format(gained_from_lit) + "</div><br>";
+	}
+
 	s += "<div>Total Positive: " + format(total_tpts_positive) + "</div><br>";
 	s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
-	s += "<div>Final Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>";
+
+	s += "<div>Final Balance: " + format(points) + "</div><br>";
 	
 	$(s).insertAfter($('#report_setting'));
 }
