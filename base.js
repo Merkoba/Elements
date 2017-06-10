@@ -85,6 +85,7 @@ var report = [];
 var hs_setting = null;
 var fmsg_mode = null;
 var num_lit;
+var num_lit_trios;
 var gained_from_lit;
 
 function init()
@@ -190,6 +191,8 @@ function start()
 	report = [];
 
 	num_lit = 0;
+
+	num_lit_trios = 0;
 
 	gained_from_lit = 0;
 
@@ -543,6 +546,7 @@ function click_events(parent)
 
 								if(pts === 25000000)
 								{
+									num_lit_trios += 1;
 									gained_from_lit += pts;
 								}
 
@@ -1512,7 +1516,8 @@ function show_report()
 
 	if(options.advanced)
 	{
-		s += "<div>Elements Lit: " + num_lit + "</div><br>";
+		s += "<div>Lit: " + num_lit + "</div><br>";
+		s += "<div>Lit Trios: " + num_lit_trios + "</div><br>";
 		s += "<div>Lit Points: " + format(gained_from_lit) + "</div><br>";
 	}
 
