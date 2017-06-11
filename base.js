@@ -97,8 +97,8 @@ function init()
 	music_control();
 	check_firstime();
 	Math.seedrandom();
-	disable_game_context_menu();
-	start_title_context_menu();
+	disable_context_menus();
+	start_context_menus();
 	update_title();
 	succ();
 }
@@ -443,12 +443,6 @@ function click_events(parent)
 		else
 		{
 			var price = element.profit * 5;
-		}
-
-		if(points < price)
-		{
-			play('nope');
-			return false;
 		}
 
 		points -= price;
@@ -865,7 +859,6 @@ function show_instructions()
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
 	s += "You lose points when you own elements that have a negative profit.<br><br>";
 	s += "You own an element by buying its patent.<br><br>";
-	s += "You are only able to buy patents you can afford.<br><br>";
 	s += "Point earnings or losses of owned patents only occur after each tick.<br><br>";
 	s += "The prices for each profit point are shown in the table below:<br><br>";
 	s += "<table cellspacing=0><tr><th>Profit</th><th>Buy Price</th><th>Sell Price</th></tr><tr><td>1,000,000</td><td>5,000,000</td><td>5,000,000</td></tr><tr><td>800,000</td><td>4,000,000</td><td>3,200,000</td></tr><tr><td>600,000</td><td>3,000,000</td><td>1,800,000</td></tr><tr><td>400,000</td><td>2,000,000</td><td>800,000</td></tr><tr><td>200,000</td><td>1,000,000</td><td>200,000</td></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>-200,000</td><td>200,000</td><td>0</td></tr><tr><td>-400,000</td><td>400,000</td><td>0</td></tr><tr><td>-600,000</td><td>600,000</td><td>0</td></tr><tr><td>-800,000</td><td>800,000</td><td>0</td></tr><tr><td>-1,000,000</td><td>1,000,000</td><td>0</td></tr></table><br>";
@@ -2586,11 +2579,6 @@ function succ()
 	console.log("%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and will give them access to your memes.", "color: red; font-size: x-large");
 }
 
-function disable_game_context_menu()
-{
-	$('#main_container')[0].addEventListener('contextmenu', event => event.preventDefault());
-}
-
 function get_setting_title()
 {
 	return "Elements (" + get_full_setting() + ")";
@@ -2601,7 +2589,14 @@ function update_title()
 	document.title = get_setting_title();
 }
 
-function start_title_context_menu()
+function disable_context_menus()
+{
+	$('#main_container')[0].addEventListener('contextmenu', event => event.preventDefault());
+	$('#overlay')[0].addEventListener('contextmenu', event => event.preventDefault());
+	$('#foverlay')[0].addEventListener('contextmenu', event => event.preventDefault());
+}
+
+function start_context_menus()
 {
 	$.contextMenu(
 	{
