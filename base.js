@@ -1593,7 +1593,12 @@ function ended()
 
 	if(options.hints)
 	{
-		msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>", true);
+		var s = "Time's up!<br><br>Score: " + format(points) + "<br><br><br>";
+		s += "<button class='dialog_btn' onclick='start()'>Play Again</button>";
+		s += "<span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>";
+		s += "<br><br><button class='dialog_btn' onclick='show_report()'>Game Report</button>";
+		
+		msg(s, true);
 		msg_align_btns();
 		play('ended');
 		return;
