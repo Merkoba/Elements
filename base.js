@@ -1570,6 +1570,13 @@ function lost()
 		s += "<br><br><button class='dialog_btn' onclick='play_with_hints()'>Play with Hints</button>";
 	}
 
+	else
+	{
+		s += "<span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>";
+	}
+
+	s += "<br><br><button class='dialog_btn' onclick='show_report()'>Game Report</button>";
+
 	msg(s, true);
 	msg_align_btns();
 
