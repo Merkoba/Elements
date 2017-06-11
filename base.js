@@ -1555,6 +1555,8 @@ function on_finish()
 	playing = false;
 	start_music_fadeout();
 	set_cursors_default();
+
+	$('#start').html('Play Again');
 }
 
 function lost()
@@ -1579,8 +1581,6 @@ function lost()
 
 	msg(s, true);
 	msg_align_btns();
-
-	$('#start').html('Play Again');
 
 	play('lost');
 }
@@ -1661,8 +1661,6 @@ function ended()
 		msg_align_btns();
 		play('ended');
 	}
-
-	$('#start').html('Play Again');
 
 	overall.sort(function(a, b)
 	{
