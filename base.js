@@ -56,7 +56,7 @@ var elements = [
 ];
 
 var main_title = "E l e m e n t s";
-var start_points = 1000000;
+var start_points = 0;
 var start_count = 30;
 var tick_timer;
 var started_timeout;
@@ -633,7 +633,7 @@ function loop()
 		{
 			if(options.speed === "Linear")
 			{
-				loop_speed -= linear_diff;
+				loop_speed = speed_slow - (linear_diff * (start_count - count));
 			}
 
 			loop();
@@ -654,9 +654,14 @@ function stop_loop()
 
 function tick()
 {
-	report.push(';');
-
 	count -= 1;
+
+	if(points < 0)
+	{
+		subtract_count();
+	}
+
+	report.push(';' + count + ';');
 	
 	sold_on_tick = [];
 
@@ -830,12 +835,7 @@ function update_points()
 
 function check_state()
 {
-	if(points <= 0)
-	{ 
-		lost();
-	}
-
-	else if(count === 0)
+	if(count === 0)
 	{
 		ended();
 	}
@@ -855,7 +855,7 @@ function show_instructions()
 {
 	var s = "<b>Instructions</b><br><br>";
 	s += "<img src='inst.gif?v=2' id='instgif'><br><br>";
-	s += "The goal is to get as many points as you can before the counter reaches 0.<br><br>";
+	s += "The goal is to get as many points as you can.<br><br>";
 	s += "Earn points by owning elements that have a positive profit.<br><br>";
 	s += "You lose points when you own elements that have a negative profit.<br><br>";
 	s += "You own an element by buying its patent.<br><br>";
@@ -870,9 +870,8 @@ function show_instructions()
 	s += "You can change the speed of the game, which changes the interval between ticks.<br><br>";
 	s += "Ticks happen every 5, 8 or 12 seconds depending on your speed setting.<br><br>";
 	s += "Linear speed mode starts at 12 seconds and ends at 5 seconds.<br><br>";
-	s += "You start with 1 million points.<br><br>";
-	s += "The game ends after 30 ticks have passed.<br><br>";
-	s += "If you get 0 or fewer points after a tick, you lose.<br><br>";
+	s += "If you end a tick with negative points, the tick counter is decreased by 2 instead of 1.<br><br>";
+	s += "The game ends when the tick counter reaches 0.<br><br>";
 	s += "<br><b>Strategy</b><br><br>";
 	s += "The point is to maximize your points by selling as much as you can while spending the least.<br><br>";
 	s += "The ideal is to buy at 0 UP because it costs you 0 points and sell at 1 million DOWN. Earning you 8 million in total.<br><br>";
@@ -1458,9 +1457,9 @@ function show_report()
 	{
 		var item = report[i];
 
-		if(item === ';')
+		if(typeof item === "string" && item.startsWith(";"))
 		{
-			cnt -= 1;
+			cnt = item.replace(/;/g, "");
 
 			s += "<div>Positive: " + format(tpts_positive) + "</div><br>";
 			s += "<div>Negative: " + format(tpts_negative) + "</div><br>";
@@ -1557,32 +1556,6 @@ function on_finish()
 	set_cursors_default();
 
 	$('#start').html('Play Again');
-}
-
-function lost()
-{
-	on_finish();
-
-	$('#title').html('You Lost');
-
-	var s = "You got " + format(points) + " points.<br><br>You lost.<br><br><br><button class='dialog_btn' onclick='start()'>Play Again</button><br><br><button class='dialog_btn' onclick='show_instructions()'>Instructions</button>";
-	
-	if(!options.hints)
-	{
-		s += "<br><br><button class='dialog_btn' onclick='play_with_hints()'>Play with Hints</button>";
-	}
-
-	else
-	{
-		s += "<span id='hint_dis'><br><br><button class='dialog_btn' onclick='disable_hints()'>Disable Hints</button></span>";
-	}
-
-	s += "<br><br><button class='dialog_btn' onclick='show_report()'>Game Report</button>";
-
-	msg(s, true);
-	msg_align_btns();
-
-	play('lost');
 }
 
 function ended()
@@ -2516,11 +2489,6 @@ function title_click()
 			show_report();
 		}
 
-		else if($('#title').html() === "You Lost")
-		{
-			show_instructions();
-		}
-
 		else if($('#title').html() === ("Starting Game"))
 		{
 			if(options.seed === 0.1)
@@ -2638,4 +2606,14 @@ function copy_to_clipboard(s)
 	document.execCommand('copy');
 	document.body.removeChild(textareaEl);
 	play('pup2');
+}
+
+function subtract_count()
+{
+	count -= 1;
+
+	if(count < 0)
+	{
+		count = 0;
+	}
 }
