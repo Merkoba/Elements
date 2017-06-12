@@ -87,6 +87,7 @@ var fmsg_mode = null;
 var num_lit;
 var num_lit_trios;
 var gained_from_lit;
+var ticks_skipped;
 
 function init()
 {
@@ -195,6 +196,8 @@ function start()
 	num_lit_trios = 0;
 
 	gained_from_lit = 0;
+
+	ticks_skipped = 0;
 
 	started_timeout = setTimeout(function()
 	{
@@ -1506,6 +1509,7 @@ function show_report()
 
 	var s = "<br><div class='grey_highlight'>Overview</div><br>";
 
+
 	if(options.advanced)
 	{
 		s += "<div>Lit: " + num_lit + "</div><br>";
@@ -1517,6 +1521,8 @@ function show_report()
 	s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
 
 	s += "<div>Final Balance: " + format(points) + "</div><br>";
+
+	s += "<div>Ticks Skipped: " + ticks_skipped + "</div><br>";
 	
 	$(s).insertAfter($('#report_setting'));
 }
@@ -2615,5 +2621,10 @@ function subtract_count()
 	if(count < 0)
 	{
 		count = 0;
+	}
+
+	else
+	{
+		ticks_skipped += 1;
 	}
 }
