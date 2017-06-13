@@ -61,6 +61,7 @@ var start_count = 30;
 var tick_timer;
 var started_timeout;
 var profits = [-1000000, -800000, -600000, -400000, -200000, 0, 200000, 400000, 600000, 800000, 1000000];
+var bonuses = [0, 0, 0, 0, 0, 1, 2, 3, 4, 5];
 var directions = ["up", "down"];
 var msg_open = false;
 var fmsg_open = false;
@@ -88,6 +89,8 @@ var num_lit;
 var num_lit_trios;
 var gained_from_lit;
 var ticks_skipped;
+var bonus;
+var bonus_points;
 
 function init()
 {
@@ -159,7 +162,7 @@ function start()
 	stop_loop();
 	set_speed();
 	hide_overlays();
-	generate_tiles();
+	generate();
 	fit();
 
 	$('#title').html('Starting Game');
@@ -199,6 +202,10 @@ function start()
 
 	ticks_skipped = 0;
 
+	bonus = 0;
+
+	bonus_points = 0;
+
 	started_timeout = setTimeout(function()
 	{
 
@@ -226,7 +233,7 @@ function clear_started()
 	}
 }
 
-function generate_tiles()
+function generate()
 {
 	$('#main_container').html('');
 
@@ -265,10 +272,12 @@ function generate_tiles()
 
 		else
 		{
-			var index = get_random_profit_index();
+			var index = get_random_int(0, 10);
 		}
 
 		element.profit = profits[index];
+
+		element.bonus = bonuses[get_random_int(0, 9)];
 
 		if(options.seed === 0.1)
 		{
@@ -285,7 +294,7 @@ function generate_tiles()
 
 		else
 		{
-			index = get_random_direction_index();
+			index = get_random_int(0, 1);
 		}
 
 		element.direction = directions[index];
@@ -683,12 +692,7 @@ function tick()
 
 		if(element.lit)
 		{
-			$(cont).removeClass('yellow');
-			$(cont).removeClass('cursor_pointer');
-			$(cont).addClass('cursor_default');
-			$(cont).addClass('gone');
-			$(cont).html('');
-			element.gone = true;
+			gone(cont, element);
 			continue;
 		}
 
@@ -754,6 +758,35 @@ function tick()
 	}
 
 	check_state();
+}
+
+function gone(cont, element)
+{
+	$(cont).removeClass('yellow');
+	$(cont).removeClass('cursor_pointer');
+	$(cont).addClass('cursor_default');
+	$(cont).addClass('gone');
+
+	if(element.bonus > 0)
+	{
+		$(cont).html("<div class='bonus'>" + element.bonus + "</div>");
+		bonus += element.bonus;
+	}
+
+	else
+	{
+		$(cont).html('');
+	}
+
+	element.gone = true;
+}
+
+function make_all_gone()
+{
+	for(var i=0; i<elements.length; i++)
+	{
+		gone($('.element_container').get(i), elements[i]);
+	}
 }
 
 function remove_pulsetrios()
@@ -889,6 +922,8 @@ function show_instructions()
 	s += "Freezing a 1 million element 3 times in a row makes it lit.<br><br>";
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
+	s += "Some gone elements provide bonus percentages on the overall score at the end.<br><br>";
+	s += "Each bonus range from 1% to 5%.<br><br>";
 	s += "Another way for the game to end is by making all elements disappear.<br><br>";
 	s += "A good strategy is aligning 3 elements to become 1 million at the same time, so they can get lit at the same time, giving you a 25 million bonus when sold as a lit trio.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
@@ -1509,7 +1544,6 @@ function show_report()
 
 	var s = "<br><div class='grey_highlight'>Overview</div><br>";
 
-
 	if(options.advanced)
 	{
 		s += "<div>Lit: " + num_lit + "</div><br>";
@@ -1519,6 +1553,11 @@ function show_report()
 
 	s += "<div>Total Positive: " + format(total_tpts_positive) + "</div><br>";
 	s += "<div>Total Negative: " + format(total_tpts_negative) + "</div><br>";
+
+	if(options.advanced)
+	{
+		s += "<div>Bonus: " + bonus + "% (" + format(bonus_points) + ")</div><br>";
+	}
 
 	s += "<div>Final Balance: " + format(points) + "</div><br>";
 
@@ -1567,6 +1606,13 @@ function on_finish()
 function ended()
 {
 	on_finish();
+
+	if(points > 0 && bonus > 0)
+	{
+		bonus_points = Math.round(points * (bonus / 100));
+		points = points + bonus_points;
+		update_points();	
+	}
 
 	$('#title').html('Game Ended');
 
@@ -2246,42 +2292,6 @@ function check_firstime()
 		show_instructions();
 		localStorage.setItem("firstime", "check");
 	}
-}
-
-function get_random_profit_index()
-{
-	var r = Math.random();
-
-	var n = Math.round(r * 10);
-
-	if(n > profits.length - 1)
-	{
-		n = profits.length - 1;
-	}
-
-	if(n < 0)
-	{
-		n = 0;
-	}
-
-	return n;
-}
-
-function get_random_direction_index()
-{
-	var n = Math.round(Math.random());
-
-	if(n < 0)
-	{
-		n = 0;
-	}
-
-	if(n > 0)
-	{
-		n = 1;
-	}
-
-	return n;
 }
 
 function key_detection()
