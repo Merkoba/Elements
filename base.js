@@ -61,7 +61,6 @@ var start_count = 30;
 var tick_timer;
 var started_timeout;
 var profits = [-1000000, -800000, -600000, -400000, -200000, 0, 200000, 400000, 600000, 800000, 1000000];
-var bonuses = [0, 0, 0, 0, 0, 1, 2, 3, 4, 5];
 var directions = ["up", "down"];
 var msg_open = false;
 var fmsg_open = false;
@@ -91,6 +90,7 @@ var gained_from_lit;
 var ticks_skipped;
 var bonus;
 var bonus_points;
+var lit_trios_on_tick;
 
 function init()
 {
@@ -206,6 +206,8 @@ function start()
 
 	bonus_points = 0;
 
+	lit_trios_on_tick = 0;
+
 	started_timeout = setTimeout(function()
 	{
 
@@ -265,6 +267,8 @@ function generate()
 
 		element.gone = false;
 
+		element.bonus = 0;
+
 		if(options.seed === 0.1)
 		{
 			var index = 5;
@@ -276,8 +280,6 @@ function generate()
 		}
 
 		element.profit = profits[index];
-
-		element.bonus = bonuses[get_random_int(0, 9)];
 
 		if(options.seed === 0.1)
 		{
@@ -441,6 +443,8 @@ function click_events(parent)
 
 	if(btn.innerHTML === 'Buy Patent')
 	{
+		sold_on_tick = [];
+
 		if(element.profit <= 0)
 		{
 			var price = Math.abs(element.profit);
@@ -554,6 +558,12 @@ function click_events(parent)
 								{
 									num_lit_trios += 1;
 									gained_from_lit += pts;
+
+									lit_trios_on_tick += 1;
+
+									sold_on_tick[0].bonus = lit_trios_on_tick; 
+									sold_on_tick[1].bonus = lit_trios_on_tick; 
+									sold_on_tick[2].bonus = lit_trios_on_tick; 
 								}
 
 								$($('.element_container').get(id1)).addClass('pulsetrio');
@@ -676,6 +686,8 @@ function tick()
 	report.push(';' + count + ';');
 	
 	sold_on_tick = [];
+
+	lit_trios_on_tick = 0;
 
 	remove_pulsetrios();
 
@@ -929,10 +941,11 @@ function show_instructions()
 	s += "Freezing a 1 million element 3 times in a row makes it lit.<br><br>";
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
-	s += "Some gone elements provide bonus percentages on the overall score at the end.<br><br>";
-	s += "Each bonus range from 1% to 5%.<br><br>";
-	s += "Another way for the game to end is by making all elements disappear.<br><br>";
-	s += "A good strategy is aligning 3 elements to become 1 million at the same time, so they can get lit at the same time, giving you a 25 million bonus when sold as a lit trio.<br><br>";
+	s += "Gone elements sold in trios provide a bonus percentage on the overall score at the end.<br><br>";
+	s += "The percentage given by each gone element is determined by its trio stack on each tick.<br><br>";
+	s += "For instance, the first trio gets 1%, the second trio in the same tick gets 2%.<br><br>";
+	s += "Another way for the game to end is by making all elements gone.<br><br>";
+	s += "A good strategy is using freeze to align 3 elements, so they become 1 million at the same time.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "You can start a game with Enter.<br><br>";
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
