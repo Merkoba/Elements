@@ -866,7 +866,14 @@ function check_all_hints()
 
 function update_points()
 {
-	$('#points').html(format(points));
+	var s = format(points);
+
+	if(bonus > 0 && count > 0)
+	{
+		s += " (+" + bonus + "%)";
+	}
+
+	$('#points').html(s);
 }
 
 function check_state()
@@ -1546,9 +1553,10 @@ function show_report()
 
 	if(options.advanced)
 	{
-		s += "<div>Lit: " + num_lit + "</div><br>";
-		s += "<div>Lit Trios: " + num_lit_trios + "</div><br>";
+		s += "<div>Elements Lit: " + num_lit + "</div><br>";
+		s += "<div>Lit Trios Sold: " + num_lit_trios + "</div><br>";
 		s += "<div>Lit Points: " + format(gained_from_lit) + "</div><br>";
+		s += "<div>Elements Gone: " + $('.gone').length + "</div><br>";
 	}
 
 	s += "<div>Total Positive: " + format(total_tpts_positive) + "</div><br>";
