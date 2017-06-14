@@ -265,6 +265,8 @@ function generate()
 
 		element.lit = false;
 
+		element.deactivated = false;
+
 		element.gone = false;
 
 		element.bonus = 0;
@@ -434,7 +436,7 @@ function click_events(parent)
 {
 	var element = elements[$(parent).data('id')];
 
-	if(element.gone)
+	if(element.gone || element.deactivated)
 	{
 		return;
 	}
@@ -490,7 +492,7 @@ function click_events(parent)
 		$(btn).addClass('btn_sell');
 		$(btn).html('Sell Patent');
 	}
-
+	
 	else
 	{
 		if(element.frozen)
@@ -525,53 +527,58 @@ function click_events(parent)
 
 		if(options.advanced)
 		{
-			if(!element.soldonce)
+			element.soldonce = true;
+
+			sold_on_tick.push(element);
+
+			if(sold_on_tick.length > 3)
 			{
-				element.soldonce = true;
+				sold_on_tick.splice(0, 1);
+			}
 
-				sold_on_tick.push(element);
-
-				if(sold_on_tick.length > 3)
+			if(sold_on_tick.length > 2)
+			{
+				if(sold_on_tick[0].profit > 0)
 				{
-					sold_on_tick.splice(0, 1);
-				}
-
-				if(sold_on_tick.length > 2)
-				{
-					if(sold_on_tick[0].profit > 0)
+					if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
 					{
-						if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
+						var id1 = sold_on_tick[0].id;
+						var id2 = sold_on_tick[1].id;
+						var id3 = sold_on_tick[2].id;
+
+						if(id1 !== id2 && id1 !== id3 && id2 !== id3)
 						{
-							var id1 = sold_on_tick[0].id;
-							var id2 = sold_on_tick[1].id;
-							var id3 = sold_on_tick[2].id;
+							var pts = sold_on_tick[0].profit * 5;
 
-							if(id1 !== id2 && id1 !== id3 && id2 !== id3)
+							points += pts;
+
+							report.push(pts);
+
+							if(pts === 25000000)
 							{
-								var pts = sold_on_tick[0].profit * 5;
+								num_lit_trios += 1;
+								gained_from_lit += pts;
 
-								points += pts;
+								lit_trios_on_tick += 1;
 
-								report.push(pts);
+								sold_on_tick[0].bonus = lit_trios_on_tick; 
+								sold_on_tick[1].bonus = lit_trios_on_tick; 
+								sold_on_tick[2].bonus = lit_trios_on_tick; 
 
-								if(pts === 25000000)
-								{
-									num_lit_trios += 1;
-									gained_from_lit += pts;
+								sold_on_tick[0].deactivated = true;
+								sold_on_tick[1].deactivated = true;
+								sold_on_tick[2].deactivated = true;
 
-									lit_trios_on_tick += 1;
-
-									sold_on_tick[0].bonus = lit_trios_on_tick; 
-									sold_on_tick[1].bonus = lit_trios_on_tick; 
-									sold_on_tick[2].bonus = lit_trios_on_tick; 
-								}
-
-								$($('.element_container').get(id1)).addClass('pulsetrio');
-								$($('.element_container').get(id2)).addClass('pulsetrio');
-								$($('.element_container').get(id3)).addClass('pulsetrio');
-								
-								sold_on_tick = [];
+								$($($('.element_container').get(id1)).find('.element_patent_btn').get(0)).remove();
+								$($($('.element_container').get(id2)).find('.element_patent_btn').get(0)).remove();
+								$($($('.element_container').get(id3)).find('.element_patent_btn').get(0)).remove();
 							}
+
+							$($('.element_container').get(id1)).addClass('pulsetrio');
+							$($('.element_container').get(id2)).addClass('pulsetrio');
+							$($('.element_container').get(id3)).addClass('pulsetrio');
+							
+							sold_on_tick = [];
 						}
 					}
 				}
@@ -788,6 +795,13 @@ function gone(cont, element)
 	else
 	{
 		$(cont).html('');
+	}
+
+	element.lit = false;
+
+	if(element.deactivated)
+	{
+		element.deactivated = false;
 	}
 
 	element.gone = true;
