@@ -936,15 +936,16 @@ function show_instructions()
 	s += "Linear speed mode starts at 12 seconds and ends at 5 seconds.<br><br>";
 	s += "If you end a tick with negative points, the tick counter is decreased by 2 instead of 1.<br><br>";
 	s += "The game ends when the tick counter reaches 0.<br><br>";
-	s += "<br><b>Strategy</b><br><br>";
+	s += "<br><b>Core Mode</b><br><br>";
 	s += "The point is to maximize your points by selling as much as you can while spending the least.<br><br>";
 	s += "The ideal is to buy at 0 UP because it costs you 0 points and sell at 1 million DOWN. Earning you 8 million in total.<br><br>";
 	s += "200,000 + 400,000 + 600,000 + 800,000 + 1,000,000 + 5,000,000.<br><br>";
 	s += "You should sell anything going down because it will only lose value or get in the reds and start subtracting points.<br><br>";
 	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
 	s += "<br><b>Advanced Mode</b><br><br>";
-	s += "Advanced mode adds new mechanics to the game.<br><br>";
-	s += "For example, selling 3 elements with the same profit in a row, a trio, will give you that profit multiplied by 5.<br><br>";
+	s += "Advanced mode adds new mechanics to the core game.<br><br>";
+	s += "Selling 3 elements with the same profit in a row, a trio, will give you that profit multiplied by 5.<br><br>";
+	s += "For example, selling three 1 million elements at the same time gives you 1,000,000 + 1,000,000 + 1,000,000 + 5,000,000.<br><br>";
 	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same profit.<br><br>";
 	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
 	s += "Freezing a 1 million element 3 times in a row makes it lit.<br><br>";
@@ -952,9 +953,10 @@ function show_instructions()
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
 	s += "Gone elements sold in trios provide a bonus percentage on the overall score at the end.<br><br>";
 	s += "The percentage given by each gone element is determined by its bonus stack.<br><br>";
-	s += "For instance, the first trio gets 1%, the second trio in the same tick gets 2%.<br><br>";
+	s += "For instance, the first trio sold gets 1%, the second trio sold in the same tick gets 2%.<br><br>";
 	s += "Another way for the game to end is by making all elements gone.<br><br>";
-	s += "A good strategy is using freeze to align 3 elements, so they become 1 million at the same time.<br><br>";
+	s += "A good strategy is using freeze to align 3 elements so they become lit at the same time, and sell them as a lit trio.<br><br>";
+	s += "You can also try aligning multiple lit trios so you can increase the bonus stack.<br><br>";
 	s += "<br><b>Shortcuts</b><br><br>";
 	s += "You can start a game with Enter.<br><br>";
 	s += "Escape closes windows or stops the current game if there are no windows.<br><br>";
@@ -975,7 +977,7 @@ function get_options()
 
 	if(options === null)
 	{
-		options = {fit: true, sounds: true, music: true, hints: false, advanced: false, seed: 1, speed: "Slow"};
+		options = {fit: true, sounds: true, music: true, hints: false, advanced: false, seed: 1, speed: "Normal"};
 		update_options();
 	}
 
@@ -2116,7 +2118,7 @@ function seed_picker()
 	var s = "0 to 999<br><br><input id='seed_input'><br><br>";
 	s += "<button id='seed_btn_1' class='dialog_btn' onclick='check_seed()'>Ok</button>&nbsp;&nbsp;";
 	s += "<button id='seed_btn_2' class='dialog_btn' onclick='get_random_seed()'>?</button><br><br>";
-	s += "<button id='seed_btn_3' class='dialog_btn' onclick='get_daily()'>Daily</button><br><br>";
+	s += "<button id='seed_btn_3' class='dialog_btn' onclick='daily()'>Daily</button><br><br>";
 	s += "<button id='seed_btn_4' class='dialog_btn' onclick='change_seed(-1)'>Random</button>";
 
 	if(fmsg(s, 'seed'))
@@ -2253,7 +2255,12 @@ function get_daily()
 
 	Math.seedrandom(s);
 
-	change_seed(get_random_int(0, 999));
+	return get_random_int(0, 999);
+}
+
+function daily()
+{
+	change_seed(get_daily());
 }
 
 function speed_picker()
