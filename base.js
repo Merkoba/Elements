@@ -951,7 +951,7 @@ function show_instructions()
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
 	s += "Gone elements sold in trios provide a bonus percentage on the overall score at the end.<br><br>";
-	s += "The percentage given by each gone element is determined by its trio stack on each tick.<br><br>";
+	s += "The percentage given by each gone element is determined by its bonus stack.<br><br>";
 	s += "For instance, the first trio gets 1%, the second trio in the same tick gets 2%.<br><br>";
 	s += "Another way for the game to end is by making all elements gone.<br><br>";
 	s += "A good strategy is using freeze to align 3 elements, so they become 1 million at the same time.<br><br>";
