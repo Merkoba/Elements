@@ -436,7 +436,7 @@ function click_events(parent)
 {
 	var element = elements[$(parent).data('id')];
 
-	if(element.gone || element.deactivated)
+	if(element.gone || element.frozen || element.deactivated)
 	{
 		return;
 	}
@@ -495,11 +495,6 @@ function click_events(parent)
 	
 	else
 	{
-		if(element.frozen)
-		{
-			return;
-		}
-
 		if(element.profit <= 0)
 		{
 			var price = 0;
