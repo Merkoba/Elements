@@ -2625,6 +2625,9 @@ function disable_context_menus()
 	$('#main_container')[0].addEventListener('contextmenu', event => event.preventDefault());
 	$('#overlay')[0].addEventListener('contextmenu', event => event.preventDefault());
 	$('#foverlay')[0].addEventListener('contextmenu', event => event.preventDefault());
+	$('#left_side')[0].addEventListener('contextmenu', event => event.preventDefault());
+	$('#title_container')[0].addEventListener('contextmenu', event => event.preventDefault());
+	$('#right_side')[0].addEventListener('contextmenu', event => event.preventDefault());
 }
 
 function start_context_menus()
