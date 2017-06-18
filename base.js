@@ -1574,6 +1574,7 @@ function show_report()
 
 	if(options.advanced)
 	{
+		s += "<div>Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>";
 		s += "<div>Bonus: " + bonus + "% (" + format(bonus_points) + ")</div><br>";
 	}
 
