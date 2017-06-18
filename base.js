@@ -471,20 +471,17 @@ function click_events(parent)
 
 		if(options.advanced)
 		{
-			if(element.soldonce)
+			if(element.soldonce && !element.lit)
 			{
-				if(!element.frozen && !element.lit)
+				element.frozen = true;
+
+				$($('.element_container').get(element.id)).removeClass('green');
+				$($('.element_container').get(element.id)).removeClass('red');
+				$($('.element_container').get(element.id)).addClass('blue');
+
+				if(element.profit === 1000000)
 				{
-					element.frozen = true;
-
-					$($('.element_container').get(element.id)).removeClass('green');
-					$($('.element_container').get(element.id)).removeClass('red');
-					$($('.element_container').get(element.id)).addClass('blue');
-
-					if(element.profit === 1000000)
-					{
-						element.freeze_chain += 1;
-					}
+					element.freeze_chain += 1;
 				}
 			}
 		}
@@ -533,7 +530,7 @@ function click_events(parent)
 
 			if(sold_on_tick.length > 2)
 			{
-				if(sold_on_tick[0].profit > 0)
+				if(sold_on_tick[0].profit === 5000000)
 				{
 					if(sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit)
 					{
@@ -543,31 +540,21 @@ function click_events(parent)
 
 						if(id1 !== id2 && id1 !== id3 && id2 !== id3)
 						{
-							var pts = sold_on_tick[0].profit * 5;
+							num_lit_trios += 1;
 
-							points += pts;
+							lit_trios_on_tick += 1;
 
-							report.push(pts);
+							sold_on_tick[0].bonus = lit_trios_on_tick; 
+							sold_on_tick[1].bonus = lit_trios_on_tick; 
+							sold_on_tick[2].bonus = lit_trios_on_tick; 
 
-							if(pts === 25000000)
-							{
-								num_lit_trios += 1;
-								gained_from_lit += pts;
+							sold_on_tick[0].deactivated = true;
+							sold_on_tick[1].deactivated = true;
+							sold_on_tick[2].deactivated = true;
 
-								lit_trios_on_tick += 1;
-
-								sold_on_tick[0].bonus = lit_trios_on_tick; 
-								sold_on_tick[1].bonus = lit_trios_on_tick; 
-								sold_on_tick[2].bonus = lit_trios_on_tick; 
-
-								sold_on_tick[0].deactivated = true;
-								sold_on_tick[1].deactivated = true;
-								sold_on_tick[2].deactivated = true;
-
-								$($($('.element_container').get(id1)).find('.element_patent_btn').get(0)).remove();
-								$($($('.element_container').get(id2)).find('.element_patent_btn').get(0)).remove();
-								$($($('.element_container').get(id3)).find('.element_patent_btn').get(0)).remove();
-							}
+							$($($('.element_container').get(id1)).find('.element_patent_btn').get(0)).remove();
+							$($($('.element_container').get(id2)).find('.element_patent_btn').get(0)).remove();
+							$($($('.element_container').get(id3)).find('.element_patent_btn').get(0)).remove();
 
 							$($('.element_container').get(id1)).addClass('pulsetrio');
 							$($('.element_container').get(id2)).addClass('pulsetrio');
@@ -944,14 +931,13 @@ function show_instructions()
 	s += "As ticks are about to end, make sure you don't buy anything that won't earn you points, and sell what you need to sell at the last tick.<br><br>";
 	s += "<br><b>Advanced Mode</b><br><br>";
 	s += "Advanced mode adds new mechanics to the core game.<br><br>";
-	s += "Selling 3 elements with the same profit in a row, a trio, will give you that profit multiplied by 5.<br><br>";
-	s += "For example, selling three 1 million elements at the same time gives you 1,000,000 + 1,000,000 + 1,000,000 + 5,000,000.<br><br>";
-	s += "Trios work no matter what the directions of the elements are, just as long as they're positive and the same profit.<br><br>";
+	s += "The point is to maximize your score, mainly by selling as many lit elements and lit trios as you can.<br><br>";
+	s += "You achieve this by freezing elements.<br><br>";
 	s += "Selling and buying an element in the same tick freezes it. Which makes it stay in the same state on the next tick.<br><br>";
 	s += "Freezing a 1 million element 3 times in a row makes it lit.<br><br>";
 	s += "When lit, its profit is 5 million, selling price is 25 million, and buying price is 50 million.<br><br>";
 	s += "Elements that become lit are gone from the game after the next tick.<br><br>";
-	s += "Gone elements sold in trios provide a bonus percentage on the overall score at the end.<br><br>";
+	s += "Lit elements sold in trios provide a bonus percentage on the overall score at the end.<br><br>";
 	s += "The percentage given by each gone element is determined by its bonus stack.<br><br>";
 	s += "For instance, the first trio sold gets 1%, the second trio sold in the same tick gets 2%.<br><br>";
 	s += "Another way for the game to end is by making all elements gone.<br><br>";
