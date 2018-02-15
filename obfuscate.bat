@@ -1,1 +1,1 @@
-javascript-obfuscator C:\Users\yo\Documents\elements\base.js --output C:\Users\yo\Documents\elements\base_o.js --mangle true
+javascript-obfuscator C:\Users\yo\Documents\elements\base_c.js --output C:\Users\yo\Documents\elements\base_o.js --mangle true

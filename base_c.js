@@ -970,7 +970,7 @@ var BASE = (function()
 
 		if(options === null)
 		{
-			options = {fit: true, sounds: true, music: true, hints: false, advanced: false, seed: 1, speed: "Normal"};
+			options = {fit: true, sounds: true, music: true, hints: false, advanced: true, seed: 1, speed: "Normal"};
 			update_options();
 		}
 
