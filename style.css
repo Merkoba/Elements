@@ -289,7 +289,7 @@ body
 
 #msg
 {
-	font-size: 1.7em;
+	font-size: 1.4em;
 	text-align: center;
 	position: fixed;
 	left: 50%;
@@ -309,7 +309,7 @@ body
 #fmsg
 {
 	position: fixed;
-	font-size: 1.7em;
+	font-size: 1.4em;
 	text-align: center;
 	background: white;
 	padding-top: 0.5em;
