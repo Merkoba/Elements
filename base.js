@@ -178,7 +178,7 @@ App.start = () => {
     App.update_points()
     App.update_counter()
     App.set_cursors_pointer()
-    loop()
+    App.loop()
     App.started = true
   }, 3700)
 }
@@ -516,7 +516,7 @@ App.loop = () => {
         App.loop_speed = App.speed_slow - (App.linear_diff * (App.start_count - App.count))
       }
 
-      loop()
+      App.loop()
     }
   }, App.loop_speed)
 }
@@ -601,7 +601,7 @@ App.tick = () => {
     App.check_all_hints()
   }
 
-  check_state()
+  App.check_state()
 }
 
 App.gone = (cont, element) => {
@@ -1069,12 +1069,12 @@ App.show_scores = (setting, advanced) => {
         s += `<div class='setting_small'>` + ss + `</div>`
 
         if (App.last_highscore !== ``) {
-          t = App.last_highscore.split(`=`)[0]
-          p = App.last_highscore.split(`=`)[1]
-          m = App.last_highscore.split(`=`)[2]
+          t = parseInt(App.last_highscore.split(`=`)[0])
+          p = parseInt(App.last_highscore.split(`=`)[1])
+          m = parseInt(App.last_highscore.split(`=`)[2])
         }
 
-        if ((App.last_highscore !== ``) && (((m === `Advanced`) && advanced) || ((m === `Core`) && !advanced)) && (ss == t) && (hs == p)) {
+        if ((App.last_highscore !== ``) && (((m === `Advanced`) && advanced) || ((m === `Core`) && !advanced)) && (ss === t) && (hs === p)) {
           s += `<span class='grey_highlight'>` + App.format(hs) + `</span>`
         }
 
@@ -1106,12 +1106,12 @@ App.show_scores = (setting, advanced) => {
       }
       else {
         if (App.last_highscore !== ``) {
-          t = App.last_highscore.split(`=`)[0]
-          p = App.last_highscore.split(`=`)[1]
-          m = App.last_highscore.split(`=`)[2]
+          t = parseInt(App.last_highscore.split(`=`)[0])
+          p = parseInt(App.last_highscore.split(`=`)[1])
+          m = parseInt(App.last_highscore.split(`=`)[2])
         }
 
-        if ((App.last_highscore !== ``) && (((m === `Advanced`) && advanced) || ((m === `Core`) && !advanced)) && (setting == t) && (hs == p)) {
+        if ((App.last_highscore !== ``) && (((m === `Advanced`) && advanced) || ((m === `Core`) && !advanced)) && (setting === t) && (hs === p)) {
           s += `<span class='grey_highlight'>` + App.format(hs) + `</span>`
         }
         else {
@@ -1300,7 +1300,7 @@ App.on_finish = () => {
 }
 
 App.ended = () => {
-  on_finish()
+  App.on_finish()
 
   if ((App.points > 0) && (App.bonus > 0)) {
     App.bonus_points = Math.round(App.points * (App.bonus / 100))
@@ -1619,7 +1619,7 @@ App.position_fmsg = (el) => {
 }
 
 App.refresh = () => {
-  document.location = document.location
+  location.reload()
 }
 
 App.play = (what) => {
