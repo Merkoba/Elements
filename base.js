@@ -1697,13 +1697,6 @@ App.seed_picker = () => {
 
   if (App.fmsg(s, `seed`)) {
     App.msg_align_btns(true)
-    let pos = $(`#seed_random_seed`).position()
-    let bw = (pos.left + $(`#seed_random_seed`).outerWidth()) - pos.left
-
-    $(`#seed_input`).outerWidth(bw)
-    $(`#seed_daily`).outerWidth(bw)
-    $(`#seed_random`).outerWidth(bw)
-
     App.position_fmsg(`seed`)
   }
 
