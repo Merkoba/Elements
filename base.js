@@ -1591,7 +1591,7 @@ App.msg_align_btns = (alt = false) => {
 }
 
 App.position_fmsg = (el) => {
-  $(`#fmsg`).css(`top`, $(`#title_container`).outerHeight() - 1)
+  $(`#fmsg`).css(`top`, $(`#top`).outerHeight() - 1)
   let left = $(`#` + el).position().left - ($(`#fmsg`).outerWidth() / 2) + ($(`#` + el).width() / 2)
 
   if (left < 0) {

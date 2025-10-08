@@ -15,15 +15,22 @@ body {
 	background-position: center center;
 }
 
+#top {
+	font-size: 1.2em;
+	display: flex;
+	flex-direction: row;
+	background-color: white;
+	color: black;
+	align-items: center;
+	justify-content: center;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
 #title_container {
-	font-size: 1.8em;
-	padding-top: 0.6em;
-	padding-bottom: 0.6em;
-	position: fixed;
-	background-color: #fff;
-	width: 100%;
-	text-align: center;
 	user-select: none;
+	flex-grow: 1;
+	flex-shrink: 1;
 }
 
 #title {
@@ -32,24 +39,21 @@ body {
 }
 
 #left_side {
-	font-size: 1.4em;
-	top: 1em;
-	left: 1.8em;
-	position: fixed;
-	z-index: 34534;
 	user-select: none;
 	display: flex;
 	flex-direction: row;
 	gap: 2rem;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding-left: 0.5rem;
 }
 
 #right_side {
-	font-size: 1.4em;
-	top: 1em;
-	right: 2em;
-	position: fixed;
-	z-index: 34534;
 	user-select: none;
+	flex-grow: 1;
+	flex-shrink: 1;
+	text-align: right;
+	padding-right: 0.5rem;
 }
 
 #seed {
@@ -102,8 +106,6 @@ body {
 	background-image: none;
 	text-align-last: center;
 	text-decoration: underline;
-	-moz-appearance: none;
-	-webkit-appearance: none;
 }
 
 .hs_select select:focus {
@@ -231,7 +233,7 @@ body {
 }
 
 #msg {
-	font-size: 1.4em;
+	font-size: 1.2em;
 	text-align: center;
 	position: fixed;
 	left: 50%;
@@ -250,7 +252,7 @@ body {
 
 #fmsg {
 	position: fixed;
-	font-size: 1.4em;
+	font-size: 1.2em;
 	text-align: center;
 	background: white;
 	padding-top: 0.5em;
@@ -268,7 +270,7 @@ body {
 
 b {
 	letter-spacing: 0.1em;
-	font-size: 1.4em;
+	font-size: 1.2em;
 }
 
 .dialog_btn {
