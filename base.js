@@ -192,11 +192,11 @@ App.clear_started = () => {
 App.generate = () => {
   $(`#main_container`).html(``)
 
-  if (options.seed === -1) {
+  if (App.options.seed === -1) {
     Math.seedrandom()
   }
   else {
-    Math.seedrandom(options.seed)
+    Math.seedrandom(App.options.seed)
   }
 
   for (let i = 0; i < App.elements.length; i++) {
@@ -212,7 +212,7 @@ App.generate = () => {
     element.bonus = 0
     let index
 
-    if (options.seed === 0.1) {
+    if (App.options.seed === 0.1) {
       index = 5
     }
     else {
@@ -221,7 +221,7 @@ App.generate = () => {
 
     element.profit = App.profits[index]
 
-    if (options.seed === 0.1) {
+    if (App.options.seed === 0.1) {
       if (i % 2 === 0) {
         index = 1
       }
@@ -261,7 +261,7 @@ App.generate = () => {
       s += ` red`
     }
 
-    if (options.hints && (element.profit === 0 || element.profit === 200000) && element.direction === `up`) {
+    if (App.options.hints && (element.profit === 0 || element.profit === 200000) && (element.direction === `up`)) {
       s += ` pulsating`
     }
 
@@ -300,7 +300,7 @@ App.fit = () => {
 
     $(`#main_container`).css(`font-size`, size + `em`)
 
-    if (options.fit) {
+    if (App.options.fit) {
       for (let i = 0; i < 20; i++) {
         if (document.body.scrollHeight > document.body.clientHeight) {
           size -= 0.025
@@ -371,7 +371,7 @@ App.click_events = (parent) => {
     App.report.push(-price)
     element.owned = true
 
-    if (options.advanced) {
+    if (App.options.advanced) {
       if (element.soldonce && !element.lit) {
         element.frozen = true
 
@@ -410,7 +410,7 @@ App.click_events = (parent) => {
     $(btn).removeClass(`btn_sell`)
     $(btn).html(`Buy Patent`)
 
-    if (options.advanced) {
+    if (App.options.advanced) {
       element.soldonce = true
       App.sold_on_tick.push(element)
 
@@ -455,7 +455,7 @@ App.click_events = (parent) => {
 
   update_points()
 
-  if (options.hints) {
+  if (App.options.hints) {
     check_all_hints()
   }
 }
@@ -513,7 +513,7 @@ App.loop = () => {
     }
 
     if (App.count > 0) {
-      if (options.speed === `Linear`) {
+      if (App.options.speed === `Linear`) {
         loop_speed = App.speed_slow - (App.linear_diff * (App.start_count - App.count))
       }
 
@@ -598,7 +598,7 @@ App.tick = () => {
   App.update_counter()
   update_points()
 
-  if (options.hints) {
+  if (App.options.hints) {
     check_all_hints()
   }
 
@@ -1275,7 +1275,7 @@ App.copy_report = () => {
 }
 
 App.set_speed = () => {
-  if (App.options.speed === `Slow` || App.options.speed === `Linear`) {
+  if ((App.options.speed === `Slow`) || (App.options.speed === `Linear`)) {
     loop_speed = App.speed_slow
   }
 
@@ -1369,7 +1369,7 @@ App.ended = () => {
         hs.sort(function(a, b){return b - a})
         hs.splice(10, hs.length)
 
-        if (options.advanced) {
+        if (App.options.advanced) {
           localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
         }
 
@@ -1390,7 +1390,7 @@ App.ended = () => {
   })
 
   $(`#end_show_hs`).click(() => {
-    show_highscores(options.advanced)
+    show_highscores(App.options.advanced)
   })
 
   $(`#end_rep`).click(() => {
@@ -1427,9 +1427,9 @@ App.ended = () => {
       }
     }
 
-    App.highscores[`Overall - ` + options.speed] = counted
+    App.highscores[`Overall - ` + App.options.speed] = counted
 
-    if (options.advanced) {
+    if (App.options.advanced) {
       localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
     }
     else {
@@ -1463,7 +1463,7 @@ App.ended = () => {
 
     App.highscores.Overall = counted
 
-    if (options.advanced) {
+    if (App.options.advanced) {
       localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
     }
     else {
@@ -1473,7 +1473,7 @@ App.ended = () => {
 
   App.last_highscore = setting + `=` + App.points
 
-  if (options.advanced) {
+  if (App.options.advanced) {
     App.last_highscore += `=Advanced`
   }
   else {
@@ -1583,7 +1583,7 @@ App.fmsg = (txt, el) => {
   return true
 }
 
-App.App.msg_align_btns = (alt = false) => {
+App.fApp.msg_align_btns = (alt = false) => {
   if (alt) {
     $(`#fmsg`).find(`.dialog_btn`).each(() => {
       $(this).width($(this).outerWidth())
@@ -1625,7 +1625,7 @@ App.refresh = () => {
 
 App.play = (what) => {
   if (what === `music`) {
-    if (options.music) {
+    if (App.options.music) {
       unmute_music()
     }
     else {
@@ -1637,7 +1637,7 @@ App.play = (what) => {
     $(`#music`)[0].play()
   }
 
-  else if (options.sounds) {
+  else if (App.options.sounds) {
     $(`#` + what)[0].pause()
     $(`#` + what)[0].currentTime = 0
     $(`#` + what)[0].play()
@@ -1709,7 +1709,7 @@ App.seed_picker = () => {
   s += `<button id='seed_random' class='dialog_btn'>Random</button>`
 
   if (App.fmsg(s, `seed`)) {
-    App.msg_align_btns(true)
+    fApp.msg_align_btns(true)
     let bw = ($(`#seed_random_seed`).offset().left + $(`#seed_random_seed`).outerWidth()) - $(`#seed_check_seed`).offset().left
 
     $(`#seed_input`).outerWidth(bw)
@@ -1745,8 +1745,8 @@ App.seed_picker = () => {
     }
   })
 
-  if (options.seed !== -1) {
-    $(`#seed_input`).val(options.seed)
+  if (App.options.seed !== -1) {
+    $(`#seed_input`).val(App.options.seed)
   }
 
   $(`#seed_input`).focus()
@@ -1788,16 +1788,16 @@ App.change_seed = (s, save = true) => {
     }
   }
 
-  options.seed = seed
+  App.options.seed = seed
 
-  if (options.seed === -1) {
+  if (App.options.seed === -1) {
     $(`#seed`).html(`#`)
   }
-  else if (options.seed === 0.1) {
+  else if (App.options.seed === 0.1) {
     $(`#seed`).html(`#NaN`)
   }
   else {
-    $(`#seed`).html(`#` + options.seed)
+    $(`#seed`).html(`#` + App.options.seed)
   }
 
   if (save) {
@@ -1840,7 +1840,7 @@ App.speed_picker = () => {
   s += `<button id='speed_linear' class='dialog_btn'>Linear</button>`
 
   if (App.fmsg(s, `speed`)) {
-    App.msg_align_btns()
+    fApp.msg_align_btns()
     position_fmsg(`speed`)
   }
 
@@ -1862,7 +1862,7 @@ App.speed_picker = () => {
 }
 
 App.change_speed = (what, save = true) => {
-  options.speed = what
+  App.options.speed = what
   $(`#speed`).html(what)
 
   if (save) {
@@ -1877,7 +1877,7 @@ App.mode_picker = () => {
   s += `<button id='mode_advanced'class='dialog_btn'>Advanced</button>`
 
   if (App.fmsg(s, `mode`)) {
-    App.msg_align_btns()
+    fApp.msg_align_btns()
     position_fmsg(`mode`)
   }
 
@@ -1891,7 +1891,7 @@ App.mode_picker = () => {
 }
 
 App.change_mode = (advanced, save = true) => {
-  options.advanced = advanced
+  App.options.advanced = advanced
   $(`#mode`).html(get_mode_text())
 
   if (save) {
@@ -2000,7 +2000,7 @@ App.show_menu = () => {
   })
 
   $(`#menu_highscores`).click(() => {
-    show_highscores(options.advanced)
+    show_highscores(App.options.advanced)
   })
 
   $(`#menu_options`).click(() => {
@@ -2061,13 +2061,13 @@ App.resize_events = () => {
 }
 
 App.play_with_hints = () => {
-  options.hints = true
+  App.options.hints = true
   App.update_options()
   App.start()
 }
 
 App.disable_hints = () => {
-  options.hints = false
+  App.options.hints = false
   App.update_options()
 
   $(`#hint_dis`).remove()
@@ -2090,7 +2090,7 @@ App.title_click = () => {
   }
 
   else if ($(`#title`).html() === `Starting Game`) {
-    if (options.seed === 0.1) {
+    if (App.options.seed === 0.1) {
       App.change_seed(`-1`)
     }
 
@@ -2225,7 +2225,7 @@ App.title_clicks = () => {
 
 App.right_side_clicks = () => {
   $(`#points`).click(() => {
-    App.show_highscores(options.advanced)
+    App.show_highscores(App.options.advanced)
   })
 
   $(`#menu`).click(() => {
