@@ -486,7 +486,7 @@ App.format = (n) => {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, `,`)
 }
 
-App.TickTimer = function (callback, delay) {
+App.TickTimer = function(callback, delay) {
   let timer_id, start, remaining = delay
 
   this.pause = function() {
@@ -948,7 +948,7 @@ App.get_mode_text = () => {
 }
 
 App.get_full_setting = () => {
-  return get_setting() + ` : ` + App.get_mode_text()
+  return App.get_setting() + ` : ` + App.get_mode_text()
 }
 
 App.start_setting = (setting, advanced) => {
@@ -996,7 +996,7 @@ App.show_highscores = (advanced) => {
   let setting
 
   if (App.hs_setting === null) {
-    setting = get_setting()
+    setting = App.get_setting()
   }
   else {
     setting = App.hs_setting
@@ -1336,7 +1336,7 @@ App.ended = () => {
   }
 
   let shs = `<br><br><button id='end_show_hs' class='dialog_btn'>High Scores</button><br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
-  let setting = get_setting()
+  let setting = App.get_setting()
   let hs = App.get_setting_highscores(setting, App.options.advanced)
   let overall = App.highscores.Overall
   let overall_speed = App.highscores[`Overall - ` + App.options.speed]
@@ -1672,7 +1672,7 @@ App.start_music_fadeout = () => {
     clearInterval(App.music_fadeout_interval)
   }
 
-  App.music_fadeout_interval = setInterval(music_fadeout, 100)
+  App.music_fadeout_interval = setInterval(App.music_fadeout, 100)
 }
 
 App.music_fadeout = () => {
@@ -1775,7 +1775,7 @@ App.check_seed = () => {
 App.change_seed = (s, save = true) => {
   let seed
 
-  if (s == `0.1`) {
+  if (s.toString() === `0.1`) {
     seed = 0.1
   }
   else {
@@ -1810,7 +1810,7 @@ App.get_random_seed = () => {
   Math.seedrandom()
   let r = App.get_random_int(0, 999)
 
-  if ($(`#seed_input`).val() == r) {
+  if (parseInt($(`#seed_input`).val()) === r) {
     r += 1
 
     if (r > 999) {
@@ -1980,8 +1980,8 @@ App.stop_the_music = () => {
 }
 
 App.stop_all_audio = () => {
-  stop_all_sounds()
-  stop_the_music()
+  App.stop_all_sounds()
+  App.stop_the_music()
 }
 
 App.show_menu = () => {
@@ -2013,7 +2013,7 @@ App.show_menu = () => {
 
 App.toggle_menu = () => {
   if ($(`#msg_menu`).length === 0) {
-    show_menu()
+    App.show_menu()
   }
   else {
     App.hide_overlay()
