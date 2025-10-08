@@ -486,7 +486,7 @@ App.format = (n) => {
   return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, `,`)
 }
 
-App.TickTimer = (callback, delay) => {
+App.TickTimer = function (callback, delay) {
   let timer_id, start, remaining = delay
 
   this.pause = function() {
@@ -533,7 +533,7 @@ App.tick = () => {
   App.count -= 1
 
   if (App.points < 0) {
-    subtract_count()
+    App.subtract_count()
   }
 
   App.report.push(`;` + App.count + `;`)
@@ -830,7 +830,7 @@ App.show_options = () => {
     App.update_options()
 
     if (!App.options.sounds) {
-      stop_all_sounds()
+      App.stop_all_sounds()
     }
   })
 
@@ -1968,7 +1968,7 @@ App.stop = () => {
 }
 
 App.stop_all_sounds = () => {
-  $(`.sound`).each(() => {
+  $(`.sound`).each(function() {
     this.pause()
     this.currentTime = 0
   })
