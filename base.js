@@ -68,26 +68,19 @@ App.ls_options = "options_v6"
 App.msg_closeable = false
 App.speed_slow = 12000
 App.speed_normal = 8000
-var speed_fast = 5000
-var linear_diff = (App.speed_slow - speed_fast) / (App.start_count - 1)
-var count = 0
-var points = 0
-var music_fadeout_interval
-var playing = false
-var started = false
-var paused = false
-var last_highscore = ""
-var sold_on_tick = []
-var report = []
-var hs_setting = null
-var fmsg_mode = null
-var num_lit
-var num_lit_trios
-var gained_from_lit
-var ticks_skipped
-var bonus
-var bonus_points
-var lit_trios_on_tick
+App.speed_fast = 5000
+App.linear_diff = (App.speed_slow - App.speed_fast) / (App.start_count - 1)
+App.count = 0
+App.points = 0
+App.music_fadeout_interval
+App.playing = false
+App.started = false
+App.paused = false
+App.last_highscore = ""
+App.sold_on_tick = []
+App.report = []
+App.hs_setting = null
+App.fmsg_mode = null
 
 function init() {
 	get_options()
@@ -144,9 +137,9 @@ function hide_and_stop() {
 }
 
 function start() {
-	playing = true
-	started = false
-	paused = false
+	App.playing = true
+	App.started = false
+	App.paused = false
 	stop_loop()
 	set_speed()
 	hide_overlays()
@@ -154,60 +147,44 @@ function start() {
 	fit()
 
 	$('#title').html('Starting Game')
-
 	$('#points').html('')
-
 	$('#start').html('Stop')
-
 	$('body').css('background-image', 'none')
-
 	$('#main_container').focus()
 
 	to_top()
-
 	play('started')
 
-	if (music_fadeout_interval !== undefined) {
-		clearInterval(music_fadeout_interval)
+	if (App.music_fadeout_interval !== undefined) {
+		clearInterval(App.music_fadeout_interval)
 	}
 
 	play('music')
-
 	clear_started()
 
-	last_highscore = ""
-
-	sold_on_tick = []
-
-	report = []
-
-	num_lit = 0
-
-	num_lit_trios = 0
-
-	gained_from_lit = 0
-
-	ticks_skipped = 0
-
+	App.last_highscore = ""
+	App.sold_on_tick = []
+	App.report = []
+	App.num_lit = 0
+	App.num_lit_trios = 0
+	App.gained_from_lit = 0
+	App.ticks_skipped = 0
 	bonus = 0
-
-	bonus_points = 0
-
-	lit_trios_on_tick = 0
+	App.bonus_points = 0
+	App.lit_trios_on_tick = 0
 
 	App.started_timeout = setTimeout(function() {
 		$('.element_patent_btn').each(function() {
 			$(this).css('display', 'inline-block')
 		})
 
-		points = App.start_points
-		count = App.start_count
+		App.points = App.start_points
+		App.count = App.start_count
 		update_points()
 		update_counter()
 		set_cursors_pointer()
 		loop()
-		started = true
-
+		App.started = true
 	}, 3700)
 }
 
@@ -314,7 +291,7 @@ function generate() {
 
 	$('.element_container').each(function() {
 		$(this).mousedown(function() {
-			if (playing && started && !paused) {
+			if (App.playing && App.started && !App.paused) {
 				click_events(this)
 			}
 		})
@@ -387,7 +364,7 @@ function click_events(parent) {
 	let btn = $(parent).find('.element_patent_btn').get(0)
 
 	if (btn.innerHTML === 'Buy Patent') {
-		sold_on_tick = []
+		App.sold_on_tick = []
 		let price
 
 		if (element.profit <= 0) {
@@ -396,15 +373,15 @@ function click_events(parent) {
 
 		else if (element.profit === 5000000) {
 			let price = 50000000
-			gained_from_lit -= price
+			App.gained_from_lit -= price
 		}
 
 		else {
 			price = element.profit * 5
 		}
 
-		points -= price
-		report.push(-price)
+		App.points -= price
+		App.report.push(-price)
 		element.owned = true
 
 		if (options.advanced) {
@@ -434,15 +411,15 @@ function click_events(parent) {
 
 		else if (element.profit === 5000000) {
 			price = 25000000
-			gained_from_lit += price
+			App.gained_from_lit += price
 		}
 
 		else {
 			price = element.profit * (element.profit / 200000)
 		}
 
-		points += price
-		report.push(price)
+		App.points += price
+		App.report.push(price)
 		element.owned = false
 
 		$(btn).removeClass('btn_sell')
@@ -450,30 +427,30 @@ function click_events(parent) {
 
 		if (options.advanced) {
 			element.soldonce = true
-			sold_on_tick.push(element)
+			App.sold_on_tick.push(element)
 
-			if (sold_on_tick.length > 3) {
-				sold_on_tick.splice(0, 1)
+			if (App.sold_on_tick.length > 3) {
+				App.sold_on_tick.splice(0, 1)
 			}
 
-			if (sold_on_tick.length > 2) {
-				if (sold_on_tick[0].profit === 5000000) {
-					if (sold_on_tick[0].profit === sold_on_tick[1].profit && sold_on_tick[0].profit === sold_on_tick[2].profit) {
-						let id1 = sold_on_tick[0].id
-						let id2 = sold_on_tick[1].id
-						let id3 = sold_on_tick[2].id
+			if (App.sold_on_tick.length > 2) {
+				if (App.sold_on_tick[0].profit === 5000000) {
+					if (App.sold_on_tick[0].profit === App.sold_on_tick[1].profit && App.sold_on_tick[0].profit === App.sold_on_tick[2].profit) {
+						let id1 = App.sold_on_tick[0].id
+						let id2 = App.sold_on_tick[1].id
+						let id3 = App.sold_on_tick[2].id
 
 						if (id1 !== id2 && id1 !== id3 && id2 !== id3) {
-							num_lit_trios += 1
-							lit_trios_on_tick += 1
+							App.num_lit_trios += 1
+							App.lit_trios_on_tick += 1
 
-							sold_on_tick[0].bonus = lit_trios_on_tick
-							sold_on_tick[1].bonus = lit_trios_on_tick
-							sold_on_tick[2].bonus = lit_trios_on_tick
+							App.sold_on_tick[0].bonus = App.lit_trios_on_tick
+							App.sold_on_tick[1].bonus = App.lit_trios_on_tick
+							App.sold_on_tick[2].bonus = App.lit_trios_on_tick
 
-							sold_on_tick[0].deactivated = true
-							sold_on_tick[1].deactivated = true
-							sold_on_tick[2].deactivated = true
+							App.sold_on_tick[0].deactivated = true
+							App.sold_on_tick[1].deactivated = true
+							App.sold_on_tick[2].deactivated = true
 
 							$($($('.element_container').get(id1)).find('.element_patent_btn').get(0)).remove()
 							$($($('.element_container').get(id2)).find('.element_patent_btn').get(0)).remove()
@@ -483,7 +460,7 @@ function click_events(parent) {
 							$($('.element_container').get(id2)).addClass('pulsetrio')
 							$($('.element_container').get(id3)).addClass('pulsetrio')
 
-							sold_on_tick = []
+							App.sold_on_tick = []
 						}
 					}
 				}
@@ -547,24 +524,22 @@ function TickTimer(callback, delay) {
 
 function loop() {
 	App.tick_timer = new TickTimer(function() {
-
-		if (count > 0) {
+		if (App.count > 0) {
 			tick()
 		}
 
-		if (count > 0) {
+		if (App.count > 0) {
 			if (options.speed === "Linear") {
-				loop_speed = App.speed_slow - (linear_diff * (App.start_count - count))
+				loop_speed = App.speed_slow - (App.linear_diff * (App.start_count - App.count))
 			}
 
 			loop()
 		}
-
 	}, loop_speed)
 }
 
 function stop_loop() {
-	count = 0
+	App.count = 0
 
 	if (App.tick_timer !== undefined) {
 		App.tick_timer.pause()
@@ -572,15 +547,15 @@ function stop_loop() {
 }
 
 function tick() {
-	count -= 1
+	App.count -= 1
 
-	if (points < 0) {
+	if (App.points < 0) {
 		subtract_count()
 	}
 
-	report.push(';' + count + ';')
-	sold_on_tick = []
-	lit_trios_on_tick = 0
+	App.report.push(';' + App.count + ';')
+	App.sold_on_tick = []
+	App.lit_trios_on_tick = 0
 	remove_pulsetrios()
 
 	for (let i = 0; i < App.elements.length; i++) {
@@ -607,8 +582,8 @@ function tick() {
 			if (element.freeze_chain === 3) {
 				element.lit = true
 				element.profit = 5000000
-				num_lit += 1
-				gained_from_lit += element.profit
+				App.num_lit += 1
+				App.gained_from_lit += element.profit
 			}
 		}
 
@@ -637,8 +612,8 @@ function tick() {
 		}
 
 		if (element.owned) {
-			points += element.profit
-			report.push(element.profit)
+			App.points += element.profit
+			App.report.push(element.profit)
 		}
 	}
 
@@ -660,7 +635,7 @@ function gone(cont, element) {
 
 	if (element.bonus > 0) {
 		$(cont).html("<div class='bonus'>" + element.bonus + "</div>")
-		bonus += element.bonus
+		App.bonus += element.bonus
 	}
 
 	else {
@@ -690,10 +665,9 @@ function remove_pulsetrios() {
 
 function check_hint(element) {
 	let cont = $('.element_container').get(element.id)
-
 	$(cont).removeClass('pulsating')
 
-	if (count > 1) {
+	if (App.count > 1) {
 		if (element.direction === "down" && element.owned) {
 			$(cont).addClass('pulsating')
 		}
@@ -703,13 +677,13 @@ function check_hint(element) {
 		}
 
 		else if (element.profit > 0 && element.profit < 1000000 && element.direction === "up" && !element.owned) {
-			if (points >= element.profit * 5) {
+			if (App.points >= element.profit * 5) {
 				$(cont).addClass('pulsating')
 			}
 		}
 	}
 
-	else if (count === 1) {
+	else if (App.count === 1) {
 		if (element.owned) {
 			if (element.profit === -200000 && element.direction === "up") {
 				return
@@ -741,17 +715,17 @@ function check_all_hints() {
 }
 
 function update_points() {
-	let s = format(points)
+	let s = format(App.points)
 
-	if ((bonus > 0) && (count > 0)) {
-		s += " (+" + bonus + "%)"
+	if ((App.bonus > 0) && (App.count > 0)) {
+		s += " (+" + App.bonus + "%)"
 	}
 
 	$('#points').html(s)
 }
 
 function check_state() {
-	if (count === 0) {
+	if (App.count === 0) {
 		ended()
 	}
 
@@ -911,7 +885,7 @@ function show_options() {
 		options.hints = $(this).prop('checked')
 		update_options()
 
-		if (playing) {
+		if (App.playing) {
 			start()
 		}
 	})
@@ -1070,12 +1044,12 @@ function show_highscores(advanced) {
 	let keys = Object.keys(App.highscores)
 	let setting
 
-	if (hs_setting === null) {
+	if (App.hs_setting === null) {
 		setting = get_setting()
 	}
 
 	else {
-		setting = hs_setting
+		setting = App.hs_setting
 	}
 
 	if (keys.indexOf(setting) === -1) {
@@ -1130,7 +1104,7 @@ function show_highscores(advanced) {
 }
 
 function show_scores(setting, advanced) {
-	hs_setting = setting
+	App.hs_setting = setting
 	let scores = get_setting_highscores(setting, advanced)
 	let s = ""
 
@@ -1148,13 +1122,13 @@ function show_scores(setting, advanced) {
 				s += "<span class='clickable_score' data-ss='" + ss + "'>"
 				s += "<div class='setting_small'>" + ss + "</div>"
 
-				if (last_highscore !== "") {
-					t = last_highscore.split("=")[0]
-					p = last_highscore.split("=")[1]
-					m = last_highscore.split("=")[2]
+				if (App.last_highscore !== "") {
+					t = App.last_highscore.split("=")[0]
+					p = App.last_highscore.split("=")[1]
+					m = App.last_highscore.split("=")[2]
 				}
 
-				if (last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && ss == t && hs == p) {
+				if (App.last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && ss == t && hs == p) {
 					s += "<span class='grey_highlight'>" + format(hs) + "</span>"
 				}
 
@@ -1186,13 +1160,13 @@ function show_scores(setting, advanced) {
 				s += "----<br><br>"
 			}
 			else {
-				if (last_highscore !== "") {
-					t = last_highscore.split("=")[0]
-					p = last_highscore.split("=")[1]
-					m = last_highscore.split("=")[2]
+				if (App.last_highscore !== "") {
+					t = App.last_highscore.split("=")[0]
+					p = App.last_highscore.split("=")[1]
+					m = App.last_highscore.split("=")[2]
 				}
 
-				if (last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && setting == t && hs == p) {
+				if (App.last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && setting == t && hs == p) {
 					s += "<span class='grey_highlight'>" + format(hs) + "</span>"
 				}
 				else {
@@ -1288,8 +1262,8 @@ function show_report() {
 	let tpts_positive = 0
 	let tpts_negative = 0
 
-	for (let i = 0; i<report.length; i++) {
-		let item = report[i]
+	for (let i = 0; i < App.report.length; i++) {
+		let item = App.report[i]
 
 		if (typeof item === "string" && item.startsWith(";")) {
 			cnt = item.replace(/;/g, "")
@@ -1333,9 +1307,9 @@ function show_report() {
 	s = "<br><div class='grey_highlight'>Overview</div><br>"
 
 	if (options.advanced) {
-		s += "<div>Elements Lit: " + num_lit + "</div><br>"
-		s += "<div>Lit Trios Sold: " + num_lit_trios + "</div><br>"
-		s += "<div>Lit Points: " + format(gained_from_lit) + "</div><br>"
+		s += "<div>Elements Lit: " + App.num_lit + "</div><br>"
+		s += "<div>Lit Trios Sold: " + App.num_lit_trios + "</div><br>"
+		s += "<div>Lit Points: " + format(App.gained_from_lit) + "</div><br>"
 		s += "<div>Elements Gone: " + $('.gone').length + "</div><br>"
 	}
 
@@ -1344,11 +1318,11 @@ function show_report() {
 
 	if (options.advanced) {
 		s += "<div>Balance: " + format(total_tpts_positive + total_tpts_negative) + "</div><br>"
-		s += "<div>Bonus: " + bonus + "% (" + format(bonus_points) + ")</div><br>"
+		s += "<div>Bonus: " + App.bonus + "% (" + format(App.bonus_points) + ")</div><br>"
 	}
 
 	s += "<div>Final Balance: " + format(points) + "</div><br>"
-	s += "<div>Ticks Skipped: " + ticks_skipped + "</div><br>"
+	s += "<div>Ticks Skipped: " + App.ticks_skipped + "</div><br>"
 
 	$(s).insertAfter($('#report_setting'))
 
@@ -1371,16 +1345,16 @@ function set_speed() {
 	}
 
 	else if (options.speed === "Fast") {
-		loop_speed = speed_fast
+		loop_speed = App.speed_fast
 	}
 }
 
 function on_finish() {
-	if (count > 0) {
+	if (App.count > 0) {
 		stop_loop()
 	}
 
-	playing = false
+	App.playing = false
 	start_music_fadeout()
 	set_cursors_default()
 
@@ -1390,16 +1364,16 @@ function on_finish() {
 function ended() {
 	on_finish()
 
-	if (points > 0 && bonus > 0) {
-		bonus_points = Math.round(points * (bonus / 100))
-		points = points + bonus_points
+	if (App.points > 0 && App.bonus > 0) {
+		App.bonus_points = Math.round(App.points * (App.bonus / 100))
+		App.points = App.points + App.bonus_points
 		update_points()
 	}
 
 	$('#title').html('Game Ended')
 
 	if (options.hints) {
-		let s = "Time's up!<br><br>Score: " + format(points) + "<br><br><br>"
+		let s = "Time's up!<br><br>Score: " + format(App.points) + "<br><br><br>"
 		s += "<button id='end_play_again' class='dialog_btn'>Play Again</button>"
 		s += "<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn'>Disable Hints</button></span>"
 		s += "<br><br><button id='end_rep' class='dialog_btn'>Game Report</button>"
@@ -1429,13 +1403,13 @@ function ended() {
 	let overall = App.highscores.Overall
 	let overall_speed = App.highscores["Overall - " + options.speed]
 
-	if (!options.hints && points > hs[hs.length -1]) {
-		if (points > hs[0]) {
-			msg("Time's up!<br><br>Score: " + format(points) + "<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>" + shs, true)
+	if (!options.hints && App.points > hs[hs.length -1]) {
+		if (App.points > hs[0]) {
+			msg("Time's up!<br><br>Score: " + format(App.points) + "<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>" + shs, true)
 			msg_align_btns()
 			play('highscore')
 
-			hs.push(points)
+			hs.push(App.points)
 			hs.sort(function(a, b){return b-a})
 			hs.splice(10, hs.length)
 
@@ -1449,12 +1423,12 @@ function ended() {
 		}
 
 		else {
-			msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>" + shs, true)
+			msg("Time's up!<br><br>Score: " + format(App.points) + "<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>" + shs, true)
 			msg_align_btns()
 			play('ended')
 
-			if (hs.indexOf(points) === -1) {
-				hs.push(points)
+			if (hs.indexOf(App.points) === -1) {
+				hs.push(App.points)
 				hs.sort(function(a, b){return b-a})
 				hs.splice(10, hs.length)
 
@@ -1470,7 +1444,7 @@ function ended() {
 	}
 
 	else {
-		msg("Time's up!<br><br>Score: " + format(points) + "<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>" + shs, true)
+		msg("Time's up!<br><br>Score: " + format(App.points) + "<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>" + shs, true)
 		msg_align_btns()
 		play('ended')
 	}
@@ -1493,8 +1467,8 @@ function ended() {
 		return y-x
 	})
 
-	if (points > overall_speed[overall_speed.length -1][0]) {
-		overall_speed.push([points, setting])
+	if (App.points > overall_speed[overall_speed.length -1][0]) {
+		overall_speed.push([App.points, setting])
 
 		overall_speed.sort(function(a, b) {
 			let x = a[0]
@@ -1528,8 +1502,8 @@ function ended() {
 		}
 	}
 
-	if (points > overall[overall.length -1][0]) {
-		overall.push([points, setting])
+	if (App.points > overall[overall.length -1][0]) {
+		overall.push([App.points, setting])
 
 		overall.sort(function(a, b) {
 			let x = a[0]
@@ -1563,14 +1537,14 @@ function ended() {
 		}
 	}
 
-	last_highscore = setting + "=" + points
+	App.last_highscore = setting + "=" + App.points
 
 	if (options.advanced) {
-		last_highscore += "=Advanced"
+		App.last_highscore += "=Advanced"
 	}
 
 	else {
-		last_highscore += "=Core"
+		App.last_highscore += "=Core"
 	}
 }
 
@@ -1623,7 +1597,7 @@ function msg(txt, temp_disable=false) {
 		App.msg_closeable = true
 	}
 
-	hs_setting = null
+	App.hs_setting = null
 	App.msg_open = true
 }
 
@@ -1654,14 +1628,14 @@ function hide_foverlay() {
 		$('#fmsg').html('')
 		App.fmsg_open = false
 		App.msg_closeable = false
-		fmsg_mode = null
+		App.fmsg_mode = null
 	}
 }
 
 function fmsg(txt, el) {
 	hide_overlay()
 
-	if (el === fmsg_mode) {
+	if (el === App.fmsg_mode) {
 		hide_foverlay()
 		return false
 	}
@@ -1675,7 +1649,7 @@ function fmsg(txt, el) {
 	$('#fmsg').focus()
 
 	App.fmsg_open = true
-	fmsg_mode = el
+	App.fmsg_mode = el
 	return true
 }
 
@@ -1746,7 +1720,7 @@ function play(what) {
 
 function music_control() {
 	$('#music')[0].ontimeupdate = function() {
-		if (count > 0 && this.currentTime > 73.2) {
+		if ((App.count > 0) && (this.currentTime > 73.2)) {
 			this.currentTime = 4.5
 		}
 	}
@@ -1769,11 +1743,11 @@ function unmute_music() {
 }
 
 function start_music_fadeout() {
-	if (music_fadeout_interval !== undefined) {
-		clearInterval(music_fadeout_interval)
+	if (App.music_fadeout_interval !== undefined) {
+		clearInterval(App.music_fadeout_interval)
 	}
 
-	music_fadeout_interval = setInterval(music_fadeout, 100)
+	App.music_fadeout_interval = setInterval(music_fadeout, 100)
 }
 
 function music_fadeout() {
@@ -1784,8 +1758,8 @@ function music_fadeout() {
 	}
 
 	else {
-		if (music_fadeout_interval !== undefined) {
-			clearInterval(music_fadeout_interval)
+		if (App.music_fadeout_interval !== undefined) {
+			clearInterval(App.music_fadeout_interval)
 		}
 
 		$('#music')[0].volume = 0
@@ -1800,7 +1774,7 @@ function to_top() {
 }
 
 function update_counter() {
-	$('#title').html(count)
+	$('#title').html(App.count)
 }
 
 function seed_picker() {
@@ -2074,7 +2048,7 @@ function key_detection() {
 }
 
 function stop() {
-	playing = false
+	App.playing = false
 	clear_started()
 	stop_loop()
 	stop_all_audio()
@@ -2199,7 +2173,7 @@ function disable_hints() {
 }
 
 function title_click() {
-	if (playing && started) {
+	if (App.playing && App.started) {
 		toggle_pause()
 	}
 
@@ -2227,11 +2201,11 @@ function title_click() {
 }
 
 function toggle_pause() {
-	if (App.tick_timer !== undefined && playing && started) {
+	if (App.tick_timer !== undefined && App.playing && App.started) {
 		if (App.tick_timer.active) {
 			App.tick_timer.pause()
 			pause_music()
-			paused = true
+			App.paused = true
 			$('#title').html('Paused')
 			set_cursors_default()
 		}
@@ -2240,7 +2214,7 @@ function toggle_pause() {
 			App.tick_timer.resume()
 			unpause_music()
 			update_counter()
-			paused = false
+			App.paused = false
 			set_cursors_pointer()
 		}
 	}
@@ -2314,14 +2288,14 @@ function copy_to_clipboard(s) {
 }
 
 function subtract_count() {
-	count -= 1
+	App.count -= 1
 
-	if (count < 0) {
-		count = 0
+	if (App.count < 0) {
+		App.count = 0
 	}
 
 	else {
-		ticks_skipped += 1
+		App.ticks_skipped += 1
 	}
 }
 
