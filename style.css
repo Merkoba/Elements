@@ -23,11 +23,6 @@ body {
 	background-color: #fff;
 	width: 100%;
 	text-align: center;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -54,11 +49,6 @@ body {
 	right: 2em;
 	position: fixed;
 	z-index: 34534;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -123,11 +113,6 @@ body {
 #main_container {
 	text-align: center;
 	outline: 0;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -298,11 +283,6 @@ b {
 	border-bottom-width: 3px;
 	font-size: 0.7em;
 	cursor: pointer;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -317,8 +297,8 @@ b {
 }
 
 #seed_input {
-	font-size: 1.2em;
-	width: 5em;
+	font-size: 1.1em;
+	min-width: 6em;
 	padding: 0.2em;
 	text-align: center;
 	border: 1px solid grey;
@@ -327,11 +307,6 @@ b {
 .linkydiv {
 	text-decoration: underline;
 	cursor: pointer;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
@@ -416,14 +391,17 @@ input[type="checkbox"] {
 }
 
 .unselectable {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 }
 
 .button:hover {
 	text-shadow: 0 0.05em 0 rgba(0, 0, 0, 0.5);
+}
+
+.menu_button {
+	min-width: 12rem;
+}
+
+.menu_button_small {
+	min-width: 4.9rem;
 }

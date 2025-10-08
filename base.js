@@ -1689,11 +1689,11 @@ App.update_counter = () => {
 }
 
 App.seed_picker = () => {
-  let s = `0 to 999<br><br><input id='seed_input'><br><br>`
-  s += `<button id='seed_check_seed' class='dialog_btn'>Ok</button>&nbsp&nbsp`
-  s += `<button id='seed_random_seed' class='dialog_btn'>?</button><br><br>`
-  s += `<button id='seed_daily' class='dialog_btn'>Daily</button><br><br>`
-  s += `<button id='seed_random' class='dialog_btn'>Random</button>`
+  let s = `0 to 999<br><br><input id='seed_input' placeholder='Number'><br><br>`
+  s += `<button id='seed_check_seed' class='dialog_btn menu_button_small'>Ok</button>&nbsp&nbsp`
+  s += `<button id='seed_random_seed' class='dialog_btn menu_button_small'>?</button><br><br>`
+  s += `<button id='seed_daily' class='dialog_btn menu_button'>Daily</button><br><br>`
+  s += `<button id='seed_random' class='dialog_btn menu_button'>Random</button>`
 
   if (App.fmsg(s, `seed`)) {
     App.msg_align_btns(true)
@@ -1966,10 +1966,10 @@ App.stop_all_audio = () => {
 
 App.show_menu = () => {
   let s = `<div id='msg_menu'></div>`
-  s += `<button id='menu_instructions' class='dialog_btn'>Instructions</button><br><br>`
-  s += `<button id='menu_highscores' class='dialog_btn'>High Scores</button><br><br>`
-  s += `<button id='menu_options' class='dialog_btn'>Options</button><br><br>`
-  s += `<button id='menu_about' class='dialog_btn'>About</button>`
+  s += `<button id='menu_instructions' class='dialog_btn menu_button'>Instructions</button><br><br>`
+  s += `<button id='menu_highscores' class='dialog_btn menu_button'>High Scores</button><br><br>`
+  s += `<button id='menu_options' class='dialog_btn menu_button'>Options</button><br><br>`
+  s += `<button id='menu_about' class='dialog_btn menu_button'>About</button>`
 
   App.msg(s)
   App.msg_align_btns()
