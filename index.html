@@ -8,16 +8,19 @@
 		<script src="libs/seedrandom.js"></script>
 		<script src="libs/contextmenu.js"></script>
 
-		<script src="base.js?v=4"></script>
+		<script>
+			const App = {}
+			App.version = `57.0`
+		</script>
+
+		<script src="base.js"></script>
 		<link rel="stylesheet" href="style.css?v=75">
 		<link rel="stylesheet" href="contextmenu.css">
 
 		<script>
-			$(function() {
-				const App = {}
-				App.version = `57.0`
-				init()
-			})
+			window.load = () => {
+				App.init()
+			}
 		</script>
 	</head>
 

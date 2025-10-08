@@ -1655,7 +1655,7 @@ App.pause_music = () => {
   $(`#music`)[0].pause()
 }
 
-App.unApp.pause_music = () => {
+App.pause_music = () => {
   $(`#music`)[0].play()
 }
 
@@ -2112,7 +2112,7 @@ App.toggle_pause = () => {
     }
     else {
       App.tick_timer.resume()
-      App.unApp.pause_music()
+      App.pause_music()
       App.update_counter()
       App.paused = false
       App.set_cursors_pointer()
