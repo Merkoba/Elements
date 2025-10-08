@@ -105,7 +105,7 @@ App.check_start = () => {
 	}
 
 	else {
-		start()
+		App.start()
 	}
 }
 
@@ -783,15 +783,15 @@ App.get_options = () => {
 
 	if (options === null) {
 		options = {fit: true, sounds: true, music: true, hints: false, advanced: true, seed: 1, speed: `Normal`}
-		update_options()
+		App.update_options()
 	}
 
-	change_seed(options.seed, false)
+	App.change_seed(options.seed, false)
 	change_speed(options.speed, false)
 	change_mode(options.advanced, false)
 }
 
-App.update_options = () => {
+App.App.update_options = () => {
 	localStorage.setItem(App.ls_options, JSON.stringify(options))
 }
 
@@ -841,13 +841,13 @@ App.show_options = () => {
 
 	$(`#chk_fit`).change(() => {
 		options.fit = $(this).prop(`checked`)
-		update_options()
+		App.update_options()
 		fit()
 	})
 
 	$(`#chk_sounds`).change(() => {
 		options.sounds = $(this).prop(`checked`)
-		update_options()
+		App.update_options()
 
 		if (!options.sounds) {
 			stop_all_sounds()
@@ -856,7 +856,7 @@ App.show_options = () => {
 
 	$(`#chk_music`).change(() => {
 		options.music = $(this).prop(`checked`)
-		update_options()
+		App.update_options()
 
 		if (!options.music) {
 			mute_music()
@@ -868,15 +868,15 @@ App.show_options = () => {
 
 	$(`#chk_hints`).change(() => {
 		options.hints = $(this).prop(`checked`)
-		update_options()
+		App.update_options()
 
 		if (App.playing) {
-			start()
+			App.start()
 		}
 	})
 }
 
-App.show_about = () => {
+App.App.show_about = () => {
 	let s = `<b>About</b><br><br>`
 	s += `Idea and development by madprops<br><br>`
 	s += `Version ` + app_version + `<br><br>`
@@ -982,24 +982,21 @@ App.start_setting = (setting, advanced) => {
 	let sd = setting.split(` - `)[0].replace(`#`, ``).trim()
 
 	if (sd === ``) {
-		change_seed(`-1`, false)
+		App.change_seed(`-1`, false)
 	}
 
 	else if (sd === `NaN`) {
-		change_seed(`0.1`, false)
+		App.change_seed(`0.1`, false)
 	}
 
 	else {
-		change_seed(sd, false)
+		App.change_seed(sd, false)
 	}
 
 	change_speed(setting.split(` - `)[1].trim(), false)
-
 	change_mode(advanced, false)
-
-	update_options()
-
-	start()
+	App.update_options()
+	App.start()
 }
 
 App.show_highscores = (advanced) => {
@@ -1231,7 +1228,7 @@ App.copy_highscores = (setting, advanced) => {
 	copy_to_clipboard(s)
 }
 
-App.show_report = () => {
+App.App.show_report = () => {
 	let s = `<b>Game Report</b><br>`
 	s += `<div id='report_setting'>` + get_full_setting() + `</div>`
 	let pts = App.start_points
@@ -1336,7 +1333,7 @@ App.on_finish = () => {
 
 	App.playing = false
 	start_music_fadeout()
-	set_cursors_default()
+	App.set_cursors_default()
 
 	$(`#start`).html(`Play Again`)
 }
@@ -1363,7 +1360,7 @@ App.ended = () => {
 		play(`ended`)
 
 		$(`#end_play_again`).click(() => {
-			start()
+			App.start()
 		})
 
 		$(`#end_hint_dis`).click(() => {
@@ -1371,7 +1368,7 @@ App.ended = () => {
 		})
 
 		$(`#end_rep`).click(() => {
-			show_report()
+			App.show_report()
 		})
 
 		return
@@ -1429,7 +1426,7 @@ App.ended = () => {
 	}
 
 	$(`#end_play_again`).click(() => {
-		start()
+		App.start()
 	})
 
 	$(`#end_show_hs`).click(() => {
@@ -1437,7 +1434,7 @@ App.ended = () => {
 	})
 
 	$(`#end_rep`).click(() => {
-		show_report()
+		App.show_report()
 	})
 
 	overall.sort(function(a, b) {
@@ -1702,11 +1699,11 @@ App.music_control = () => {
 	}
 }
 
-App.pause_music = () => {
+App.App.pause_music = () => {
 	$(`#music`)[0].pause()
 }
 
-App.unpause_music = () => {
+App.unApp.pause_music = () => {
 	$(`#music`)[0].play()
 }
 
@@ -1784,7 +1781,7 @@ App.seed_picker = () => {
 	})
 
 	$(`#seed_random`).click(() => {
-		change_seed(-1)
+		App.change_seed(-1)
 	})
 
 	$(`#seed_input`).attr(`type`, `number`)
@@ -1823,12 +1820,12 @@ App.check_seed = () => {
 			return false
 		}
 		else {
-			change_seed(input)
+			App.change_seed(input)
 		}
 	}
 }
 
-App.change_seed = (s, save=true) => {
+App.App.change_seed = (s, save=true) => {
 	let seed
 
 	if (s == `0.1`) {
@@ -1859,7 +1856,7 @@ App.change_seed = (s, save=true) => {
 	}
 
 	if (save) {
-		update_options()
+		App.update_options()
 	}
 
 	hide_and_stop()
@@ -1888,7 +1885,7 @@ App.get_daily = () => {
 }
 
 App.daily = () => {
-	change_seed(get_daily())
+	App.change_seed(get_daily())
 }
 
 App.speed_picker = () => {
@@ -1924,7 +1921,7 @@ App.change_speed = (what, save=true) => {
 	$(`#speed`).html(what)
 
 	if (save) {
-		update_options()
+		App.update_options()
 	}
 
 	hide_and_stop()
@@ -1953,7 +1950,7 @@ App.change_mode = (advanced, save=true) => {
 	$(`#mode`).html(get_mode_text())
 
 	if (save) {
-		update_options()
+		App.update_options()
 	}
 
 	hide_and_stop()
@@ -1981,12 +1978,12 @@ App.key_detection = () => {
 				return
 			}
 			else if (code === 13) {
-				start()
+				App.start()
 				e.preventDefault()
 				return
 			}
 			else if (code === 32) {
-				toggle_pause()
+				App.toggle_pause()
 				e.preventDefault()
 				return
 			}
@@ -2068,7 +2065,7 @@ App.show_menu = () => {
 	})
 
 	$(`#menu_about`).click(() => {
-		show_about()
+		App.show_about()
 	})
 }
 
@@ -2124,13 +2121,13 @@ App.resize_events = () => {
 
 App.play_with_hints = () => {
 	options.hints = true
-	update_options()
-	start()
+	App.update_options()
+	App.start()
 }
 
 App.disable_hints = () => {
 	options.hints = false
-	update_options()
+	App.update_options()
 
 	$(`#hint_dis`).remove()
 
@@ -2141,44 +2138,44 @@ App.disable_hints = () => {
 
 App.title_click = () => {
 	if (App.playing && App.started) {
-		toggle_pause()
+		App.toggle_pause()
 	}
 
 	else {
 		if ($(`#title`).html() === App.main_title) {
-			show_about()
+			App.show_about()
 		}
 
 		else if ($(`#title`).html() === `Game Ended`) {
-			show_report()
+			App.show_report()
 		}
 
 		else if ($(`#title`).html() === (`Starting Game`)) {
 			if (options.seed === 0.1) {
-				change_seed(`-1`)
+				App.change_seed(`-1`)
 			}
 
 			else {
-				change_seed(`0.1`)
+				App.change_seed(`0.1`)
 			}
 
-			start()
+			App.start()
 		}
 	}
 }
 
-App.toggle_pause = () => {
+App.App.toggle_pause = () => {
 	if (App.tick_timer !== undefined && App.playing && App.started) {
 		if (App.tick_timer.active) {
 			App.tick_timer.pause()
-			pause_music()
+			App.pause_music()
 			App.paused = true
 			$(`#title`).html(`Paused`)
-			set_cursors_default()
+			App.set_cursors_default()
 		}
 		else {
 			App.tick_timer.resume()
-			App.unpause_music()
+			App.unApp.pause_music()
 			App.update_counter()
 			App.paused = false
 			App.set_cursors_pointer()
@@ -2194,7 +2191,7 @@ App.set_cursors_pointer = () => {
 	})
 }
 
-App.set_cursors_default = () => {
+App.App.set_cursors_default = () => {
 	$(`.element_container`).each(() => {
 		if (!$(this).hasClass(`gone`)) {
 			$(this).removeClass(`cursor_pointer`).addClass(`cursor_default`)
