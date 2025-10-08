@@ -439,7 +439,7 @@ function click_events(parent) {
 		}
 
 		else {
-			var price = element.profit * (element.profit / 200000)
+			price = element.profit * (element.profit / 200000)
 		}
 
 		points += price
@@ -500,12 +500,14 @@ function click_events(parent) {
 }
 
 function change_profit(element) {
+	let change
+
 	if (element.direction === "up") {
-		var change = 200000
+		change = 200000
 	}
 
 	else {
-		var change = -200000
+		change = -200000
 	}
 
 	element.profit += change
@@ -526,18 +528,18 @@ function format(n) {
 }
 
 function TickTimer(callback, delay) {
-	var timerId, start, remaining = delay
+	let timer_id, start, remaining = delay
 
 	this.pause = function() {
-		clearTimeout(timerId)
+		clearTimeout(timer_id)
 		remaining -= new Date() - start
 		this.active = false
 	}
 
 	this.resume = function() {
 		start = new Date()
-		clearTimeout(timerId)
-		timerId = setTimeout(callback, remaining)
+		clearTimeout(timer_id)
+		timer_id = setTimeout(callback, remaining)
 		this.active = true
 	}
 
@@ -585,14 +587,14 @@ function tick() {
 
 	remove_pulsetrios()
 
-	for (var i=0; i<App.elements.length; i++) {
-		var element = App.elements[i]
+	for (let i = 0; i < App.elements.length; i++) {
+		let element = App.elements[i]
 
 		if (element.gone) {
 			continue
 		}
 
-		var cont = $('.element_container').get(i)
+		let cont = $('.element_container').get(i)
 
 		if (element.lit) {
 			gone(cont, element)
@@ -1706,7 +1708,7 @@ function fmsg_align_btns(alt=false) {
 	}
 
 	else {
-		var w = 0
+		let w = 0
 
 		$('#fmsg').find('.dialog_btn').each(function() {
 			w = Math.max(w, $(this).outerWidth())
@@ -1720,8 +1722,7 @@ function fmsg_align_btns(alt=false) {
 
 function position_fmsg(el) {
 	$('#fmsg').css('top', $('#title_container').outerHeight() - 1)
-
-	var left = $('#' + el).offset().left - ($('#fmsg').outerWidth() / 2) + ($('#' + el).width() / 2)
+	let left = $('#' + el).offset().left - ($('#fmsg').outerWidth() / 2) + ($('#' + el).width() / 2)
 
 	if (left < 0) {
 		left = 0
@@ -1797,7 +1798,7 @@ function start_music_fadeout() {
 }
 
 function music_fadeout() {
-	var new_volume = $('#music')[0].volume - 0.01
+	let new_volume = $('#music')[0].volume - 0.01
 
 	if (new_volume >= 0) {
 		$('#music')[0].volume = new_volume
@@ -1824,7 +1825,7 @@ function update_counter() {
 }
 
 function seed_picker() {
-	var s = "0 to 999<br><br><input id='seed_input'><br><br>"
+	let s = "0 to 999<br><br><input id='seed_input'><br><br>"
 	s += "<button id='seed_check_seed' class='dialog_btn'>Ok</button>&nbsp&nbsp"
 	s += "<button id='seed_random_seed' class='dialog_btn'>?</button><br><br>"
 	s += "<button id='seed_daily' class='dialog_btn'>Daily</button><br><br>"
@@ -1832,8 +1833,7 @@ function seed_picker() {
 
 	if (fmsg(s, 'seed')) {
 		fmsg_align_btns(true)
-
-		var bw = ($('#seed_random_seed').offset().left + $('#seed_random_seed').outerWidth()) - $('#seed_check_seed').offset().left
+		let bw = ($('#seed_random_seed').offset().left + $('#seed_random_seed').outerWidth()) - $('#seed_check_seed').offset().left
 
 		$('#seed_input').outerWidth(bw)
 		$('#seed_daily').outerWidth(bw)
@@ -1876,7 +1876,7 @@ function seed_picker() {
 }
 
 function check_seed() {
-	var input = $('#seed_input').val().trim()
+	let input = $('#seed_input').val().trim()
 
 	if (input == "") {
 		$('#seed_input').focus()
