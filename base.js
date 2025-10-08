@@ -859,7 +859,7 @@ App.show_options = () => {
 App.show_about = () => {
   let s = `<b>About</b><br><br>`
   s += `Idea and development by madprops<br><br>`
-  s += `Version ` + App.app_version + `<br><br>`
+  s += `Version ` + App.version + `<br><br>`
   s += `<a target='_blank' href='https://merkoba.com'>https://merkoba.com</a>`
   App.msg(s)
 }
