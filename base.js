@@ -110,8 +110,8 @@ App.check_start = () => {
 
 App.check_escape = () => {
   if (App.msg_open || App.fmsg_open) {
-    hide_overlay(true)
-    hide_foverlay()
+    App.hide_overlay(true)
+    App.hide_foverlay()
   }
   else if ($(`#title`).html() !== App.main_title) {
     stop()
@@ -120,8 +120,8 @@ App.check_escape = () => {
 
 App.hide_and_stop = () => {
   if (App.msg_open || App.fmsg_open) {
-    hide_overlay(true)
-    hide_foverlay()
+    App.hide_overlay(true)
+    App.hide_foverlay()
   }
 
   if ($(`#title`).html() !== App.main_title) {
@@ -135,11 +135,11 @@ App.start = () => {
   App.playing = true
   App.started = false
   App.paused = false
-  stop_loop()
-  set_speed()
-  hide_overlays()
-  generate()
-  fit()
+  App.stop_loop()
+  App.set_speed()
+  App.hide_overlays()
+  App.generate()
+  App.fit()
 
   $(`#title`).html(`Starting Game`)
   $(`#points`).html(``)
@@ -777,7 +777,7 @@ App.get_options = () => {
   change_mode(options.advanced, false)
 }
 
-App.App.update_options = () => {
+App.update_options = () => {
   localStorage.setItem(App.ls_options, JSON.stringify(options))
 }
 
@@ -824,7 +824,7 @@ App.show_options = () => {
   $(`#chk_fit`).change(() => {
     options.fit = $(this).prop(`checked`)
     App.update_options()
-    fit()
+    App.fit()
   })
 
   $(`#chk_sounds`).change(() => {
@@ -858,7 +858,7 @@ App.show_options = () => {
   })
 }
 
-App.App.show_about = () => {
+App.show_about = () => {
   let s = `<b>About</b><br><br>`
   s += `Idea and development by madprops<br><br>`
   s += `Version ` + app_version + `<br><br>`
@@ -915,7 +915,7 @@ App.get_setting_highscores = (setting, advanced) => {
     App.highscores[setting] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     return App.highscores[setting]
   }
-	
+
   return scores
 }
 
@@ -1196,7 +1196,7 @@ App.copy_highscores = (setting, advanced) => {
   copy_to_clipboard(s)
 }
 
-App.App.show_report = () => {
+App.show_report = () => {
   let s = `<b>Game Report</b><br>`
   s += `<div id='report_setting'>` + get_full_setting() + `</div>`
   let pts = App.start_points
@@ -1294,7 +1294,7 @@ App.set_speed = () => {
 
 App.on_finish = () => {
   if (App.count > 0) {
-    stop_loop()
+    App.stop_loop()
   }
 
   App.playing = false
@@ -1488,17 +1488,17 @@ App.ended = () => {
 
 App.overlay_clicked = () => {
   $(`#overlay`).click(() => {
-    hide_overlay()
+    App.hide_overlay()
   })
 
   $(`#foverlay`).click(() => {
-    hide_foverlay()
+    App.hide_foverlay()
   })
 }
 
 App.hide_overlays = () => {
-  hide_overlay(true)
-  hide_foverlay()
+  App.hide_overlay(true)
+  App.hide_foverlay()
 }
 
 App.hide_overlay = (force = false) => {
@@ -1512,7 +1512,7 @@ App.hide_overlay = (force = false) => {
 }
 
 App.msg = (txt, temp_disable = false) => {
-  hide_foverlay()
+  App.hide_foverlay()
 
   $(`#overlay`).css(`display`, `block`)
   $(`#msg`).html(txt)
@@ -1568,10 +1568,10 @@ App.hide_foverlay = () => {
 }
 
 App.fmsg = (txt, el) => {
-  hide_overlay()
+  App.hide_overlay()
 
   if (el === App.fmsg_mode) {
-    hide_foverlay()
+    App.hide_foverlay()
     return false
   }
 
@@ -1657,7 +1657,7 @@ App.music_control = () => {
   }
 }
 
-App.App.pause_music = () => {
+App.pause_music = () => {
   $(`#music`)[0].pause()
 }
 
@@ -1769,16 +1769,16 @@ App.check_seed = () => {
     $(`#seed_input`).focus()
     return false
   }
-	
+
   if (input < 0 || input > 999) {
     $(`#seed_input`).focus()
     return false
   }
-		
+
   App.change_seed(input)
 }
 
-App.App.change_seed = (s, save = true) => {
+App.change_seed = (s, save = true) => {
   let seed
 
   if (s == `0.1`) {
@@ -1963,9 +1963,9 @@ App.key_detection = () => {
 App.stop = () => {
   App.playing = false
   clear_started()
-  stop_loop()
+  App.stop_loop()
   stop_all_audio()
-  hide_overlays()
+  App.hide_overlays()
   $(`#main_container`).html(``)
   $(`#title`).html(App.main_title)
   $(`#points`).html(``)
@@ -2022,7 +2022,7 @@ App.toggle_menu = () => {
     show_menu()
   }
   else {
-    hide_overlay()
+    App.hide_overlay()
   }
 }
 
@@ -2054,7 +2054,7 @@ let resize_timer = (() => {
   return function() {
     clearTimeout(timer)
     timer = setTimeout(() => {
-      fit()
+      App.fit()
     }, 350)
   }
 })()
@@ -2107,7 +2107,7 @@ App.title_click = () => {
   }
 }
 
-App.App.toggle_pause = () => {
+App.toggle_pause = () => {
   if (App.tick_timer !== undefined && App.playing && App.started) {
     if (App.tick_timer.active) {
       App.tick_timer.pause()
@@ -2134,7 +2134,7 @@ App.set_cursors_pointer = () => {
   })
 }
 
-App.App.set_cursors_default = () => {
+App.set_cursors_default = () => {
   $(`.element_container`).each(() => {
     if (!$(this).hasClass(`gone`)) {
       $(this).removeClass(`cursor_pointer`).addClass(`cursor_default`)

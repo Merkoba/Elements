@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 export NODE_OPTIONS="--no-warnings"
 
@@ -7,7 +8,7 @@ export NODE_OPTIONS="--no-warnings"
 # Pick one
 # files=$(git diff --name-only $last_tag HEAD -- '*.js')
 files=$(git ls-files -- "*.js")
-files=$(echo $files | tr " " "\n" | grep -v "/libs/" | tr "\n" " ")
+files=$(echo $files | tr " " "\n" | grep -v "libs/" | tr "\n" " ")
 
 if [ -n "$files" ]; then
   npm run --silent lint $files
