@@ -81,6 +81,8 @@ App.sold_on_tick = []
 App.report = []
 App.hs_setting = null
 App.fmsg_mode = null
+App.min_seed = 0
+App.max_seed = 999
 
 App.init = () => {
   App.get_options()
@@ -760,6 +762,10 @@ App.get_options = () => {
   if (App.options === null) {
     App.options = {fit: true, sounds: true, music: true, hints: false, advanced: true, seed: 1, speed: `Normal`}
     App.update_options()
+  }
+
+  if (App.options.seed < 1) {
+    App.options.seed = App.get_random_int(App.min_seed, App.max_seed)
   }
 
   App.change_seed(App.options.seed, false)
@@ -1719,8 +1725,8 @@ App.seed_picker = () => {
   })
 
   $(`#seed_input`).attr(`type`, `number`)
-  $(`#seed_input`).attr(`max`, 999)
-  $(`#seed_input`).attr(`min`, 0)
+  $(`#seed_input`).attr(`max`, App.max_seed)
+  $(`#seed_input`).attr(`min`, App.min_seed)
 
   $(`#seed_input`).on(`input`, function() {
     $(this).val(parseInt($(this).val()))
@@ -1750,7 +1756,7 @@ App.check_seed = () => {
     return false
   }
 
-  if ((input < 0) || (input > 999)) {
+  if ((input < 0) || (input > App.max_seed)) {
     $(`#seed_input`).focus()
     return false
   }
@@ -1794,13 +1800,13 @@ App.change_seed = (s, save = true) => {
 
 App.get_random_seed = () => {
   Math.seedrandom()
-  let r = App.get_random_int(0, 999)
+  let r = App.get_random_int(App.min_seed, App.max_seed)
 
   if (parseInt($(`#seed_input`).val()) === r) {
     r += 1
 
-    if (r > 999) {
-      r = 0
+    if (r > App.max_seed) {
+      r = App.min_seed
     }
   }
 
@@ -1811,7 +1817,7 @@ App.get_daily = () => {
   let d = new Date()
   let s = d.getDate() + (d.getMonth() * 100) + d.getYear()
   Math.seedrandom(s)
-  return App.get_random_int(0, 999)
+  return App.get_random_int(App.min_seed, App.max_seed)
 }
 
 App.daily = () => {
@@ -2069,7 +2075,10 @@ App.title_click = () => {
   else if ($(`#title`).html() === `Game Ended`) {
     App.show_report()
   }
-  else if ($(`#title`).html() === `Starting Game`) {
+}
+
+App.title_double_click = () => {
+  if ($(`#title`).html() === `Starting Game`) {
     if (App.options.seed === 0.1) {
       App.change_seed(`-1`)
     }
@@ -2118,7 +2127,7 @@ App.set_cursors_default = () => {
 }
 
 App.succ = () => {
-  console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and will give them access to your memes.`, `color: red; font-size: x-large`)
+  console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and might give them access to your memes.`, `color: red; font-size: x-large`)
 }
 
 App.get_setting_title = () => {
@@ -2195,6 +2204,10 @@ App.left_side_clicks = () => {
 App.title_clicks = () => {
   $(`#title`).on(`click`, () => {
     App.title_click()
+  })
+
+  $(`#title`).on(`dblclick`, () => {
+    App.title_double_click()
   })
 }
 
