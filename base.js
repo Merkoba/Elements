@@ -1030,12 +1030,12 @@ App.show_highscores = (advanced) => {
   App.show_scores($(`#hs_setting_select option:selected`).val(), advanced)
 
   if (advanced) {
-    $(`#hs_setting_select`).change(() => {
+    $(`#hs_setting_select`).on(`change`, () => {
       App.show_scores($(`#hs_setting_select option:selected`).val(), true)
     })
   }
   else {
-    $(`#hs_setting_select`).change(() => {
+    $(`#hs_setting_select`).on(`change`, () => {
       App.show_scores($(`#hs_setting_select option:selected`).val(), false)
     })
   }
@@ -1501,7 +1501,7 @@ App.msg = (txt, temp_disable = false) => {
   $(`#msg`).html(txt)
   $(`#msg`).css(`display`, `block`)
   $(`#msg`).scrollTop(0)
-  $(`#msg`).focus()
+  $(`#msg`)[0].focus()
 
   if (temp_disable) {
     $(`.dialog_btn`).prop(`disabled`, true)
@@ -1564,7 +1564,7 @@ App.fmsg = (txt, el) => {
   $(`#fmsg`).html(txt)
   $(`#foverlay`).css(`display`, `block`)
   $(`#fmsg`).scrollTop(0)
-  $(`#fmsg`).focus()
+  $(`#fmsg`)[0].focus()
 
   App.fmsg_open = true
   App.fmsg_mode = el
@@ -2041,7 +2041,7 @@ let resize_timer = (() => {
 })()
 
 App.resize_events = () => {
-  $(window).resize(() => {
+  $(window).on(`resize`, () => {
     resize_timer()
   })
 }
@@ -2055,7 +2055,6 @@ App.play_with_hints = () => {
 App.disable_hints = () => {
   App.options.hints = false
   App.update_options()
-
   $(`#hint_dis`).remove()
 
   $(`.element_container`).each(function() {
