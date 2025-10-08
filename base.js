@@ -238,7 +238,6 @@ App.generate = () => {
     if ((element.profit === 1000000) && (element.direction === `up`)) {
       element.direction = `down`
     }
-
     else if ((element.profit === -1000000) && (element.direction === `down`)) {
       element.direction = `up`
     }
@@ -311,20 +310,19 @@ App.fit = () => {
       if (document.body.scrollHeight <= document.body.clientHeight) {
         let last = $(`.element_container`).last()
         let qheight = last.outerHeight() / 4
-        let top1 = last.offset().top
+        let top1 = last.position().top
         let top2 = top1 - last.outerHeight()
         let row1 = []
         let row2 = []
 
         $(`.element_container`).each(() => {
-          let top = $(this).offset().top
+          let top = $(this).position().top
           let t1 = top - qheight
           let t2 = top + qheight
 
           if ((top1 > t1) && (top1 < t2)) {
             row1.push($(this))
           }
-
           else if ((top2 > t1) && (top2 < t2)) {
             row2.push($(this))
           }
@@ -357,7 +355,6 @@ App.click_events = (parent) => {
     if (element.profit <= 0) {
       price = Math.abs(element.profit)
     }
-
     else if (element.profit === 5000000) {
       let price = 50000000
       App.gained_from_lit -= price
@@ -393,7 +390,6 @@ App.click_events = (parent) => {
     if (element.profit <= 0) {
       price = 0
     }
-
     else if (element.profit === 5000000) {
       price = 25000000
       App.gained_from_lit += price
@@ -647,18 +643,15 @@ App.check_hint = (element) => {
     if ((element.direction === `down`) && element.owned) {
       $(cont).addClass(`pulsating`)
     }
-
     else if ((element.profit === 0) && (element.direction === `up`) && !element.owned) {
       $(cont).addClass(`pulsating`)
     }
-
     else if ((element.profit > 0) && (element.profit < 1000000) && (element.direction === `up`) && !element.owned) {
       if (App.points >= element.profit * 5) {
         $(cont).addClass(`pulsating`)
       }
     }
   }
-
   else if (App.count === 1) {
     if (element.owned) {
       if ((element.profit === -200000) && (element.direction === `up`)) {
@@ -699,7 +692,6 @@ App.check_state = () => {
   if (App.count === 0) {
     App.ended()
   }
-
   else if ($(`.gone`).length === App.elements.length) {
     App.ended()
   }
@@ -957,7 +949,6 @@ App.start_setting = (setting, advanced) => {
   if (sd === ``) {
     App.change_seed(`-1`, false)
   }
-
   else if (sd === `NaN`) {
     App.change_seed(`0.1`, false)
   }
@@ -1021,7 +1012,7 @@ App.show_highscores = (advanced) => {
   s += `</select></div><div id='scores'></div>`
   App.msg(s)
 
-  $(`#hs_type_toggle`).click(() => {
+  $(`#hs_type_toggle`).on(`click`, () => {
     if (advanced) {
       App.show_highscores(false)
     }
@@ -1131,19 +1122,19 @@ App.show_scores = (setting, advanced) => {
   $(`#hs_setting_select`).val(setting)
   $(`#msg`).scrollTop(0)
 
-  $(`.clickable_score`).click(() => {
+  $(`.clickable_score`).on(`click`, () => {
     App.show_scores($(this).data(`ss`), advanced)
   })
 
-  $(`#hs_clear`).click(() => {
+  $(`#hs_clear`).on(`click`, () => {
     App.clear_highscores(advanced)
   })
 
-  $(`#hs_play_again`).click(() => {
+  $(`#hs_play_again`).on(`click`, () => {
     App.start_setting(setting, advanced)
   })
 
-  $(`#hs_copy_hs`).click(() => {
+  $(`#hs_copy_hs`).on(`click`, () => {
     App.copy_highscores(setting, advanced)
   })
 }
@@ -1264,7 +1255,7 @@ App.show_report = () => {
 
   $(s).insertAfter($(`#report_setting`))
 
-  $(`#rep_copy`).click(() => {
+  $(`#rep_copy`).on(`click`, () => {
     App.copy_report()
   })
 }
@@ -1277,11 +1268,9 @@ App.set_speed = () => {
   if ((App.options.speed === `Slow`) || (App.options.speed === `Linear`)) {
     App.loop_speed = App.speed_slow
   }
-
   else if (App.options.speed === `Normal`) {
     App.loop_speed = App.speed_normal
   }
-
   else if (App.options.speed === `Fast`) {
     App.loop_speed = App.speed_fast
   }
@@ -1320,15 +1309,15 @@ App.ended = () => {
     App.msg_align_btns()
     App.play(`ended`)
 
-    $(`#end_play_again`).click(() => {
+    $(`#end_play_again`).on(`click`, () => {
       App.start()
     })
 
-    $(`#end_hint_dis`).click(() => {
+    $(`#end_hint_dis`).on(`click`, () => {
       App.disable_hints()
     })
 
-    $(`#end_rep`).click(() => {
+    $(`#end_rep`).on(`click`, () => {
       App.show_report()
     })
 
@@ -1384,15 +1373,15 @@ App.ended = () => {
     App.play(`ended`)
   }
 
-  $(`#end_play_again`).click(() => {
+  $(`#end_play_again`).on(`click`, () => {
     App.start()
   })
 
-  $(`#end_show_hs`).click(() => {
+  $(`#end_show_hs`).on(`click`, () => {
     App.show_highscores(App.options.advanced)
   })
 
-  $(`#end_rep`).click(() => {
+  $(`#end_rep`).on(`click`, () => {
     App.show_report()
   })
 
@@ -1481,11 +1470,11 @@ App.ended = () => {
 }
 
 App.overlay_clicked = () => {
-  $(`#overlay`).click(() => {
+  $(`#overlay`).on(`click`, () => {
     App.hide_overlay()
   })
 
-  $(`#foverlay`).click(() => {
+  $(`#foverlay`).on(`click`, () => {
     App.hide_foverlay()
   })
 }
@@ -1603,7 +1592,7 @@ App.msg_align_btns = (alt = false) => {
 
 App.position_fmsg = (el) => {
   $(`#fmsg`).css(`top`, $(`#title_container`).outerHeight() - 1)
-  let left = $(`#` + el).offset().left - ($(`#fmsg`).outerWidth() / 2) + ($(`#` + el).width() / 2)
+  let left = $(`#` + el).position().left - ($(`#fmsg`).outerWidth() / 2) + ($(`#` + el).width() / 2)
 
   if (left < 0) {
     left = 0
@@ -1635,7 +1624,6 @@ App.play = (what) => {
     $(`#music`)[0].currentTime = 0
     $(`#music`)[0].play()
   }
-
   else if (App.options.sounds) {
     $(`#` + what)[0].pause()
     $(`#` + what)[0].currentTime = 0
@@ -1709,7 +1697,8 @@ App.seed_picker = () => {
 
   if (App.fmsg(s, `seed`)) {
     App.msg_align_btns(true)
-    let bw = ($(`#seed_random_seed`).offset().left + $(`#seed_random_seed`).outerWidth()) - $(`#seed_check_seed`).offset().left
+    let pos = $(`#seed_random_seed`).position()
+    let bw = (pos.left + $(`#seed_random_seed`).outerWidth()) - pos.left
 
     $(`#seed_input`).outerWidth(bw)
     $(`#seed_daily`).outerWidth(bw)
@@ -1718,19 +1707,19 @@ App.seed_picker = () => {
     App.position_fmsg(`seed`)
   }
 
-  $(`#seed_check_seed`).click(() => {
+  $(`#seed_check_seed`).on(`click`, () => {
     App.check_seed()
   })
 
-  $(`#seed_random_seed`).click(() => {
+  $(`#seed_random_seed`).on(`click`, () => {
     App.get_random_seed()
   })
 
-  $(`#seed_daily`).click(() => {
+  $(`#seed_daily`).on(`click`, () => {
     App.daily()
   })
 
-  $(`#seed_random`).click(() => {
+  $(`#seed_random`).on(`click`, () => {
     App.change_seed(-1)
   })
 
@@ -1843,19 +1832,19 @@ App.speed_picker = () => {
     App.position_fmsg(`speed`)
   }
 
-  $(`#speed_slow`).click(() => {
+  $(`#speed_slow`).on(`click`, () => {
     App.change_speed(`Slow`)
   })
 
-  $(`#speed_normal`).click(() => {
+  $(`#speed_normal`).on(`click`, () => {
     App.change_speed(`Normal`)
   })
 
-  $(`#speed_fast`).click(() => {
+  $(`#speed_fast`).on(`click`, () => {
     App.change_speed(`Fast`)
   })
 
-  $(`#speed_linear`).click(() => {
+  $(`#speed_linear`).on(`click`, () => {
     App.change_speed(`Linear`)
   })
 }
@@ -1880,11 +1869,11 @@ App.mode_picker = () => {
     App.position_fmsg(`mode`)
   }
 
-  $(`#mode_core`).click(() => {
+  $(`#mode_core`).on(`click`, () => {
     App.change_mode(false)
   })
 
-  $(`#mode_advanced`).click(() => {
+  $(`#mode_advanced`).on(`click`, () => {
     App.change_mode(true)
   })
 }
@@ -1912,42 +1901,40 @@ App.check_firstime = () => {
 }
 
 App.key_detection = () => {
-  $(document).keydown(function(e) {
-    let code = e.keyCode
-
+  $(document).on(`keydown`, function(e) {
     if (!$(`input`).is(`:focus`)) {
-      if (code === 8) {
+      if (e.key === `Backspace`) {
         App.toggle_menu()
         e.preventDefault()
         return
       }
-      else if (code === 13) {
+      else if (e.key === `Enter`) {
         App.start()
         e.preventDefault()
         return
       }
-      else if (code === 32) {
+      else if (e.key === ` `) {
         App.toggle_pause()
         e.preventDefault()
         return
       }
     }
-    else if (code === 13) {
+    else if (e.key === `Enter`) {
       if ($(`#seed_input`).is(`:focus`)) {
         App.check_seed()
         return
       }
     }
 
-    if (code === 27) {
+    if (e.key === `Escape`) {
       App.check_escape()
     }
 
     if (!App.msg_open && !App.fmsg_open) {
-      if ((code === 40) || (code === 83)) {
+      if ((e.key === `ArrowDown`) || (e.key === `s`)) {
         $(`body`).scrollTop($(document).height() - $(window).height())
       }
-      else if ((code === 38) || (code === 87)) {
+      else if ((e.key === `ArrowUp`) || (e.key === `w`)) {
         $(`body`).scrollTop(0)
       }
     }
@@ -1994,19 +1981,19 @@ App.show_menu = () => {
   App.msg(s)
   App.msg_align_btns()
 
-  $(`#menu_instructions`).click(() => {
+  $(`#menu_instructions`).on(`click`, () => {
     App.show_instructions()
   })
 
-  $(`#menu_highscores`).click(() => {
+  $(`#menu_highscores`).on(`click`, () => {
     App.show_highscores(App.options.advanced)
   })
 
-  $(`#menu_options`).click(() => {
+  $(`#menu_options`).on(`click`, () => {
     App.show_options()
   })
 
-  $(`#menu_about`).click(() => {
+  $(`#menu_about`).on(`click`, () => {
     App.show_about()
   })
 }
@@ -2083,11 +2070,9 @@ App.title_click = () => {
   else if ($(`#title`).html() === App.main_title) {
     App.show_about()
   }
-
   else if ($(`#title`).html() === `Game Ended`) {
     App.show_report()
   }
-
   else if ($(`#title`).html() === `Starting Game`) {
     if (App.options.seed === 0.1) {
       App.change_seed(`-1`)
@@ -2178,12 +2163,7 @@ App.copy_setting = () => {
 }
 
 App.copy_to_clipboard = (s) => {
-  let text_area_el = document.createElement(`textarea`)
-  document.body.appendChild(text_area_el)
-  text_area_el.value = s
-  text_area_el.select()
-  document.execCommand(`copy`)
-  document.body.removeChild(text_area_el)
+  navigator.clipboard.writeText(s)
   App.play(`pup2`)
 }
 
@@ -2199,35 +2179,35 @@ App.subtract_count = () => {
 }
 
 App.left_side_clicks = () => {
-  $(`#seed`).click(() => {
+  $(`#seed`).on(`click`, () => {
     App.seed_picker()
   })
 
-  $(`#speed`).click(() => {
+  $(`#speed`).on(`click`, () => {
     App.speed_picker()
   })
 
-  $(`#mode`).click(() => {
+  $(`#mode`).on(`click`, () => {
     App.mode_picker()
   })
 
-  $(`#start`).click(() => {
+  $(`#start`).on(`click`, () => {
     App.check_start()
   })
 }
 
 App.title_clicks = () => {
-  $(`#title`).click(() => {
+  $(`#title`).on(`click`, () => {
     App.title_click()
   })
 }
 
 App.right_side_clicks = () => {
-  $(`#points`).click(() => {
+  $(`#points`).on(`click`, () => {
     App.show_highscores(App.options.advanced)
   })
 
-  $(`#menu`).click(() => {
+  $(`#menu`).on(`click`, () => {
     App.show_menu()
   })
 }
