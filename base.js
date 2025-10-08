@@ -62,15 +62,14 @@ App.profits = [-1000000, -800000, -600000, -400000, -200000, 0, 200000, 400000, 
 App.directions = ["up", "down"]
 App.msg_open = false
 App.fmsg_open = false
-var highscores
-var ls_highscores = "highscores_v4"
-var ls_highscores_advanced = "highscores_advanced_v4"
-var ls_options = "options_v6"
-var msg_closeable = false
-var speed_slow = 12000
-var speed_normal = 8000
+App.ls_highscores = "highscores_v4"
+App.ls_highscores_advanced = "highscores_advanced_v4"
+App.ls_options = "options_v6"
+App.msg_closeable = false
+App.speed_slow = 12000
+App.speed_normal = 8000
 var speed_fast = 5000
-var linear_diff = (speed_slow - speed_fast) / (App.start_count - 1)
+var linear_diff = (App.speed_slow - speed_fast) / (App.start_count - 1)
 var count = 0
 var points = 0
 var music_fadeout_interval
@@ -555,7 +554,7 @@ function loop() {
 
 		if (count > 0) {
 			if (options.speed === "Linear") {
-				loop_speed = speed_slow - (linear_diff * (App.start_count - count))
+				loop_speed = App.speed_slow - (linear_diff * (App.start_count - count))
 			}
 
 			loop()
@@ -580,11 +579,8 @@ function tick() {
 	}
 
 	report.push(';' + count + ';')
-
 	sold_on_tick = []
-
 	lit_trios_on_tick = 0
-
 	remove_pulsetrios()
 
 	for (let i = 0; i < App.elements.length; i++) {
@@ -681,7 +677,7 @@ function gone(cont, element) {
 }
 
 function make_all_gone() {
-	for (var i=0; i<App.elements.length; i++) {
+	for (let i = 0; i < App.elements.length; i++) {
 		gone($('.element_container').get(i), App.elements[i])
 	}
 }
@@ -693,7 +689,7 @@ function remove_pulsetrios() {
 }
 
 function check_hint(element) {
-	var cont = $('.element_container').get(element.id)
+	let cont = $('.element_container').get(element.id)
 
 	$(cont).removeClass('pulsating')
 
@@ -739,15 +735,15 @@ function check_hint(element) {
 }
 
 function check_all_hints() {
-	for (var i=0; i<App.elements.length; i++) {
+	for (let i = 0; i < App.elements.length; i++) {
 		check_hint(App.elements[i])
 	}
 }
 
 function update_points() {
-	var s = format(points)
+	let s = format(points)
 
-	if (bonus > 0 && count > 0) {
+	if ((bonus > 0) && (count > 0)) {
 		s += " (+" + bonus + "%)"
 	}
 
@@ -769,7 +765,7 @@ function check_state() {
 }
 
 function show_instructions() {
-	var s = "<b>Instructions</b><br><br>"
+	let s = "<b>Instructions</b><br><br>"
 	s += "<img src='inst.gif?v=2' id='instgif'><br><br>"
 	s += "The goal is to get as many points as you can.<br><br>"
 	s += "Earn points by owning App.elements that have a positive profit.<br><br>"
@@ -823,7 +819,7 @@ function show_instructions() {
 }
 
 function get_options() {
-	options = JSON.parse(localStorage.getItem(ls_options))
+	options = JSON.parse(localStorage.getItem(App.ls_options))
 
 	if (options === null) {
 		options = {fit: true, sounds: true, music: true, hints: false, advanced: true, seed: 1, speed: "Normal"}
@@ -836,12 +832,11 @@ function get_options() {
 }
 
 function update_options() {
-	localStorage.setItem(ls_options, JSON.stringify(options))
+	localStorage.setItem(App.ls_options, JSON.stringify(options))
 }
 
 function show_options() {
-	var s = "<b>Options</b><br><br>"
-
+	let s = "<b>Options</b><br><br>"
 	s += "Automatically Fit Grid<br><br>"
 
 	if (options.fit) {
@@ -923,7 +918,7 @@ function show_options() {
 }
 
 function show_about() {
-	var s = "<b>About</b><br><br>"
+	let s = "<b>About</b><br><br>"
 	s += "Idea and development by madprops<br><br>"
 	s += "Version " + app_version + "<br><br>"
 	s += "<a target='_blank' href='https://merkoba.com'>https://merkoba.com</a>"
@@ -933,11 +928,11 @@ function show_about() {
 
 function get_highscores(advanced) {
 	if (advanced) {
-		App.highscores = JSON.parse(localStorage.getItem(ls_highscores_advanced))
+		App.highscores = JSON.parse(localStorage.getItem(App.ls_highscores_advanced))
 	}
 
 	else {
-		App.highscores = JSON.parse(localStorage.getItem(ls_highscores))
+		App.highscores = JSON.parse(localStorage.getItem(App.ls_highscores))
 	}
 
 	if (App.highscores === null) {
@@ -950,23 +945,23 @@ function get_highscores(advanced) {
 		}
 
 		if (advanced) {
-			localStorage.setItem(ls_highscores_advanced, JSON.stringify(App.highscores))
+			localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 		}
 
 		else {
-			localStorage.setItem(ls_highscores, JSON.stringify(App.highscores))
+			localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 		}
 	}
 
 	else {
-		var keys = Object.keys(App.highscores)
+		let keys = Object.keys(App.highscores)
 
-		for (var i=0; i<keys.length; i++) {
+		for (let i = 0; i < keys.length; i++) {
 			if (keys[i].indexOf("Overall") !== -1) {
 				continue
 			}
 
-			var sum = App.highscores[keys[i]].reduce((a, b) => a + b, 0)
+			let sum = App.highscores[keys[i]].reduce((a, b) => a + b, 0)
 
 			if (sum === 0) {
 				delete App.highscores[keys[i]]
@@ -977,8 +972,7 @@ function get_highscores(advanced) {
 
 function get_setting_highscores(setting, advanced) {
 	get_highscores(advanced)
-
-	var scores = App.highscores[setting]
+	let scores = App.highscores[setting]
 
 	if (scores === undefined) {
 		App.highscores[setting] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -991,30 +985,33 @@ function get_setting_highscores(setting, advanced) {
 }
 
 function get_setting() {
+	let s
+
 	if (options.seed === -1) {
-		var s = "#"
+		s = "#"
 	}
 
 	else if (options.seed === 0.1) {
-		var s = "#NaN"
+		s = "#NaN"
 	}
 
 	else {
-		var s = "#" + parseInt(options.seed)
+		s = "#" + parseInt(options.seed)
 	}
 
 	s += " - " + options.speed
-
 	return s
 }
 
 function get_mode_text() {
+	let m
+
 	if (options.advanced) {
-		var m = "Adv"
+		m = "Adv"
 	}
 
 	else {
-		var m = "Core"
+		m = "Core"
 	}
 
 	return m
@@ -1025,7 +1022,7 @@ function get_full_setting() {
 }
 
 function start_setting(setting, advanced) {
-	var sd = setting.split(" - ")[0].replace('#', '').trim()
+	let sd = setting.split(" - ")[0].replace('#', '').trim()
 
 	if (sd === '') {
 		change_seed('-1', false)
@@ -1050,13 +1047,14 @@ function start_setting(setting, advanced) {
 
 function show_highscores(advanced) {
 	get_highscores(advanced)
+	let s
 
 	if (advanced) {
-		var s = "<div id='hs_type_toggle' class='hs_type unselectable'>Advanced</div>"
+		s = "<div id='hs_type_toggle' class='hs_type unselectable'>Advanced</div>"
 	}
 
 	else {
-		var s = "<div id='hs_type_toggle' class='hs_type unselectable'>Core</div>"
+		s = "<div id='hs_type_toggle' class='hs_type unselectable'>Core</div>"
 	}
 
 	s += "<b class='unselectable'>High Scores</b>"
@@ -1069,14 +1067,15 @@ function show_highscores(advanced) {
 	s += "<option value='Overall - Fast'>Overall - Fast</option>"
 	s += "<option value='Overall - Linear'>Overall - Linear</option>"
 
-	var keys = Object.keys(App.highscores)
+	let keys = Object.keys(App.highscores)
+	let setting
 
 	if (hs_setting === null) {
-		var setting = get_setting()
+		setting = get_setting()
 	}
 
 	else {
-		var setting = hs_setting
+		setting = hs_setting
 	}
 
 	if (keys.indexOf(setting) === -1) {
@@ -1085,8 +1084,8 @@ function show_highscores(advanced) {
 
 	keys.sort()
 
-	for (var i=0; i<keys.length; i++) {
-		var key = keys[i]
+	for (let i = 0; i < keys.length; i++) {
+		let key = keys[i]
 
 		if (key.indexOf("Overall") !== -1) {
 			continue
@@ -1096,7 +1095,6 @@ function show_highscores(advanced) {
 	}
 
 	s += "</select></div><div id='scores'></div>"
-
 	msg(s)
 
 	$('#hs_type_toggle').click(function() {
@@ -1133,15 +1131,14 @@ function show_highscores(advanced) {
 
 function show_scores(setting, advanced) {
 	hs_setting = setting
-
-	var scores = get_setting_highscores(setting, advanced)
-
-	var s = ""
+	let scores = get_setting_highscores(setting, advanced)
+	let s = ""
 
 	if (setting.indexOf("Overall") !== -1) {
-		for (var i=0; i<scores.length; i++) {
-			var hs = scores[i][0]
-			var ss = scores[i][1]
+		for (let i = 0; i < scores.length; i++) {
+			let hs = scores[i][0]
+			let ss = scores[i][1]
+			let t, p, m
 
 			if (hs === 0) {
 				s += "----"
@@ -1152,17 +1149,16 @@ function show_scores(setting, advanced) {
 				s += "<div class='setting_small'>" + ss + "</div>"
 
 				if (last_highscore !== "") {
-					var t = last_highscore.split("=")[0]
-					var p = last_highscore.split("=")[1]
-					var m = last_highscore.split("=")[2]
+					t = last_highscore.split("=")[0]
+					p = last_highscore.split("=")[1]
+					m = last_highscore.split("=")[2]
 				}
 
 				if (last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && ss == t && hs == p) {
 					s += "<span class='grey_highlight'>" + format(hs) + "</span>"
 				}
 
-				else
-				{
+				else {
 					s += "<span>" + format(hs) + "</span>"
 				}
 
@@ -1182,26 +1178,24 @@ function show_scores(setting, advanced) {
 	}
 
 	else {
-		for (var i=0; i<scores.length; i++) {
-			var hs = scores[i]
+		for (let i = 0; i < scores.length; i++) {
+			let hs = scores[i]
+			let t, p, m
 
 			if (hs === 0) {
 				s += "----<br><br>"
 			}
-
 			else {
 				if (last_highscore !== "") {
-					var t = last_highscore.split("=")[0]
-					var p = last_highscore.split("=")[1]
-					var m = last_highscore.split("=")[2]
+					t = last_highscore.split("=")[0]
+					p = last_highscore.split("=")[1]
+					m = last_highscore.split("=")[2]
 				}
 
 				if (last_highscore !== "" && ((m === "Advanced" && advanced) || (m === "Core" && !advanced)) && setting == t && hs == p) {
 					s += "<span class='grey_highlight'>" + format(hs) + "</span>"
 				}
-
-				else
-				{
+				else {
 					s += "<span>" + format(hs) + "</span>"
 				}
 
@@ -1215,9 +1209,7 @@ function show_scores(setting, advanced) {
 	s += "<br><div id='hs_copy_hs' class='linkydiv'>Copy To Clipboard</div>"
 
 	$('#scores').html(s)
-
 	$('#hs_setting_select').val(setting)
-
 	$('#msg').scrollTop(0)
 
 	$('.clickable_score').click(function() {
@@ -1238,9 +1230,8 @@ function show_scores(setting, advanced) {
 }
 
 function copy_highscores(setting, advanced) {
-	var scores = get_setting_highscores(setting, advanced)
-
-	var s = setting
+	let scores = get_setting_highscores(setting, advanced)
+	let s = setting
 
 	if (advanced) {
 		s += " : Adv\n"
@@ -1251,9 +1242,9 @@ function copy_highscores(setting, advanced) {
 	}
 
 	if (setting.indexOf("Overall") !== -1) {
-		for (var i=0; i<scores.length; i++) {
-			var hs = scores[i][0]
-			var ss = scores[i][1]
+		for (let i = 0; i<scores.length; i++) {
+			let hs = scores[i][0]
+			let ss = scores[i][1]
 
 			if (hs === 0) {
 				s += "----"
@@ -1268,13 +1259,12 @@ function copy_highscores(setting, advanced) {
 	}
 
 	else {
-		for (var i=0; i<scores.length; i++) {
-			var hs = scores[i]
+		for (let i = 0; i<scores.length; i++) {
+			let hs = scores[i]
 
 			if (hs === 0) {
 				s += "----"
 			}
-
 			else {
 				s += format(hs)
 			}
@@ -1287,24 +1277,19 @@ function copy_highscores(setting, advanced) {
 }
 
 function show_report() {
-	var s = "<b>Game Report</b><br>"
-
+	let s = "<b>Game Report</b><br>"
 	s += "<div id='report_setting'>" + get_full_setting() + "</div>"
-
-	var pts = App.start_points
-
+	let pts = App.start_points
 	s += "<div class='grey_highlight'>" + App.start_count + " (" + format(pts) + ")</div><br>"
 
-	var cnt = App.start_count
+	let cnt = App.start_count
+	let total_tpts_positive = 0
+	let total_tpts_negative = 0
+	let tpts_positive = 0
+	let tpts_negative = 0
 
-	var total_tpts_positive = 0
-	var total_tpts_negative = 0
-
-	var tpts_positive = 0
-	var tpts_negative = 0
-
-	for (var i=0; i<report.length; i++) {
-		var item = report[i]
+	for (let i = 0; i<report.length; i++) {
+		let item = report[i]
 
 		if (typeof item === "string" && item.startsWith(";")) {
 			cnt = item.replace(/;/g, "")
@@ -1312,7 +1297,6 @@ function show_report() {
 			s += "<div>Positive: " + format(tpts_positive) + "</div><br>"
 			s += "<div>Negative: " + format(tpts_negative) + "</div><br>"
 			s += "<div>Balance: " + format(tpts_positive + tpts_negative) + "</div><br>"
-
 			s += "<div class='grey_highlight'>" + cnt + " (" + format(pts) + ")</div><br>"
 
 			tpts_positive = 0
@@ -1325,15 +1309,12 @@ function show_report() {
 
 				if (item > 0) {
 					s += "<div class='green_color'>" + format(item) + "</div><br>"
-
 					tpts_positive += item
 					total_tpts_positive += item
 				}
 
-				else
-				{
+				else {
 					s += "<div class='red_color'>" + format(item) + "</div><br>"
-
 					tpts_negative += item
 					total_tpts_negative += item
 				}
@@ -1349,7 +1330,7 @@ function show_report() {
 
 	msg(s)
 
-	var s = "<br><div class='grey_highlight'>Overview</div><br>"
+	s = "<br><div class='grey_highlight'>Overview</div><br>"
 
 	if (options.advanced) {
 		s += "<div>Elements Lit: " + num_lit + "</div><br>"
@@ -1367,7 +1348,6 @@ function show_report() {
 	}
 
 	s += "<div>Final Balance: " + format(points) + "</div><br>"
-
 	s += "<div>Ticks Skipped: " + ticks_skipped + "</div><br>"
 
 	$(s).insertAfter($('#report_setting'))
@@ -1383,11 +1363,11 @@ function copy_report() {
 
 function set_speed() {
 	if (options.speed === "Slow" || options.speed === "Linear") {
-		loop_speed = speed_slow
+		loop_speed = App.speed_slow
 	}
 
 	else if (options.speed === "Normal") {
-		loop_speed = speed_normal
+		loop_speed = App.speed_normal
 	}
 
 	else if (options.speed === "Fast") {
@@ -1419,7 +1399,7 @@ function ended() {
 	$('#title').html('Game Ended')
 
 	if (options.hints) {
-		var s = "Time's up!<br><br>Score: " + format(points) + "<br><br><br>"
+		let s = "Time's up!<br><br>Score: " + format(points) + "<br><br><br>"
 		s += "<button id='end_play_again' class='dialog_btn'>Play Again</button>"
 		s += "<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn'>Disable Hints</button></span>"
 		s += "<br><br><button id='end_rep' class='dialog_btn'>Game Report</button>"
@@ -1446,8 +1426,8 @@ function ended() {
 	let shs = "<br><br><button id='end_show_hs' class='dialog_btn'>High Scores</button><br><br><button id='end_rep' class='dialog_btn'>Game Report</button>"
 	let setting = get_setting()
 	let hs = get_setting_highscores(setting, options.advanced)
-	let overall = highscores.Overall
-	let overall_speed = highscores["Overall - " + options.speed]
+	let overall = App.highscores.Overall
+	let overall_speed = App.highscores["Overall - " + options.speed]
 
 	if (!options.hints && points > hs[hs.length -1]) {
 		if (points > hs[0]) {
@@ -1460,11 +1440,11 @@ function ended() {
 			hs.splice(10, hs.length)
 
 			if (options.advanced) {
-				localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores))
+				localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 			}
 
 			else {
-				localStorage.setItem(ls_highscores, JSON.stringify(highscores))
+				localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 			}
 		}
 
@@ -1479,12 +1459,11 @@ function ended() {
 				hs.splice(10, hs.length)
 
 				if (options.advanced) {
-					localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores))
+					localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 				}
 
-				else
-				{
-					localStorage.setItem(ls_highscores, JSON.stringify(highscores))
+				else {
+					localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 				}
 			}
 		}
@@ -1527,7 +1506,7 @@ function ended() {
 		let counted = []
 		let ncounted = []
 
-		for (let i=0; i<overall_speed.length; i++) {
+		for (let i = 0; i<overall_speed.length; i++) {
 			if (overall_speed[i][1] === "" || ncounted.indexOf(overall_speed[i][1]) === -1) {
 				counted.push(overall_speed[i])
 				ncounted.push(overall_speed[i][1])
@@ -1538,14 +1517,14 @@ function ended() {
 			}
 		}
 
-		highscores["Overall - " + options.speed] = counted
+		App.highscores["Overall - " + options.speed] = counted
 
 		if (options.advanced) {
-			localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores))
+			localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 		}
 
 		else {
-			localStorage.setItem(ls_highscores, JSON.stringify(highscores))
+			localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 		}
 	}
 
@@ -1562,7 +1541,7 @@ function ended() {
 		let counted = []
 		let ncounted = []
 
-		for (let i=0; i<overall.length; i++) {
+		for (let i = 0; i<overall.length; i++) {
 			if (overall[i][1] === "" || ncounted.indexOf(overall[i][1]) === -1) {
 				counted.push(overall[i])
 				ncounted.push(overall[i][1])
@@ -1573,14 +1552,14 @@ function ended() {
 			}
 		}
 
-		highscores.Overall = counted
+		App.highscores.Overall = counted
 
 		if (options.advanced) {
-			localStorage.setItem(ls_highscores_advanced, JSON.stringify(highscores))
+			localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 		}
 
 		else {
-			localStorage.setItem(ls_highscores, JSON.stringify(highscores))
+			localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 		}
 	}
 
@@ -1611,12 +1590,12 @@ function hide_overlays() {
 }
 
 function hide_overlay(force=false) {
-	if (App.msg_open && (msg_closeable || force)) {
+	if (App.msg_open && (App.msg_closeable || force)) {
 		$('#overlay').css('display', 'none')
 		$('#msg').css('display', 'none')
 		$('#msg').html('')
 		App.msg_open = false
-		msg_closeable = false
+		App.msg_closeable = false
 	}
 }
 
@@ -1631,17 +1610,17 @@ function msg(txt, temp_disable=false) {
 
 	if (temp_disable) {
 		$('.dialog_btn').prop('disabled', true)
-		msg_closeable = false
+		App.msg_closeable = false
 
 		setTimeout(function() {
 			$('.dialog_btn').prop('disabled', false)
-			msg_closeable = true
+			App.msg_closeable = true
 
 		}, 1000)
 	}
 
 	else {
-		msg_closeable = true
+		App.msg_closeable = true
 	}
 
 	hs_setting = null
@@ -1674,7 +1653,7 @@ function hide_foverlay() {
 		$('#fmsg').css('display', 'none')
 		$('#fmsg').html('')
 		App.fmsg_open = false
-		msg_closeable = false
+		App.msg_closeable = false
 		fmsg_mode = null
 	}
 }
@@ -2174,11 +2153,11 @@ function clear_highscores(advanced) {
 
 	if (conf) {
 		if (advanced) {
-			localStorage.removeItem(ls_highscores_advanced)
+			localStorage.removeItem(App.ls_highscores_advanced)
 		}
 
 		else {
-			localStorage.removeItem(ls_highscores)
+			localStorage.removeItem(App.ls_highscores)
 		}
 
 		show_highscores(advanced)
