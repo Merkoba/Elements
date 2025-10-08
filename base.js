@@ -169,7 +169,7 @@ App.start = () => {
   App.lit_trios_on_tick = 0
 
   App.started_timeout = setTimeout(() => {
-    $(`.element_patent_btn`).each(() => {
+    $(`.element_patent_btn`).each(function() {
       $(this).css(`display`, `inline-block`)
     })
 
@@ -277,8 +277,8 @@ App.generate = () => {
 
   let id = 0
 
-  $(`.element_container`).each(() => {
-    $(this).mousedown(() => {
+  $(`.element_container`).each(function () {
+    $(this).on(`mousedown`, function() {
       if (App.playing && App.started && !App.paused) {
         App.click_events(this)
       }
@@ -291,7 +291,7 @@ App.generate = () => {
 
 App.fit = () => {
   if ($(`#main_container`).html() !== ``) {
-    $(`.breaker`).each(() => {
+    $(`.breaker`).each(function () {
       $(this).remove()
     })
 
@@ -315,7 +315,7 @@ App.fit = () => {
         let row1 = []
         let row2 = []
 
-        $(`.element_container`).each(() => {
+        $(`.element_container`).each(function() {
           let top = $(this).position().top
           let t1 = top - qheight
           let t2 = top + qheight
@@ -630,7 +630,7 @@ App.make_all_gone = () => {
 }
 
 App.remove_pulsetrios = () => {
-  $(`.pulsetrio`).each(() => {
+  $(`.pulsetrio`).each(function () {
     $(this).removeClass(`pulsetrio`)
   })
 }
@@ -811,13 +811,13 @@ App.show_options = () => {
 
   App.msg(s)
 
-  $(`#chk_fit`).change(() => {
+  $(`#chk_fit`).on(`change`, function() {
     App.options.fit = $(this).prop(`checked`)
     App.update_options()
     App.fit()
   })
 
-  $(`#chk_sounds`).change(() => {
+  $(`#chk_sounds`).on(`change`, function() {
     App.options.sounds = $(this).prop(`checked`)
     App.update_options()
 
@@ -826,7 +826,7 @@ App.show_options = () => {
     }
   })
 
-  $(`#chk_music`).change(() => {
+  $(`#chk_music`).on(`change`, function() {
     App.options.music = $(this).prop(`checked`)
     App.update_options()
 
@@ -838,7 +838,7 @@ App.show_options = () => {
     }
   })
 
-  $(`#chk_hints`).change(() => {
+  $(`#chk_hints`).on(`change`, function() {
     App.options.hints = $(this).prop(`checked`)
     App.update_options()
 
@@ -1021,7 +1021,7 @@ App.show_highscores = (advanced) => {
     }
   })
 
-  $(`#msg`).find(`option`).each(() => {
+  $(`#msg`).find(`option`).each(function() {
     if ($(this).val() === setting) {
       $(this).prop(`selected`, true)
     }
@@ -1122,7 +1122,7 @@ App.show_scores = (setting, advanced) => {
   $(`#hs_setting_select`).val(setting)
   $(`#msg`).scrollTop(0)
 
-  $(`.clickable_score`).on(`click`, () => {
+  $(`.clickable_score`).on(`click`, function () {
     App.show_scores($(this).data(`ss`), advanced)
   })
 
@@ -1522,18 +1522,18 @@ App.msg = (txt, temp_disable = false) => {
 
 App.msg_align_btns = (alt = false) => {
   if (alt) {
-    $(`#msg`).find(`.dialog_btn`).each(() => {
+    $(`#msg`).find(`.dialog_btn`).each(function () {
       $(this).width($(this).outerWidth())
     })
   }
   else {
     let w = 0
 
-    $(`#msg`).find(`.dialog_btn`).each(() => {
+    $(`#msg`).find(`.dialog_btn`).each(function () {
       w = Math.max(w, $(this).outerWidth())
     })
 
-    $(`#msg`).find(`.dialog_btn`).each(() => {
+    $(`#msg`).find(`.dialog_btn`).each(function () {
       $(this).width(w)
     })
   }
@@ -1573,18 +1573,18 @@ App.fmsg = (txt, el) => {
 
 App.msg_align_btns = (alt = false) => {
   if (alt) {
-    $(`#fmsg`).find(`.dialog_btn`).each(() => {
+    $(`#fmsg`).find(`.dialog_btn`).each(function () {
       $(this).width($(this).outerWidth())
     })
   }
   else {
     let w = 0
 
-    $(`#fmsg`).find(`.dialog_btn`).each(() => {
+    $(`#fmsg`).find(`.dialog_btn`).each(function () {
       w = Math.max(w, $(this).outerWidth())
     })
 
-    $(`#fmsg`).find(`.dialog_btn`).each(() => {
+    $(`#fmsg`).find(`.dialog_btn`).each(function () {
       $(this).width(w)
     })
   }
@@ -1727,7 +1727,7 @@ App.seed_picker = () => {
   $(`#seed_input`).attr(`max`, 999)
   $(`#seed_input`).attr(`min`, 0)
 
-  $(`#seed_input`).on(`input`, () => {
+  $(`#seed_input`).on(`input`, function () {
     if ($(this).val().length > 3) {
       $(this).val($(this).val().substring(0, 3))
     }
@@ -2058,7 +2058,7 @@ App.disable_hints = () => {
 
   $(`#hint_dis`).remove()
 
-  $(`.element_container`).each(() => {
+  $(`.element_container`).each(function () {
     $(this).removeClass(`pulsating`)
   })
 }
@@ -2106,7 +2106,7 @@ App.toggle_pause = () => {
 }
 
 App.set_cursors_pointer = () => {
-  $(`.element_container`).each(() => {
+  $(`.element_container`).each(function() {
     if (!$(this).hasClass(`gone`)) {
       $(this).removeClass(`cursor_default`).addClass(`cursor_pointer`)
     }
@@ -2114,7 +2114,7 @@ App.set_cursors_pointer = () => {
 }
 
 App.set_cursors_default = () => {
-  $(`.element_container`).each(() => {
+  $(`.element_container`).each(function() {
     if (!$(this).hasClass(`gone`)) {
       $(this).removeClass(`cursor_pointer`).addClass(`cursor_default`)
     }
