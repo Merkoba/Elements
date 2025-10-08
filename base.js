@@ -916,7 +916,7 @@ App.get_setting = () => {
     s = `#`
   }
   else if (App.options.seed === 0.1) {
-    s = `#NaN`
+    s = `Fun`
   }
   else {
     s = `#` + parseInt(App.options.seed)
@@ -1779,7 +1779,7 @@ App.change_seed = (s, save = true) => {
     $(`#seed`).html(`#`)
   }
   else if (App.options.seed === 0.1) {
-    $(`#seed`).html(`#NaN`)
+    $(`#seed`).html(`Fun`)
   }
   else {
     $(`#seed`).html(`#` + App.options.seed)
