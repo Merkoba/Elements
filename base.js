@@ -147,7 +147,7 @@ App.start = () => {
   $(`body`).css(`background-image`, `none`)
   $(`#main_container`).focus()
 
-  to_top()
+  App.to_top()
   App.play(`started`)
 
   if (App.music_fadeout_interval !== undefined) {
@@ -155,7 +155,7 @@ App.start = () => {
   }
 
   App.play(`music`)
-  clear_started()
+  App.clear_started()
 
   App.last_highscore = ``
   App.sold_on_tick = []
@@ -164,7 +164,7 @@ App.start = () => {
   App.num_lit_trios = 0
   App.gained_from_lit = 0
   App.ticks_skipped = 0
-  bonus = 0
+  App.bonus = 0
   App.bonus_points = 0
   App.lit_trios_on_tick = 0
 
@@ -175,7 +175,7 @@ App.start = () => {
 
     App.points = App.start_points
     App.count = App.start_count
-    update_points()
+    App.update_points()
     App.update_counter()
     App.set_cursors_pointer()
     loop()
@@ -216,7 +216,7 @@ App.generate = () => {
       index = 5
     }
     else {
-      index = get_random_int(0, 10)
+      index = App.get_random_int(0, 10)
     }
 
     element.profit = App.profits[index]
@@ -230,16 +230,16 @@ App.generate = () => {
       }
     }
     else {
-      index = get_random_int(0, 1)
+      index = App.get_random_int(0, 1)
     }
 
     element.direction = App.directions[index]
 
-    if (element.profit === 1000000 && element.direction === `up`) {
+    if ((element.profit === 1000000) && (element.direction === `up`)) {
       element.direction = `down`
     }
 
-    else if (element.profit === -1000000 && element.direction === `down`) {
+    else if ((element.profit === -1000000) && (element.direction === `down`)) {
       element.direction = `up`
     }
 
@@ -261,14 +261,14 @@ App.generate = () => {
       s += ` red`
     }
 
-    if (App.options.hints && (element.profit === 0 || element.profit === 200000) && (element.direction === `up`)) {
+    if (App.options.hints && ((element.profit === 0) || (element.profit === 200000)) && (element.direction === `up`)) {
       s += ` pulsating`
     }
 
     s += `'>`
 
     s += `<div class='element_name'>` + App.elements[i].name + `</div>`
-    s += `<div class='element_profit'>` + format(element.profit) + `</div>`
+    s += `<div class='element_profit'>` + App.format(element.profit) + `</div>`
     s += `<div class='element_direction'>` + dir + `</div>`
     s += `<button class='element_patent_btn' style='display:none'>Buy Patent</button>`
     s += `</div>`
@@ -281,7 +281,7 @@ App.generate = () => {
   $(`.element_container`).each(() => {
     $(this).mousedown(() => {
       if (App.playing && App.started && !App.paused) {
-        click_events(this)
+        App.click_events(this)
       }
     })
 
@@ -304,7 +304,6 @@ App.fit = () => {
       for (let i = 0; i < 20; i++) {
         if (document.body.scrollHeight > document.body.clientHeight) {
           size -= 0.025
-
           $(`#main_container`).css(`font-size`, size + `em`)
         }
       }
@@ -322,11 +321,11 @@ App.fit = () => {
           let t1 = top - qheight
           let t2 = top + qheight
 
-          if (top1 > t1 && top1 < t2) {
+          if ((top1 > t1) && (top1 < t2)) {
             row1.push($(this))
           }
 
-          else if (top2 > t1 && top2 < t2) {
+          else if ((top2 > t1) && (top2 < t2)) {
             row2.push($(this))
           }
         })
@@ -420,12 +419,12 @@ App.click_events = (parent) => {
 
       if (App.sold_on_tick.length > 2) {
         if (App.sold_on_tick[0].profit === 5000000) {
-          if (App.sold_on_tick[0].profit === App.sold_on_tick[1].profit && App.sold_on_tick[0].profit === App.sold_on_tick[2].profit) {
+          if ((App.sold_on_tick[0].profit === App.sold_on_tick[1].profit) && (App.sold_on_tick[0].profit === App.sold_on_tick[2].profit)) {
             let id1 = App.sold_on_tick[0].id
             let id2 = App.sold_on_tick[1].id
             let id3 = App.sold_on_tick[2].id
 
-            if (id1 !== id2 && id1 !== id3 && id2 !== id3) {
+            if ((id1 !== id2) && (id1 !== id3) && (id2 !== id3)) {
               App.num_lit_trios += 1
               App.lit_trios_on_tick += 1
 
@@ -453,10 +452,10 @@ App.click_events = (parent) => {
     }
   }
 
-  update_points()
+  App.update_points()
 
   if (App.options.hints) {
-    check_all_hints()
+    App.check_all_hints()
   }
 }
 
@@ -507,19 +506,19 @@ App.TickTimer = (callback, delay) => {
 }
 
 App.loop = () => {
-  App.tick_timer = new TickTimer(() => {
+  App.tick_timer = new App.TickTimer(() => {
     if (App.count > 0) {
-      tick()
+      App.tick()
     }
 
     if (App.count > 0) {
       if (App.options.speed === `Linear`) {
-        loop_speed = App.speed_slow - (App.linear_diff * (App.start_count - App.count))
+        App.loop_speed = App.speed_slow - (App.linear_diff * (App.start_count - App.count))
       }
 
       loop()
     }
-  }, loop_speed)
+  }, App.loop_speed)
 }
 
 App.stop_loop = () => {
@@ -540,7 +539,7 @@ App.tick = () => {
   App.report.push(`;` + App.count + `;`)
   App.sold_on_tick = []
   App.lit_trios_on_tick = 0
-  remove_pulsetrios()
+  App.remove_pulsetrios()
 
   for (let i = 0; i < App.elements.length; i++) {
     let element = App.elements[i]
@@ -552,7 +551,7 @@ App.tick = () => {
     let cont = $(`.element_container`).get(i)
 
     if (element.lit) {
-      gone(cont, element)
+      App.gone(cont, element)
       continue
     }
 
@@ -571,10 +570,10 @@ App.tick = () => {
     }
     else {
       element.freeze_chain = 0
-      change_profit(element)
+      App.change_profit(element)
     }
 
-    $(cont).find(`.element_profit`).html(format(element.profit))
+    $(cont).find(`.element_profit`).html(App.format(element.profit))
 
     if (element.lit) {
       $(cont).addClass(`yellow`)
@@ -596,10 +595,10 @@ App.tick = () => {
   }
 
   App.update_counter()
-  update_points()
+  App.update_points()
 
   if (App.options.hints) {
-    check_all_hints()
+    App.check_all_hints()
   }
 
   check_state()
@@ -630,7 +629,7 @@ App.gone = (cont, element) => {
 
 App.make_all_gone = () => {
   for (let i = 0; i < App.elements.length; i++) {
-    gone($(`.element_container`).get(i), App.elements[i])
+    App.gone($(`.element_container`).get(i), App.elements[i])
   }
 }
 
@@ -645,15 +644,15 @@ App.check_hint = (element) => {
   $(cont).removeClass(`pulsating`)
 
   if (App.count > 1) {
-    if (element.direction === `down` && element.owned) {
+    if ((element.direction === `down`) && element.owned) {
       $(cont).addClass(`pulsating`)
     }
 
-    else if (element.profit === 0 && element.direction === `up` && !element.owned) {
+    else if ((element.profit === 0) && (element.direction === `up`) && !element.owned) {
       $(cont).addClass(`pulsating`)
     }
 
-    else if (element.profit > 0 && element.profit < 1000000 && element.direction === `up` && !element.owned) {
+    else if ((element.profit > 0) && (element.profit < 1000000) && (element.direction === `up`) && !element.owned) {
       if (App.points >= element.profit * 5) {
         $(cont).addClass(`pulsating`)
       }
@@ -662,19 +661,19 @@ App.check_hint = (element) => {
 
   else if (App.count === 1) {
     if (element.owned) {
-      if (element.profit === -200000 && element.direction === `up`) {
+      if ((element.profit === -200000) && (element.direction === `up`)) {
         return
       }
-      else if (element.profit === 0 && element.direction === `up`) {
+      else if ((element.profit === 0) && (element.direction === `up`)) {
         return
       }
-      else if (element.profit === 200000 && element.direction === `up`) {
+      else if ((element.profit === 200000) && (element.direction === `up`)) {
         return
       }
 
       $(cont).addClass(`pulsating`)
     }
-    else if (element.profit === 0 && element.direction === `up`) {
+    else if ((element.profit === 0) && (element.direction === `up`)) {
       $(cont).addClass(`pulsating`)
     }
   }
@@ -682,12 +681,12 @@ App.check_hint = (element) => {
 
 App.check_all_hints = () => {
   for (let i = 0; i < App.elements.length; i++) {
-    check_hint(App.elements[i])
+    App.check_hint(App.elements[i])
   }
 }
 
 App.update_points = () => {
-  let s = format(App.points)
+  let s = App.format(App.points)
 
   if ((App.bonus > 0) && (App.count > 0)) {
     s += ` (+` + App.bonus + `%)`
@@ -698,11 +697,11 @@ App.update_points = () => {
 
 App.check_state = () => {
   if (App.count === 0) {
-    ended()
+    App.ended()
   }
 
   else if ($(`.gone`).length === App.elements.length) {
-    ended()
+    App.ended()
   }
   else {
     App.play(`pup`)
@@ -772,8 +771,8 @@ App.get_options = () => {
   }
 
   App.change_seed(App.options.seed, false)
-  change_speed(App.options.speed, false)
-  change_mode(App.options.advanced, false)
+  App.change_speed(App.options.speed, false)
+  App.change_mode(App.options.advanced, false)
 }
 
 App.update_options = () => {
@@ -840,10 +839,10 @@ App.show_options = () => {
     App.update_options()
 
     if (!App.options.music) {
-      mute_music()
+      App.mute_music()
     }
     else {
-      unmute_music()
+      App.unmute_music()
     }
   })
 
@@ -860,7 +859,7 @@ App.show_options = () => {
 App.show_about = () => {
   let s = `<b>About</b><br><br>`
   s += `Idea and development by madprops<br><br>`
-  s += `Version ` + app_version + `<br><br>`
+  s += `Version ` + App.app_version + `<br><br>`
   s += `<a target='_blank' href='https://merkoba.com'>https://merkoba.com</a>`
   App.msg(s)
 }
@@ -907,7 +906,7 @@ App.get_highscores = (advanced) => {
 }
 
 App.get_setting_highscores = (setting, advanced) => {
-  get_highscores(advanced)
+  App.get_highscores(advanced)
   let scores = App.highscores[setting]
 
   if (scores === undefined) {
@@ -949,7 +948,7 @@ App.get_mode_text = () => {
 }
 
 App.get_full_setting = () => {
-  return get_setting() + ` : ` + get_mode_text()
+  return get_setting() + ` : ` + App.get_mode_text()
 }
 
 App.start_setting = (setting, advanced) => {
@@ -966,14 +965,14 @@ App.start_setting = (setting, advanced) => {
     App.change_seed(sd, false)
   }
 
-  change_speed(setting.split(` - `)[1].trim(), false)
-  change_mode(advanced, false)
+  App.change_speed(setting.split(` - `)[1].trim(), false)
+  App.change_mode(advanced, false)
   App.update_options()
   App.start()
 }
 
 App.show_highscores = (advanced) => {
-  get_highscores(advanced)
+  App.get_highscores(advanced)
   let s
 
   if (advanced) {
@@ -1024,10 +1023,10 @@ App.show_highscores = (advanced) => {
 
   $(`#hs_type_toggle`).click(() => {
     if (advanced) {
-      show_highscores(false)
+      App.show_highscores(false)
     }
     else {
-      show_highscores(true)
+      App.show_highscores(true)
     }
   })
 
@@ -1037,23 +1036,23 @@ App.show_highscores = (advanced) => {
     }
   })
 
-  show_scores($(`#hs_setting_select option:selected`).val(), advanced)
+  App.show_scores($(`#hs_setting_select option:selected`).val(), advanced)
 
   if (advanced) {
     $(`#hs_setting_select`).change(() => {
-      show_scores($(`#hs_setting_select option:selected`).val(), true)
+      App.show_scores($(`#hs_setting_select option:selected`).val(), true)
     })
   }
   else {
     $(`#hs_setting_select`).change(() => {
-      show_scores($(`#hs_setting_select option:selected`).val(), false)
+      App.show_scores($(`#hs_setting_select option:selected`).val(), false)
     })
   }
 }
 
 App.show_scores = (setting, advanced) => {
   App.hs_setting = setting
-  let scores = get_setting_highscores(setting, advanced)
+  let scores = App.get_setting_highscores(setting, advanced)
   let s = ``
 
   if (setting.indexOf(`Overall`) !== -1) {
@@ -1075,12 +1074,12 @@ App.show_scores = (setting, advanced) => {
           m = App.last_highscore.split(`=`)[2]
         }
 
-        if (App.last_highscore !== `` && ((m === `Advanced` && advanced) || (m === `Core` && !advanced)) && ss == t && hs == p) {
-          s += `<span class='grey_highlight'>` + format(hs) + `</span>`
+        if ((App.last_highscore !== ``) && (((m === `Advanced`) && advanced) || ((m === `Core`) && !advanced)) && (ss == t) && (hs == p)) {
+          s += `<span class='grey_highlight'>` + App.format(hs) + `</span>`
         }
 
         else {
-          s += `<span>` + format(hs) + `</span>`
+          s += `<span>` + App.format(hs) + `</span>`
         }
 
         s += `</span>`
@@ -1112,11 +1111,11 @@ App.show_scores = (setting, advanced) => {
           m = App.last_highscore.split(`=`)[2]
         }
 
-        if (App.last_highscore !== `` && ((m === `Advanced` && advanced) || (m === `Core` && !advanced)) && setting == t && hs == p) {
-          s += `<span class='grey_highlight'>` + format(hs) + `</span>`
+        if ((App.last_highscore !== ``) && (((m === `Advanced`) && advanced) || ((m === `Core`) && !advanced)) && (setting == t) && (hs == p)) {
+          s += `<span class='grey_highlight'>` + App.format(hs) + `</span>`
         }
         else {
-          s += `<span>` + format(hs) + `</span>`
+          s += `<span>` + App.format(hs) + `</span>`
         }
 
         s += `<br><br>`
@@ -1133,24 +1132,24 @@ App.show_scores = (setting, advanced) => {
   $(`#msg`).scrollTop(0)
 
   $(`.clickable_score`).click(() => {
-    show_scores($(this).data(`ss`), advanced)
+    App.show_scores($(this).data(`ss`), advanced)
   })
 
   $(`#hs_clear`).click(() => {
-    clear_highscores(advanced)
+    App.clear_highscores(advanced)
   })
 
   $(`#hs_play_again`).click(() => {
-    start_setting(setting, advanced)
+    App.start_setting(setting, advanced)
   })
 
   $(`#hs_copy_hs`).click(() => {
-    copy_highscores(setting, advanced)
+    App.copy_highscores(setting, advanced)
   })
 }
 
 App.copy_highscores = (setting, advanced) => {
-  let scores = get_setting_highscores(setting, advanced)
+  let scores = App.get_setting_highscores(setting, advanced)
   let s = setting
 
   if (advanced) {
@@ -1169,7 +1168,7 @@ App.copy_highscores = (setting, advanced) => {
         s += `----`
       }
       else {
-        s += format(hs) + ` (` + ss + `)`
+        s += App.format(hs) + ` (` + ss + `)`
       }
 
       s += `\n`
@@ -1183,21 +1182,21 @@ App.copy_highscores = (setting, advanced) => {
         s += `----`
       }
       else {
-        s += format(hs)
+        s += App.format(hs)
       }
 
       s += `\n`
     }
   }
 
-  copy_to_clipboard(s)
+  App.copy_to_clipboard(s)
 }
 
 App.show_report = () => {
   let s = `<b>Game Report</b><br>`
-  s += `<div id='report_setting'>` + get_full_setting() + `</div>`
+  s += `<div id='report_setting'>` + App.get_full_setting() + `</div>`
   let pts = App.start_points
-  s += `<div class='grey_highlight'>` + App.start_count + ` (` + format(pts) + `)</div><br>`
+  s += `<div class='grey_highlight'>` + App.start_count + ` (` + App.format(pts) + `)</div><br>`
 
   let cnt = App.start_count
   let total_tpts_positive = 0
@@ -1208,13 +1207,13 @@ App.show_report = () => {
   for (let i = 0; i < App.report.length; i++) {
     let item = App.report[i]
 
-    if (typeof item === `string` && item.startsWith(`;`)) {
+    if ((typeof item === `string`) && item.startsWith(`;`)) {
       cnt = item.replace(/;/g, ``)
 
-      s += `<div>Positive: ` + format(tpts_positive) + `</div><br>`
-      s += `<div>Negative: ` + format(tpts_negative) + `</div><br>`
-      s += `<div>Balance: ` + format(tpts_positive + tpts_negative) + `</div><br>`
-      s += `<div class='grey_highlight'>` + cnt + ` (` + format(pts) + `)</div><br>`
+      s += `<div>Positive: ` + App.format(tpts_positive) + `</div><br>`
+      s += `<div>Negative: ` + App.format(tpts_negative) + `</div><br>`
+      s += `<div>Balance: ` + App.format(tpts_positive + tpts_negative) + `</div><br>`
+      s += `<div class='grey_highlight'>` + cnt + ` (` + App.format(pts) + `)</div><br>`
 
       tpts_positive = 0
       tpts_negative = 0
@@ -1223,21 +1222,21 @@ App.show_report = () => {
       pts += item
 
       if (item > 0) {
-        s += `<div class='green_color'>` + format(item) + `</div><br>`
+        s += `<div class='green_color'>` + App.format(item) + `</div><br>`
         tpts_positive += item
         total_tpts_positive += item
       }
       else {
-        s += `<div class='red_color'>` + format(item) + `</div><br>`
+        s += `<div class='red_color'>` + App.format(item) + `</div><br>`
         tpts_negative += item
         total_tpts_negative += item
       }
     }
   }
 
-  s += `<div>Positive: ` + format(tpts_positive) + `</div><br>`
-  s += `<div>Negative: ` + format(tpts_negative) + `</div><br>`
-  s += `<div>Balance: ` + format(tpts_positive + tpts_negative) + `</div><br>`
+  s += `<div>Positive: ` + App.format(tpts_positive) + `</div><br>`
+  s += `<div>Negative: ` + App.format(tpts_negative) + `</div><br>`
+  s += `<div>Balance: ` + App.format(tpts_positive + tpts_negative) + `</div><br>`
 
   s += `<div id='rep_copy' class='linkydiv'>Copy To Clipboard</div>`
 
@@ -1248,43 +1247,43 @@ App.show_report = () => {
   if (App.options.advanced) {
     s += `<div>Elements Lit: ` + App.num_lit + `</div><br>`
     s += `<div>Lit Trios Sold: ` + App.num_lit_trios + `</div><br>`
-    s += `<div>Lit Points: ` + format(App.gained_from_lit) + `</div><br>`
+    s += `<div>Lit Points: ` + App.format(App.gained_from_lit) + `</div><br>`
     s += `<div>Elements Gone: ` + $(`.gone`).length + `</div><br>`
   }
 
-  s += `<div>Total Positive: ` + format(total_tpts_positive) + `</div><br>`
-  s += `<div>Total Negative: ` + format(total_tpts_negative) + `</div><br>`
+  s += `<div>Total Positive: ` + App.format(total_tpts_positive) + `</div><br>`
+  s += `<div>Total Negative: ` + App.format(total_tpts_negative) + `</div><br>`
 
   if (App.options.advanced) {
-    s += `<div>Balance: ` + format(total_tpts_positive + total_tpts_negative) + `</div><br>`
-    s += `<div>Bonus: ` + App.bonus + `% (` + format(App.bonus_points) + `)</div><br>`
+    s += `<div>Balance: ` + App.format(total_tpts_positive + total_tpts_negative) + `</div><br>`
+    s += `<div>Bonus: ` + App.bonus + `% (` + App.format(App.bonus_points) + `)</div><br>`
   }
 
-  s += `<div>Final Balance: ` + format(points) + `</div><br>`
+  s += `<div>Final Balance: ` + App.format(App.points) + `</div><br>`
   s += `<div>Ticks Skipped: ` + App.ticks_skipped + `</div><br>`
 
   $(s).insertAfter($(`#report_setting`))
 
   $(`#rep_copy`).click(() => {
-    copy_report()
+    App.copy_report()
   })
 }
 
 App.copy_report = () => {
-  copy_to_clipboard(document.getElementById(`msg`).innerText.replace(`Game Report`, ``).replace(`Copy To Clipboard`, ``).replace(/\n\s*\n/g, `\n`).trim())
+  App.copy_to_clipboard(document.getElementById(`msg`).innerText.replace(`Game Report`, ``).replace(`Copy To Clipboard`, ``).replace(/\n\s*\n/g, `\n`).trim())
 }
 
 App.set_speed = () => {
   if ((App.options.speed === `Slow`) || (App.options.speed === `Linear`)) {
-    loop_speed = App.speed_slow
+    App.loop_speed = App.speed_slow
   }
 
   else if (App.options.speed === `Normal`) {
-    loop_speed = App.speed_normal
+    App.loop_speed = App.speed_normal
   }
 
   else if (App.options.speed === `Fast`) {
-    loop_speed = App.speed_fast
+    App.loop_speed = App.speed_fast
   }
 }
 
@@ -1294,7 +1293,7 @@ App.on_finish = () => {
   }
 
   App.playing = false
-  start_music_fadeout()
+  App.start_music_fadeout()
   App.set_cursors_default()
 
   $(`#start`).html(`Play Again`)
@@ -1303,16 +1302,16 @@ App.on_finish = () => {
 App.ended = () => {
   on_finish()
 
-  if (App.points > 0 && App.bonus > 0) {
+  if ((App.points > 0) && (App.bonus > 0)) {
     App.bonus_points = Math.round(App.points * (App.bonus / 100))
     App.points = App.points + App.bonus_points
-    update_points()
+    App.update_points()
   }
 
   $(`#title`).html(`Game Ended`)
 
   if (App.options.hints) {
-    let s = `Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br>`
+    let s = `Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br>`
     s += `<button id='end_play_again' class='dialog_btn'>Play Again</button>`
     s += `<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn'>Disable Hints</button></span>`
     s += `<br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
@@ -1326,7 +1325,7 @@ App.ended = () => {
     })
 
     $(`#end_hint_dis`).click(() => {
-      disable_hints()
+      App.disable_hints()
     })
 
     $(`#end_rep`).click(() => {
@@ -1338,13 +1337,13 @@ App.ended = () => {
 
   let shs = `<br><br><button id='end_show_hs' class='dialog_btn'>High Scores</button><br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
   let setting = get_setting()
-  let hs = get_setting_highscores(setting, App.options.advanced)
+  let hs = App.get_setting_highscores(setting, App.options.advanced)
   let overall = App.highscores.Overall
   let overall_speed = App.highscores[`Overall - ` + App.options.speed]
 
-  if (!App.options.hints && App.points > hs[hs.length - 1]) {
+  if (!App.options.hints && (App.points > hs[hs.length - 1])) {
     if (App.points > hs[0]) {
-      App.msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+      App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
       App.msg_align_btns()
       App.play(`highscore`)
 
@@ -1360,7 +1359,7 @@ App.ended = () => {
       }
     }
     else {
-      App.msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+      App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
       App.msg_align_btns()
       App.play(`ended`)
 
@@ -1380,7 +1379,7 @@ App.ended = () => {
     }
   }
   else {
-    App.msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+    App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
     App.msg_align_btns()
     App.play(`ended`)
   }
@@ -1390,7 +1389,7 @@ App.ended = () => {
   })
 
   $(`#end_show_hs`).click(() => {
-    show_highscores(App.options.advanced)
+    App.show_highscores(App.options.advanced)
   })
 
   $(`#end_rep`).click(() => {
@@ -1417,7 +1416,7 @@ App.ended = () => {
     let ncounted = []
 
     for (let i = 0; i < overall_speed.length; i++) {
-      if (overall_speed[i][1] === `` || ncounted.indexOf(overall_speed[i][1]) === -1) {
+      if ((overall_speed[i][1] === ``) || (ncounted.indexOf(overall_speed[i][1]) === -1)) {
         counted.push(overall_speed[i])
         ncounted.push(overall_speed[i][1])
 
@@ -1451,7 +1450,7 @@ App.ended = () => {
     let ncounted = []
 
     for (let i = 0; i < overall.length; i++) {
-      if (overall[i][1] === `` || ncounted.indexOf(overall[i][1]) === -1) {
+      if ((overall[i][1] === ``) || (ncounted.indexOf(overall[i][1]) === -1)) {
         counted.push(overall[i])
         ncounted.push(overall[i][1])
 
@@ -1532,7 +1531,7 @@ App.msg = (txt, temp_disable = false) => {
   App.msg_open = true
 }
 
-App.App.msg_align_btns = (alt = false) => {
+App.msg_align_btns = (alt = false) => {
   if (alt) {
     $(`#msg`).find(`.dialog_btn`).each(() => {
       $(this).width($(this).outerWidth())
@@ -1583,7 +1582,7 @@ App.fmsg = (txt, el) => {
   return true
 }
 
-App.fApp.msg_align_btns = (alt = false) => {
+App.msg_align_btns = (alt = false) => {
   if (alt) {
     $(`#fmsg`).find(`.dialog_btn`).each(() => {
       $(this).width($(this).outerWidth())
@@ -1626,10 +1625,10 @@ App.refresh = () => {
 App.play = (what) => {
   if (what === `music`) {
     if (App.options.music) {
-      unmute_music()
+      App.unmute_music()
     }
     else {
-      mute_music()
+      App.mute_music()
     }
 
     $(`#music`)[0].pause()
@@ -1709,26 +1708,26 @@ App.seed_picker = () => {
   s += `<button id='seed_random' class='dialog_btn'>Random</button>`
 
   if (App.fmsg(s, `seed`)) {
-    fApp.msg_align_btns(true)
+    App.msg_align_btns(true)
     let bw = ($(`#seed_random_seed`).offset().left + $(`#seed_random_seed`).outerWidth()) - $(`#seed_check_seed`).offset().left
 
     $(`#seed_input`).outerWidth(bw)
     $(`#seed_daily`).outerWidth(bw)
     $(`#seed_random`).outerWidth(bw)
 
-    position_fmsg(`seed`)
+    App.position_fmsg(`seed`)
   }
 
   $(`#seed_check_seed`).click(() => {
-    check_seed()
+    App.check_seed()
   })
 
   $(`#seed_random_seed`).click(() => {
-    get_random_seed()
+    App.get_random_seed()
   })
 
   $(`#seed_daily`).click(() => {
-    daily()
+    App.daily()
   })
 
   $(`#seed_random`).click(() => {
@@ -1755,7 +1754,7 @@ App.seed_picker = () => {
 App.check_seed = () => {
   let input = $(`#seed_input`).val().trim()
 
-  if (input == ``) {
+  if (input === ``) {
     $(`#seed_input`).focus()
     return false
   }
@@ -1765,7 +1764,7 @@ App.check_seed = () => {
     return false
   }
 
-  if (input < 0 || input > 999) {
+  if ((input < 0) || (input > 999)) {
     $(`#seed_input`).focus()
     return false
   }
@@ -1804,12 +1803,12 @@ App.change_seed = (s, save = true) => {
     App.update_options()
   }
 
-  hide_and_stop()
+  App.hide_and_stop()
 }
 
 App.get_random_seed = () => {
   Math.seedrandom()
-  let r = get_random_int(0, 999)
+  let r = App.get_random_int(0, 999)
 
   if ($(`#seed_input`).val() == r) {
     r += 1
@@ -1826,11 +1825,11 @@ App.get_daily = () => {
   let d = new Date()
   let s = d.getDate() + (d.getMonth() * 100) + d.getYear()
   Math.seedrandom(s)
-  return get_random_int(0, 999)
+  return App.get_random_int(0, 999)
 }
 
 App.daily = () => {
-  App.change_seed(get_daily())
+  App.change_seed(App.get_daily())
 }
 
 App.speed_picker = () => {
@@ -1840,24 +1839,24 @@ App.speed_picker = () => {
   s += `<button id='speed_linear' class='dialog_btn'>Linear</button>`
 
   if (App.fmsg(s, `speed`)) {
-    fApp.msg_align_btns()
-    position_fmsg(`speed`)
+    App.msg_align_btns()
+    App.position_fmsg(`speed`)
   }
 
   $(`#speed_slow`).click(() => {
-    change_speed(`Slow`)
+    App.change_speed(`Slow`)
   })
 
   $(`#speed_normal`).click(() => {
-    change_speed(`Normal`)
+    App.change_speed(`Normal`)
   })
 
   $(`#speed_fast`).click(() => {
-    change_speed(`Fast`)
+    App.change_speed(`Fast`)
   })
 
   $(`#speed_linear`).click(() => {
-    change_speed(`Linear`)
+    App.change_speed(`Linear`)
   })
 }
 
@@ -1869,7 +1868,7 @@ App.change_speed = (what, save = true) => {
     App.update_options()
   }
 
-  hide_and_stop()
+  App.hide_and_stop()
 }
 
 App.mode_picker = () => {
@@ -1877,28 +1876,28 @@ App.mode_picker = () => {
   s += `<button id='mode_advanced'class='dialog_btn'>Advanced</button>`
 
   if (App.fmsg(s, `mode`)) {
-    fApp.msg_align_btns()
-    position_fmsg(`mode`)
+    App.msg_align_btns()
+    App.position_fmsg(`mode`)
   }
 
   $(`#mode_core`).click(() => {
-    change_mode(false)
+    App.change_mode(false)
   })
 
   $(`#mode_advanced`).click(() => {
-    change_mode(true)
+    App.change_mode(true)
   })
 }
 
 App.change_mode = (advanced, save = true) => {
   App.options.advanced = advanced
-  $(`#mode`).html(get_mode_text())
+  $(`#mode`).html(App.get_mode_text())
 
   if (save) {
     App.update_options()
   }
 
-  hide_and_stop()
+  App.hide_and_stop()
 }
 
 App.get_random_int = (min, max) => {
@@ -1907,7 +1906,7 @@ App.get_random_int = (min, max) => {
 
 App.check_firstime = () => {
   if (localStorage.getItem(`firstime`) === null) {
-    show_instructions()
+    App.show_instructions()
     localStorage.setItem(`firstime`, `check`)
   }
 }
@@ -1918,7 +1917,7 @@ App.key_detection = () => {
 
     if (!$(`input`).is(`:focus`)) {
       if (code === 8) {
-        toggle_menu()
+        App.toggle_menu()
         e.preventDefault()
         return
       }
@@ -1935,20 +1934,20 @@ App.key_detection = () => {
     }
     else if (code === 13) {
       if ($(`#seed_input`).is(`:focus`)) {
-        check_seed()
+        App.check_seed()
         return
       }
     }
 
     if (code === 27) {
-      check_escape()
+      App.check_escape()
     }
 
-    if (!msg_open && !App.fmsg_open) {
-      if (code === 40 || code === 83) {
+    if (!App.msg_open && !App.fmsg_open) {
+      if ((code === 40) || (code === 83)) {
         $(`body`).scrollTop($(document).height() - $(window).height())
       }
-      else if (code === 38 || code === 87) {
+      else if ((code === 38) || (code === 87)) {
         $(`body`).scrollTop(0)
       }
     }
@@ -1957,9 +1956,9 @@ App.key_detection = () => {
 
 App.stop = () => {
   App.playing = false
-  clear_started()
+  App.clear_started()
   App.stop_loop()
-  stop_all_audio()
+  App.stop_all_audio()
   App.hide_overlays()
   $(`#main_container`).html(``)
   $(`#title`).html(App.main_title)
@@ -1996,15 +1995,15 @@ App.show_menu = () => {
   App.msg_align_btns()
 
   $(`#menu_instructions`).click(() => {
-    show_instructions()
+    App.show_instructions()
   })
 
   $(`#menu_highscores`).click(() => {
-    show_highscores(App.options.advanced)
+    App.show_highscores(App.options.advanced)
   })
 
   $(`#menu_options`).click(() => {
-    show_options()
+    App.show_options()
   })
 
   $(`#menu_about`).click(() => {
@@ -2039,7 +2038,7 @@ App.clear_highscores = (advanced) => {
       localStorage.removeItem(App.ls_highscores)
     }
 
-    show_highscores(advanced)
+    App.show_highscores(advanced)
   }
 }
 
@@ -2142,11 +2141,11 @@ App.succ = () => {
 }
 
 App.get_setting_title = () => {
-  return `Elements (` + get_full_setting() + `)`
+  return `Elements (` + App.get_full_setting() + `)`
 }
 
 App.update_title = () => {
-  document.title = get_setting_title()
+  document.title = App.get_setting_title()
 }
 
 App.disable_context_menus = () => {
@@ -2167,7 +2166,7 @@ App.start_context_menus = () => {
 		  lsc1:
 			{
 			  name: `Copy Setting To Clipboard`, callback(key, opt) {
-			    copy_setting()
+			    App.copy_setting()
 			  },
 			},
 		},
@@ -2175,7 +2174,7 @@ App.start_context_menus = () => {
 }
 
 App.copy_setting = () => {
-  copy_to_clipboard(get_setting_title())
+  App.copy_to_clipboard(App.get_setting_title())
 }
 
 App.copy_to_clipboard = (s) => {
