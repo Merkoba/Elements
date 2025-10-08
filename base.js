@@ -83,20 +83,20 @@ App.hs_setting = null
 App.fmsg_mode = null
 
 App.init = () => {
-	get_options()
-	overlay_clicked()
-	key_detection()
-	resize_events()
-	music_control()
-	check_firstime()
+	App.get_options()
+	App.overlay_clicked()
+	App.key_detection()
+	App.resize_events()
+	App.music_control()
+	App.check_firstime()
 	Math.seedrandom()
-	disable_context_menus()
-	start_context_menus()
-	update_title()
-	left_side_clicks()
-	title_clicks()
-	right_side_clicks()
-	succ()
+	App.disable_context_menus()
+	App.start_context_menus()
+	App.update_title()
+	App.left_side_clicks()
+	App.title_clicks()
+	App.right_side_clicks()
+	App.succ()
 }
 
 App.check_start = () => {
@@ -133,7 +133,7 @@ App.hide_and_stop = () => {
 		stop()
 	}
 
-	update_title()
+	App.update_title()
 }
 
 App.start = () => {
@@ -181,8 +181,8 @@ App.start = () => {
 		App.points = App.start_points
 		App.count = App.start_count
 		update_points()
-		update_counter()
-		set_cursors_pointer()
+		App.update_counter()
+		App.set_cursors_pointer()
 		loop()
 		App.started = true
 	}, 3700)
@@ -221,7 +221,6 @@ App.generate = () => {
 		if (options.seed === 0.1) {
 			index = 5
 		}
-
 		else {
 			index = get_random_int(0, 10)
 		}
@@ -237,7 +236,6 @@ App.generate = () => {
 				index = 0
 			}
 		}
-
 		else {
 			index = get_random_int(0, 1)
 		}
@@ -257,7 +255,6 @@ App.generate = () => {
 		if (element.direction === `up`) {
 			dir = `UP`
 		}
-
 		else {
 			dir = `DOWN`
 		}
@@ -267,7 +264,6 @@ App.generate = () => {
 		if (element.profit > 0) {
 			s +=  ` green`
 		}
-
 		else {
 			s += ` red`
 		}
@@ -374,7 +370,6 @@ App.click_events = (parent) => {
 			let price = 50000000
 			App.gained_from_lit -= price
 		}
-
 		else {
 			price = element.profit * 5
 		}
@@ -412,7 +407,6 @@ App.click_events = (parent) => {
 			price = 25000000
 			App.gained_from_lit += price
 		}
-
 		else {
 			price = element.profit * (element.profit / 200000)
 		}
@@ -584,7 +578,6 @@ App.tick = () => {
 				App.gained_from_lit += element.profit
 			}
 		}
-
 		else {
 			element.freeze_chain = 0
 			change_profit(element)
@@ -596,7 +589,6 @@ App.tick = () => {
 			$(cont).addClass(`yellow`)
 			$(cont).find(`.element_direction`).get(0).innerHTML = `LIT`
 		}
-
 		else {
 			if (element.profit > 0) {
 				$(cont).removeClass(`red`)
@@ -614,7 +606,7 @@ App.tick = () => {
 		}
 	}
 
-	update_counter()
+	App.update_counter()
 	update_points()
 
 	if (options.hints) {
@@ -694,7 +686,6 @@ App.check_hint = (element) => {
 
 			$(cont).addClass(`pulsating`)
 		}
-
 		else {
 			if (element.profit === 0 && element.direction === `up`) {
 				$(cont).addClass(`pulsating`)
@@ -870,7 +861,6 @@ App.show_options = () => {
 		if (!options.music) {
 			mute_music()
 		}
-
 		else {
 			unmute_music()
 		}
@@ -915,7 +905,6 @@ App.get_highscores = (advanced) => {
 		if (advanced) {
 			localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 		}
-
 		else {
 			localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 		}
@@ -1069,7 +1058,6 @@ App.show_highscores = (advanced) => {
 		if (advanced) {
 			show_highscores(false)
 		}
-
 		else {
 			show_highscores(true)
 		}
@@ -1269,7 +1257,6 @@ App.show_report = () => {
 			tpts_positive = 0
 			tpts_negative = 0
 		}
-
 		else {
 			if (item !== 0) {
 				pts += item
@@ -1414,7 +1401,6 @@ App.ended = () => {
 				localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 			}
 		}
-
 		else {
 			msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
 			msg_align_btns()
@@ -1489,7 +1475,6 @@ App.ended = () => {
 		if (options.advanced) {
 			localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 		}
-
 		else {
 			localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 		}
@@ -1524,7 +1509,6 @@ App.ended = () => {
 		if (options.advanced) {
 			localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
 		}
-
 		else {
 			localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
 		}
@@ -1693,7 +1677,6 @@ App.play = (what) => {
 		if (options.music) {
 			unmute_music()
 		}
-
 		else {
 			mute_music()
 		}
@@ -1839,7 +1822,6 @@ App.check_seed = () => {
 			$(`#seed_input`).focus()
 			return false
 		}
-
 		else {
 			change_seed(input)
 		}
@@ -2009,7 +1991,6 @@ App.key_detection = () => {
 				return
 			}
 		}
-
 		else {
 			if (code === 13) {
 				if ($(`#seed_input`).is(`:focus`)) {
@@ -2116,7 +2097,6 @@ App.clear_highscores = (advanced) => {
 		if (advanced) {
 			localStorage.removeItem(App.ls_highscores_advanced)
 		}
-
 		else {
 			localStorage.removeItem(App.ls_highscores)
 		}
@@ -2196,13 +2176,12 @@ App.toggle_pause = () => {
 			$(`#title`).html(`Paused`)
 			set_cursors_default()
 		}
-
 		else {
 			App.tick_timer.resume()
-			unpause_music()
-			update_counter()
+			App.unpause_music()
+			App.update_counter()
 			App.paused = false
-			set_cursors_pointer()
+			App.set_cursors_pointer()
 		}
 	}
 }
@@ -2288,34 +2267,34 @@ App.subtract_count = () => {
 
 App.left_side_clicks = () => {
 	$(`#seed`).click(() => {
-		seed_picker()
+		App.seed_picker()
 	})
 
 	$(`#speed`).click(() => {
-		speed_picker()
+		App.speed_picker()
 	})
 
 	$(`#mode`).click(() => {
-		mode_picker()
+		App.mode_picker()
 	})
 
 	$(`#start`).click(() => {
-		check_start()
+		App.check_start()
 	})
 }
 
 App.title_clicks = () => {
 	$(`#title`).click(() => {
-		title_click()
+		App.title_click()
 	})
 }
 
 App.right_side_clicks = () => {
 	$(`#points`).click(() => {
-		show_highscores(options.advanced)
+		App.show_highscores(options.advanced)
 	})
 
 	$(`#menu`).click(() => {
-		show_menu()
+		App.show_menu()
 	})
 }
