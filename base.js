@@ -1301,9 +1301,9 @@ App.ended = () => {
 
   if (App.options.hints) {
     let s = `Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br>`
-    s += `<button id='end_play_again' class='dialog_btn'>Play Again</button>`
-    s += `<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn'>Disable Hints</button></span>`
-    s += `<br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
+    s += `<button id='end_play_again' class='dialog_btn menu_button'>Play Again</button>`
+    s += `<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn menu_button'>Disable Hints</button></span>`
+    s += `<br><br><button id='end_rep' class='dialog_btn menu_button'>Game Report</button>`
 
     App.msg(s, true)
     App.msg_align_btns()
@@ -1324,7 +1324,7 @@ App.ended = () => {
     return
   }
 
-  let shs = `<br><br><button id='end_show_hs' class='dialog_btn'>High Scores</button><br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
+  let shs = `<br><br><button id='end_show_hs' class='dialog_btn menu_button'>High Scores</button><br><br><button id='end_rep' class='dialog_btn menu_button'>Game Report</button>`
   let setting = App.get_setting()
   let hs = App.get_setting_highscores(setting, App.options.advanced)
   let overall = App.highscores.Overall
@@ -1332,7 +1332,7 @@ App.ended = () => {
 
   if (!App.options.hints && (App.points > hs[hs.length - 1])) {
     if (App.points > hs[0]) {
-      App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+      App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn menu_button'>Play Again</button>` + shs, true)
       App.msg_align_btns()
       App.play(`highscore`)
 
@@ -1348,7 +1348,7 @@ App.ended = () => {
       }
     }
     else {
-      App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+      App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn menu_button'>Play Again</button>` + shs, true)
       App.msg_align_btns()
       App.play(`ended`)
 
@@ -1368,7 +1368,7 @@ App.ended = () => {
     }
   }
   else {
-    App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+    App.msg(`Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn menu_button'>Play Again</button>` + shs, true)
     App.msg_align_btns()
     App.play(`ended`)
   }
