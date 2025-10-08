@@ -712,8 +712,8 @@ App.show_instructions = () => {
   let s = `<b>Instructions</b><br><br>`
   s += `<img src='inst.gif?v=2' id='instgif'><br><br>`
   s += `The goal is to get as many points as you can.<br><br>`
-  s += `Earn points by owning App.elements that have a positive profit.<br><br>`
-  s += `You lose points when you own App.elements that have a negative profit.<br><br>`
+  s += `Earn points by owning elements that have a positive profit.<br><br>`
+  s += `You lose points when you own elements that have a negative profit.<br><br>`
   s += `You own an element by buying its patent.<br><br>`
   s += `Point earnings or losses of owned patents only occur after each tick.<br><br>`
   s += `The prices for each profit point are shown in the table below:<br><br>`
