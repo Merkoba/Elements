@@ -253,7 +253,8 @@ App.generate = () => {
       dir = `DOWN`
     }
 
-    let s = `<div class='element_container cursor_default`
+    let s = ``
+    s += `<div class='element_container cursor_default`
 
     if (element.profit > 0) {
       s += ` green`
@@ -703,7 +704,9 @@ App.check_state = () => {
 }
 
 App.show_instructions = () => {
-  let s = `<b>Instructions</b><br><br>`
+  let s = ``
+
+  s += `<b>Instructions</b><br><br>`
   s += `<img src='inst.gif?v=2' id='instgif'><br><br>`
   s += `The goal is to get as many points as you can.<br><br>`
   s += `Earn points by owning elements that have a positive profit.<br><br>`
@@ -778,7 +781,9 @@ App.update_options = () => {
 }
 
 App.show_options = () => {
-  let s = `<b>Options</b><br><br>`
+  let s = ``
+
+  s += `<b>Options</b><br><br>`
   s += `Automatically Fit Grid<br><br>`
 
   if (App.options.fit) {
@@ -855,10 +860,13 @@ App.show_options = () => {
 }
 
 App.show_about = () => {
-  let s = `<b>About</b><br><br>`
+  let s = ``
+
+  s += `<b>About</b><br><br>`
   s += `Idea and development by madprops<br><br>`
   s += `Version ` + App.version + `<br><br>`
   s += `<a target='_blank' href='https://merkoba.com'>https://merkoba.com</a>`
+
   App.msg(s)
 }
 
@@ -980,7 +988,6 @@ App.show_highscores = (advanced) => {
   }
 
   s += `<b class='unselectable'>High Scores</b>`
-
   s += `<div class='hs_select unselectable'><select id='hs_setting_select'>`
 
   s += `<option value='Overall'>Overall</option>`
@@ -1190,9 +1197,11 @@ App.copy_highscores = (setting, advanced) => {
 }
 
 App.show_report = () => {
-  let s = `<b>Game Report</b><br>`
-  s += `<div id='report_setting'>` + App.get_full_setting() + `</div>`
   let pts = App.start_points
+  let s = ``
+
+  s += `<b>Game Report</b><br>`
+  s += `<div id='report_setting'>` + App.get_full_setting() + `</div>`
   s += `<div class='grey_highlight'>` + App.start_count + ` (` + App.format(pts) + `)</div><br>`
 
   let cnt = App.start_count
@@ -1306,7 +1315,9 @@ App.ended = () => {
   $(`#title`).html(`Game Ended`)
 
   if (App.options.hints) {
-    let s = `Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br>`
+    let s = ``
+
+    s += `Time's up!<br><br>Score: ` + App.format(App.points) + `<br><br><br>`
     s += `<button id='end_play_again' class='dialog_btn menu_button'>Play Again</button>`
     s += `<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn menu_button'>Disable Hints</button></span>`
     s += `<br><br><button id='end_rep' class='dialog_btn menu_button'>Game Report</button>`
@@ -1825,7 +1836,9 @@ App.daily = () => {
 }
 
 App.speed_picker = () => {
-  let s = `<button id='speed_slow' class='dialog_btn'>Slow</button><br><br>`
+  let s = ``
+
+  s += `<button id='speed_slow' class='dialog_btn'>Slow</button><br><br>`
   s += `<button id='speed_normal' class='dialog_btn'>Normal</button><br><br>`
   s += `<button id='speed_fast' class='dialog_btn'>Fast</button><br><br>`
   s += `<button id='speed_linear' class='dialog_btn'>Linear</button>`
@@ -1864,7 +1877,9 @@ App.change_speed = (what, save = true) => {
 }
 
 App.mode_picker = () => {
-  let s = `<button id='mode_core'class='dialog_btn'>Core</button><br><br>`
+  let s = ``
+
+  s += `<button id='mode_core'class='dialog_btn'>Core</button><br><br>`
   s += `<button id='mode_advanced'class='dialog_btn'>Advanced</button>`
 
   if (App.fmsg(s, `mode`)) {
@@ -1975,7 +1990,9 @@ App.stop_all_audio = () => {
 }
 
 App.show_menu = () => {
-  let s = `<div id='msg_menu'></div>`
+  let s = ``
+
+  s += `<div id='msg_menu'></div>`
   s += `<button id='menu_instructions' class='dialog_btn menu_button'>Instructions</button><br><br>`
   s += `<button id='menu_highscores' class='dialog_btn menu_button'>High Scores</button><br><br>`
   s += `<button id='menu_options' class='dialog_btn menu_button'>Options</button><br><br>`
