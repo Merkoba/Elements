@@ -148,13 +148,13 @@ App.start = () => {
   $(`#main_container`).focus()
 
   to_top()
-  play(`started`)
+  App.play(`started`)
 
   if (App.music_fadeout_interval !== undefined) {
     clearInterval(App.music_fadeout_interval)
   }
 
-  play(`music`)
+  App.play(`music`)
   clear_started()
 
   App.last_highscore = ``
@@ -225,7 +225,6 @@ App.generate = () => {
       if (i % 2 === 0) {
         index = 1
       }
-
       else {
         index = 0
       }
@@ -706,7 +705,7 @@ App.check_state = () => {
     ended()
   }
   else {
-    play(`pup`)
+    App.play(`pup`)
   }
 }
 
@@ -761,31 +760,31 @@ App.show_instructions = () => {
   s += `\`Right clicking\` on the title opens a context menu.<br><br>`
   s += `If there is overflow, you can use UpArrow or W to scroll to the top, and DownArrow or S to scroll to the bottom.<br><br>`
 
-  msg(s)
+  App.msg(s)
 }
 
 App.get_options = () => {
-  options = JSON.parse(localStorage.getItem(App.ls_options))
+  App.options = JSON.parse(localStorage.getItem(App.ls_options))
 
-  if (options === null) {
-    options = {fit: true, sounds: true, music: true, hints: false, advanced: true, seed: 1, speed: `Normal`}
+  if (App.options === null) {
+    App.options = {fit: true, sounds: true, music: true, hints: false, advanced: true, seed: 1, speed: `Normal`}
     App.update_options()
   }
 
-  App.change_seed(options.seed, false)
-  change_speed(options.speed, false)
-  change_mode(options.advanced, false)
+  App.change_seed(App.options.seed, false)
+  change_speed(App.options.speed, false)
+  change_mode(App.options.advanced, false)
 }
 
 App.update_options = () => {
-  localStorage.setItem(App.ls_options, JSON.stringify(options))
+  localStorage.setItem(App.ls_options, JSON.stringify(App.options))
 }
 
 App.show_options = () => {
   let s = `<b>Options</b><br><br>`
   s += `Automatically Fit Grid<br><br>`
 
-  if (options.fit) {
+  if (App.options.fit) {
     s += `<input id='chk_fit' type='checkbox' checked>`
   }
   else {
@@ -794,7 +793,7 @@ App.show_options = () => {
 
   s += `<br><br><br>Enable Sounds<br><br>`
 
-  if (options.sounds) {
+  if (App.options.sounds) {
     s += `<input id='chk_sounds' type='checkbox' checked>`
   }
   else {
@@ -803,7 +802,7 @@ App.show_options = () => {
 
   s += `<br><br><br>Enable Music<br><br>`
 
-  if (options.music) {
+  if (App.options.music) {
     s += `<input id='chk_music' type='checkbox' checked>`
   }
   else {
@@ -812,35 +811,35 @@ App.show_options = () => {
 
   s += `<br><br><br>Enable Hints<br><br>`
 
-  if (options.hints) {
+  if (App.options.hints) {
     s += `<input id='chk_hints' type='checkbox' checked>`
   }
   else {
     s += `<input id='chk_hints' type='checkbox'>`
   }
 
-  msg(s)
+  App.msg(s)
 
   $(`#chk_fit`).change(() => {
-    options.fit = $(this).prop(`checked`)
+    App.options.fit = $(this).prop(`checked`)
     App.update_options()
     App.fit()
   })
 
   $(`#chk_sounds`).change(() => {
-    options.sounds = $(this).prop(`checked`)
+    App.options.sounds = $(this).prop(`checked`)
     App.update_options()
 
-    if (!options.sounds) {
+    if (!App.options.sounds) {
       stop_all_sounds()
     }
   })
 
   $(`#chk_music`).change(() => {
-    options.music = $(this).prop(`checked`)
+    App.options.music = $(this).prop(`checked`)
     App.update_options()
 
-    if (!options.music) {
+    if (!App.options.music) {
       mute_music()
     }
     else {
@@ -849,7 +848,7 @@ App.show_options = () => {
   })
 
   $(`#chk_hints`).change(() => {
-    options.hints = $(this).prop(`checked`)
+    App.options.hints = $(this).prop(`checked`)
     App.update_options()
 
     if (App.playing) {
@@ -863,7 +862,7 @@ App.show_about = () => {
   s += `Idea and development by madprops<br><br>`
   s += `Version ` + app_version + `<br><br>`
   s += `<a target='_blank' href='https://merkoba.com'>https://merkoba.com</a>`
-  msg(s)
+  App.msg(s)
 }
 
 App.get_highscores = (advanced) => {
@@ -922,24 +921,24 @@ App.get_setting_highscores = (setting, advanced) => {
 App.get_setting = () => {
   let s
 
-  if (options.seed === -1) {
+  if (App.options.seed === -1) {
     s = `#`
   }
-  else if (options.seed === 0.1) {
+  else if (App.options.seed === 0.1) {
     s = `#NaN`
   }
   else {
-    s = `#` + parseInt(options.seed)
+    s = `#` + parseInt(App.options.seed)
   }
 
-  s += ` - ` + options.speed
+  s += ` - ` + App.options.speed
   return s
 }
 
 App.get_mode_text = () => {
   let m
 
-  if (options.advanced) {
+  if (App.options.advanced) {
     m = `Adv`
   }
   else {
@@ -1021,7 +1020,7 @@ App.show_highscores = (advanced) => {
   }
 
   s += `</select></div><div id='scores'></div>`
-  msg(s)
+  App.msg(s)
 
   $(`#hs_type_toggle`).click(() => {
     if (advanced) {
@@ -1066,7 +1065,6 @@ App.show_scores = (setting, advanced) => {
       if (hs === 0) {
         s += `----`
       }
-
       else {
         s += `<span class='clickable_score' data-ss='` + ss + `'>`
         s += `<div class='setting_small'>` + ss + `</div>`
@@ -1170,7 +1168,6 @@ App.copy_highscores = (setting, advanced) => {
       if (hs === 0) {
         s += `----`
       }
-
       else {
         s += format(hs) + ` (` + ss + `)`
       }
@@ -1230,7 +1227,6 @@ App.show_report = () => {
         tpts_positive += item
         total_tpts_positive += item
       }
-
       else {
         s += `<div class='red_color'>` + format(item) + `</div><br>`
         tpts_negative += item
@@ -1245,11 +1241,11 @@ App.show_report = () => {
 
   s += `<div id='rep_copy' class='linkydiv'>Copy To Clipboard</div>`
 
-  msg(s)
+  App.msg(s)
 
   s = `<br><div class='grey_highlight'>Overview</div><br>`
 
-  if (options.advanced) {
+  if (App.options.advanced) {
     s += `<div>Elements Lit: ` + App.num_lit + `</div><br>`
     s += `<div>Lit Trios Sold: ` + App.num_lit_trios + `</div><br>`
     s += `<div>Lit Points: ` + format(App.gained_from_lit) + `</div><br>`
@@ -1259,7 +1255,7 @@ App.show_report = () => {
   s += `<div>Total Positive: ` + format(total_tpts_positive) + `</div><br>`
   s += `<div>Total Negative: ` + format(total_tpts_negative) + `</div><br>`
 
-  if (options.advanced) {
+  if (App.options.advanced) {
     s += `<div>Balance: ` + format(total_tpts_positive + total_tpts_negative) + `</div><br>`
     s += `<div>Bonus: ` + App.bonus + `% (` + format(App.bonus_points) + `)</div><br>`
   }
@@ -1279,15 +1275,15 @@ App.copy_report = () => {
 }
 
 App.set_speed = () => {
-  if (options.speed === `Slow` || options.speed === `Linear`) {
+  if (App.options.speed === `Slow` || App.options.speed === `Linear`) {
     loop_speed = App.speed_slow
   }
 
-  else if (options.speed === `Normal`) {
+  else if (App.options.speed === `Normal`) {
     loop_speed = App.speed_normal
   }
 
-  else if (options.speed === `Fast`) {
+  else if (App.options.speed === `Fast`) {
     loop_speed = App.speed_fast
   }
 }
@@ -1315,15 +1311,15 @@ App.ended = () => {
 
   $(`#title`).html(`Game Ended`)
 
-  if (options.hints) {
+  if (App.options.hints) {
     let s = `Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br>`
     s += `<button id='end_play_again' class='dialog_btn'>Play Again</button>`
     s += `<span id='hint_dis'><br><br><button id='end_hint_dis' class='dialog_btn'>Disable Hints</button></span>`
     s += `<br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
 
-    msg(s, true)
-    msg_align_btns()
-    play(`ended`)
+    App.msg(s, true)
+    App.msg_align_btns()
+    App.play(`ended`)
 
     $(`#end_play_again`).click(() => {
       App.start()
@@ -1342,32 +1338,31 @@ App.ended = () => {
 
   let shs = `<br><br><button id='end_show_hs' class='dialog_btn'>High Scores</button><br><br><button id='end_rep' class='dialog_btn'>Game Report</button>`
   let setting = get_setting()
-  let hs = get_setting_highscores(setting, options.advanced)
+  let hs = get_setting_highscores(setting, App.options.advanced)
   let overall = App.highscores.Overall
-  let overall_speed = App.highscores[`Overall - ` + options.speed]
+  let overall_speed = App.highscores[`Overall - ` + App.options.speed]
 
-  if (!options.hints && App.points > hs[hs.length - 1]) {
+  if (!App.options.hints && App.points > hs[hs.length - 1]) {
     if (App.points > hs[0]) {
-      msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
-      msg_align_btns()
-      play(`highscore`)
+      App.msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br>New high score!<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+      App.msg_align_btns()
+      App.play(`highscore`)
 
       hs.push(App.points)
       hs.sort(function(a, b){return b - a})
       hs.splice(10, hs.length)
 
-      if (options.advanced) {
+      if (App.options.advanced) {
         localStorage.setItem(App.ls_highscores_advanced, JSON.stringify(App.highscores))
       }
-
       else {
         localStorage.setItem(App.ls_highscores, JSON.stringify(App.highscores))
       }
     }
     else {
-      msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
-      msg_align_btns()
-      play(`ended`)
+      App.msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+      App.msg_align_btns()
+      App.play(`ended`)
 
       if (hs.indexOf(App.points) === -1) {
         hs.push(App.points)
@@ -1385,9 +1380,9 @@ App.ended = () => {
     }
   }
   else {
-    msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
-    msg_align_btns()
-    play(`ended`)
+    App.msg(`Time's up!<br><br>Score: ` + format(App.points) + `<br><br><br><button id='end_play_again' class='dialog_btn'>Play Again</button>` + shs, true)
+    App.msg_align_btns()
+    App.play(`ended`)
   }
 
   $(`#end_play_again`).click(() => {
@@ -1537,7 +1532,7 @@ App.msg = (txt, temp_disable = false) => {
   App.msg_open = true
 }
 
-App.msg_align_btns = (alt = false) => {
+App.App.msg_align_btns = (alt = false) => {
   if (alt) {
     $(`#msg`).find(`.dialog_btn`).each(() => {
       $(this).width($(this).outerWidth())
@@ -1588,7 +1583,7 @@ App.fmsg = (txt, el) => {
   return true
 }
 
-App.fmsg_align_btns = (alt = false) => {
+App.App.msg_align_btns = (alt = false) => {
   if (alt) {
     $(`#fmsg`).find(`.dialog_btn`).each(() => {
       $(this).width($(this).outerWidth())
@@ -1713,8 +1708,8 @@ App.seed_picker = () => {
   s += `<button id='seed_daily' class='dialog_btn'>Daily</button><br><br>`
   s += `<button id='seed_random' class='dialog_btn'>Random</button>`
 
-  if (fmsg(s, `seed`)) {
-    fmsg_align_btns(true)
+  if (App.fmsg(s, `seed`)) {
+    App.msg_align_btns(true)
     let bw = ($(`#seed_random_seed`).offset().left + $(`#seed_random_seed`).outerWidth()) - $(`#seed_check_seed`).offset().left
 
     $(`#seed_input`).outerWidth(bw)
@@ -1844,8 +1839,8 @@ App.speed_picker = () => {
   s += `<button id='speed_fast' class='dialog_btn'>Fast</button><br><br>`
   s += `<button id='speed_linear' class='dialog_btn'>Linear</button>`
 
-  if (fmsg(s, `speed`)) {
-    fmsg_align_btns()
+  if (App.fmsg(s, `speed`)) {
+    App.msg_align_btns()
     position_fmsg(`speed`)
   }
 
@@ -1881,8 +1876,8 @@ App.mode_picker = () => {
   let s = `<button id='mode_core'class='dialog_btn'>Core</button><br><br>`
   s += `<button id='mode_advanced'class='dialog_btn'>Advanced</button>`
 
-  if (fmsg(s, `mode`)) {
-    fmsg_align_btns()
+  if (App.fmsg(s, `mode`)) {
+    App.msg_align_btns()
     position_fmsg(`mode`)
   }
 
@@ -1997,8 +1992,8 @@ App.show_menu = () => {
   s += `<button id='menu_options' class='dialog_btn'>Options</button><br><br>`
   s += `<button id='menu_about' class='dialog_btn'>About</button>`
 
-  msg(s)
-  msg_align_btns()
+  App.msg(s)
+  App.msg_align_btns()
 
   $(`#menu_instructions`).click(() => {
     show_instructions()
@@ -2108,7 +2103,7 @@ App.title_click = () => {
 }
 
 App.toggle_pause = () => {
-  if (App.tick_timer !== undefined && App.playing && App.started) {
+  if ((App.tick_timer !== undefined) && App.playing && App.started) {
     if (App.tick_timer.active) {
       App.tick_timer.pause()
       App.pause_music()
@@ -2190,7 +2185,7 @@ App.copy_to_clipboard = (s) => {
   text_area_el.select()
   document.execCommand(`copy`)
   document.body.removeChild(text_area_el)
-  play(`pup2`)
+  App.play(`pup2`)
 }
 
 App.subtract_count = () => {
