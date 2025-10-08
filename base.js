@@ -82,7 +82,7 @@ App.report = []
 App.hs_setting = null
 App.fmsg_mode = null
 
-function init() {
+App.init = () => {
 	get_options()
 	overlay_clicked()
 	key_detection()
@@ -99,7 +99,7 @@ function init() {
 	succ()
 }
 
-function check_start() {
+App.check_start = () => {
 	if ($(`#start`).html() === `Stop`) {
 		stop()
 	}
@@ -109,7 +109,7 @@ function check_start() {
 	}
 }
 
-function check_escape() {
+App.check_escape = () => {
 	if (App.msg_open || App.fmsg_open) {
 		hide_overlay(true)
 		hide_foverlay()
@@ -123,7 +123,7 @@ function check_escape() {
 
 }
 
-function hide_and_stop() {
+App.hide_and_stop = () => {
 	if (App.msg_open || App.fmsg_open) {
 		hide_overlay(true)
 		hide_foverlay()
@@ -136,7 +136,7 @@ function hide_and_stop() {
 	update_title()
 }
 
-function start() {
+App.start = () => {
 	App.playing = true
 	App.started = false
 	App.paused = false
@@ -173,8 +173,8 @@ function start() {
 	App.bonus_points = 0
 	App.lit_trios_on_tick = 0
 
-	App.started_timeout = setTimeout(function() {
-		$(`.element_patent_btn`).each(function() {
+	App.started_timeout = setTimeout(() => {
+		$(`.element_patent_btn`).each(() => {
 			$(this).css(`display`, `inline-block`)
 		})
 
@@ -188,13 +188,13 @@ function start() {
 	}, 3700)
 }
 
-function clear_started() {
+App.clear_started = () => {
 	if (App.started_timeout !== undefined) {
 		clearTimeout(App.started_timeout)
 	}
 }
 
-function generate() {
+App.generate = () => {
 	$(`#main_container`).html(``)
 
 	if (options.seed === -1) {
@@ -289,8 +289,8 @@ function generate() {
 
 	let id = 0
 
-	$(`.element_container`).each(function() {
-		$(this).mousedown(function() {
+	$(`.element_container`).each(() => {
+		$(this).mousedown(() => {
 			if (App.playing && App.started && !App.paused) {
 				click_events(this)
 			}
@@ -301,9 +301,9 @@ function generate() {
 	})
 }
 
-function fit() {
+App.fit = () => {
 	if ($(`#main_container`).html() !== ``) {
-		$(`.breaker`).each(function() {
+		$(`.breaker`).each(() => {
 			$(this).remove()
 		})
 
@@ -328,7 +328,7 @@ function fit() {
 				let row1 = []
 				let row2 = []
 
-				$(`.element_container`).each(function() {
+				$(`.element_container`).each(() => {
 					let top = $(this).offset().top
 					let t1 = top - qheight
 					let t2 = top + qheight
@@ -353,7 +353,7 @@ function fit() {
 	}
 }
 
-function click_events(parent) {
+App.click_events = (parent) => {
 	let element = App.elements[$(parent).data(`id`)]
 
 	if (element.gone || element.frozen || element.deactivated) {
@@ -474,7 +474,7 @@ function click_events(parent) {
 	}
 }
 
-function change_profit(element) {
+App.change_profit = (element) => {
 	let change
 
 	if (element.direction === `up`) {
@@ -498,11 +498,11 @@ function change_profit(element) {
 	}
 }
 
-function format(n) {
+App.format = (n) => {
 	return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, `,`)
 }
 
-function TickTimer(callback, delay) {
+App.TickTimer = (callback, delay) => {
 	let timer_id, start, remaining = delay
 
 	this.pause = function() {
@@ -521,8 +521,8 @@ function TickTimer(callback, delay) {
 	this.resume()
 }
 
-function loop() {
-	App.tick_timer = new TickTimer(function() {
+App.loop = () => {
+	App.tick_timer = new TickTimer(() => {
 		if (App.count > 0) {
 			tick()
 		}
@@ -537,7 +537,7 @@ function loop() {
 	}, loop_speed)
 }
 
-function stop_loop() {
+App.stop_loop = () => {
 	App.count = 0
 
 	if (App.tick_timer !== undefined) {
@@ -545,7 +545,7 @@ function stop_loop() {
 	}
 }
 
-function tick() {
+App.tick = () => {
 	App.count -= 1
 
 	if (App.points < 0) {
@@ -624,7 +624,7 @@ function tick() {
 	check_state()
 }
 
-function gone(cont, element) {
+App.gone = (cont, element) => {
 	$(cont).removeClass(`yellow`)
 	$(cont).removeClass(`cursor_pointer`)
 	$(cont).addClass(`cursor_default`)
@@ -648,19 +648,19 @@ function gone(cont, element) {
 	element.gone = true
 }
 
-function make_all_gone() {
+App.make_all_gone = () => {
 	for (let i = 0; i < App.elements.length; i++) {
 		gone($(`.element_container`).get(i), App.elements[i])
 	}
 }
 
-function remove_pulsetrios() {
-	$(`.pulsetrio`).each(function() {
+App.remove_pulsetrios = () => {
+	$(`.pulsetrio`).each(() => {
 		$(this).removeClass(`pulsetrio`)
 	})
 }
 
-function check_hint(element) {
+App.check_hint = (element) => {
 	let cont = $(`.element_container`).get(element.id)
 	$(cont).removeClass(`pulsating`)
 
@@ -703,13 +703,13 @@ function check_hint(element) {
 	}
 }
 
-function check_all_hints() {
+App.check_all_hints = () => {
 	for (let i = 0; i < App.elements.length; i++) {
 		check_hint(App.elements[i])
 	}
 }
 
-function update_points() {
+App.update_points = () => {
 	let s = format(App.points)
 
 	if ((App.bonus > 0) && (App.count > 0)) {
@@ -719,7 +719,7 @@ function update_points() {
 	$(`#points`).html(s)
 }
 
-function check_state() {
+App.check_state = () => {
 	if (App.count === 0) {
 		ended()
 	}
@@ -733,7 +733,7 @@ function check_state() {
 	}
 }
 
-function show_instructions() {
+App.show_instructions = () => {
 	let s = `<b>Instructions</b><br><br>`
 	s += `<img src='inst.gif?v=2' id='instgif'><br><br>`
 	s += `The goal is to get as many points as you can.<br><br>`
@@ -787,7 +787,7 @@ function show_instructions() {
 	msg(s)
 }
 
-function get_options() {
+App.get_options = () => {
 	options = JSON.parse(localStorage.getItem(App.ls_options))
 
 	if (options === null) {
@@ -800,11 +800,11 @@ function get_options() {
 	change_mode(options.advanced, false)
 }
 
-function update_options() {
+App.update_options = () => {
 	localStorage.setItem(App.ls_options, JSON.stringify(options))
 }
 
-function show_options() {
+App.show_options = () => {
 	let s = `<b>Options</b><br><br>`
 	s += `Automatically Fit Grid<br><br>`
 
@@ -848,13 +848,13 @@ function show_options() {
 
 	msg(s)
 
-	$(`#chk_fit`).change(function() {
+	$(`#chk_fit`).change(() => {
 		options.fit = $(this).prop(`checked`)
 		update_options()
 		fit()
 	})
 
-	$(`#chk_sounds`).change(function() {
+	$(`#chk_sounds`).change(() => {
 		options.sounds = $(this).prop(`checked`)
 		update_options()
 
@@ -863,7 +863,7 @@ function show_options() {
 		}
 	})
 
-	$(`#chk_music`).change(function() {
+	$(`#chk_music`).change(() => {
 		options.music = $(this).prop(`checked`)
 		update_options()
 
@@ -876,7 +876,7 @@ function show_options() {
 		}
 	})
 
-	$(`#chk_hints`).change(function() {
+	$(`#chk_hints`).change(() => {
 		options.hints = $(this).prop(`checked`)
 		update_options()
 
@@ -886,7 +886,7 @@ function show_options() {
 	})
 }
 
-function show_about() {
+App.show_about = () => {
 	let s = `<b>About</b><br><br>`
 	s += `Idea and development by madprops<br><br>`
 	s += `Version ` + app_version + `<br><br>`
@@ -894,7 +894,7 @@ function show_about() {
 	msg(s)
 }
 
-function get_highscores(advanced) {
+App.get_highscores = (advanced) => {
 	if (advanced) {
 		App.highscores = JSON.parse(localStorage.getItem(App.ls_highscores_advanced))
 	}
@@ -938,7 +938,7 @@ function get_highscores(advanced) {
 	}
 }
 
-function get_setting_highscores(setting, advanced) {
+App.get_setting_highscores = (setting, advanced) => {
 	get_highscores(advanced)
 	let scores = App.highscores[setting]
 
@@ -952,7 +952,7 @@ function get_setting_highscores(setting, advanced) {
 	}
 }
 
-function get_setting() {
+App.get_setting = () => {
 	let s
 
 	if (options.seed === -1) {
@@ -971,7 +971,7 @@ function get_setting() {
 	return s
 }
 
-function get_mode_text() {
+App.get_mode_text = () => {
 	let m
 
 	if (options.advanced) {
@@ -985,11 +985,11 @@ function get_mode_text() {
 	return m
 }
 
-function get_full_setting() {
+App.get_full_setting = () => {
 	return get_setting() + ` : ` + get_mode_text()
 }
 
-function start_setting(setting, advanced) {
+App.start_setting = (setting, advanced) => {
 	let sd = setting.split(` - `)[0].replace(`#`, ``).trim()
 
 	if (sd === ``) {
@@ -1013,7 +1013,7 @@ function start_setting(setting, advanced) {
 	start()
 }
 
-function show_highscores(advanced) {
+App.show_highscores = (advanced) => {
 	get_highscores(advanced)
 	let s
 
@@ -1065,7 +1065,7 @@ function show_highscores(advanced) {
 	s += `</select></div><div id='scores'></div>`
 	msg(s)
 
-	$(`#hs_type_toggle`).click(function() {
+	$(`#hs_type_toggle`).click(() => {
 		if (advanced) {
 			show_highscores(false)
 		}
@@ -1075,7 +1075,7 @@ function show_highscores(advanced) {
 		}
 	})
 
-	$(`#msg`).find(`option`).each(function() {
+	$(`#msg`).find(`option`).each(() => {
 		if ($(this).val() === setting) {
 			$(this).prop(`selected`, true)
 		}
@@ -1084,19 +1084,19 @@ function show_highscores(advanced) {
 	show_scores($(`#hs_setting_select option:selected`).val(), advanced)
 
 	if (advanced) {
-		$(`#hs_setting_select`).change(function() {
+		$(`#hs_setting_select`).change(() => {
 			show_scores($(`#hs_setting_select option:selected`).val(), true)
 		})
 	}
 	else {
-		$(`#hs_setting_select`).change(function() {
+		$(`#hs_setting_select`).change(() => {
 			show_scores($(`#hs_setting_select option:selected`).val(), false)
 		})
 	}
 
 }
 
-function show_scores(setting, advanced) {
+App.show_scores = (setting, advanced) => {
 	App.hs_setting = setting
 	let scores = get_setting_highscores(setting, advanced)
 	let s = ``
@@ -1179,24 +1179,24 @@ function show_scores(setting, advanced) {
 	$(`#hs_setting_select`).val(setting)
 	$(`#msg`).scrollTop(0)
 
-	$(`.clickable_score`).click(function() {
+	$(`.clickable_score`).click(() => {
 		show_scores($(this).data(`ss`), advanced)
 	})
 
-	$(`#hs_clear`).click(function() {
+	$(`#hs_clear`).click(() => {
 		clear_highscores(advanced)
 	})
 
-	$(`#hs_play_again`).click(function() {
+	$(`#hs_play_again`).click(() => {
 		start_setting(setting, advanced)
 	})
 
-	$(`#hs_copy_hs`).click(function() {
+	$(`#hs_copy_hs`).click(() => {
 		copy_highscores(setting, advanced)
 	})
 }
 
-function copy_highscores(setting, advanced) {
+App.copy_highscores = (setting, advanced) => {
 	let scores = get_setting_highscores(setting, advanced)
 	let s = setting
 
@@ -1243,7 +1243,7 @@ function copy_highscores(setting, advanced) {
 	copy_to_clipboard(s)
 }
 
-function show_report() {
+App.show_report = () => {
 	let s = `<b>Game Report</b><br>`
 	s += `<div id='report_setting'>` + get_full_setting() + `</div>`
 	let pts = App.start_points
@@ -1319,16 +1319,16 @@ function show_report() {
 
 	$(s).insertAfter($(`#report_setting`))
 
-	$(`#rep_copy`).click(function() {
+	$(`#rep_copy`).click(() => {
 		copy_report()
 	})
 }
 
-function copy_report() {
+App.copy_report = () => {
 	copy_to_clipboard(document.getElementById(`msg`).innerText.replace(`Game Report`, ``).replace(`Copy To Clipboard`, ``).replace(/\n\s*\n/g, `\n`).trim())
 }
 
-function set_speed() {
+App.set_speed = () => {
 	if (options.speed === `Slow` || options.speed === `Linear`) {
 		loop_speed = App.speed_slow
 	}
@@ -1342,7 +1342,7 @@ function set_speed() {
 	}
 }
 
-function on_finish() {
+App.on_finish = () => {
 	if (App.count > 0) {
 		stop_loop()
 	}
@@ -1354,7 +1354,7 @@ function on_finish() {
 	$(`#start`).html(`Play Again`)
 }
 
-function ended() {
+App.ended = () => {
 	on_finish()
 
 	if (App.points > 0 && App.bonus > 0) {
@@ -1375,15 +1375,15 @@ function ended() {
 		msg_align_btns()
 		play(`ended`)
 
-		$(`#end_play_again`).click(function() {
+		$(`#end_play_again`).click(() => {
 			start()
 		})
 
-		$(`#end_hint_dis`).click(function() {
+		$(`#end_hint_dis`).click(() => {
 			disable_hints()
 		})
 
-		$(`#end_rep`).click(function() {
+		$(`#end_rep`).click(() => {
 			show_report()
 		})
 
@@ -1442,15 +1442,15 @@ function ended() {
 		play(`ended`)
 	}
 
-	$(`#end_play_again`).click(function() {
+	$(`#end_play_again`).click(() => {
 		start()
 	})
 
-	$(`#end_show_hs`).click(function() {
+	$(`#end_show_hs`).click(() => {
 		show_highscores(options.advanced)
 	})
 
-	$(`#end_rep`).click(function() {
+	$(`#end_rep`).click(() => {
 		show_report()
 	})
 
@@ -1541,22 +1541,22 @@ function ended() {
 	}
 }
 
-function overlay_clicked() {
-	$(`#overlay`).click(function() {
+App.overlay_clicked = () => {
+	$(`#overlay`).click(() => {
 		hide_overlay()
 	})
 
-	$(`#foverlay`).click(function() {
+	$(`#foverlay`).click(() => {
 		hide_foverlay()
 	})
 }
 
-function hide_overlays() {
+App.hide_overlays = () => {
 	hide_overlay(true)
 	hide_foverlay()
 }
 
-function hide_overlay(force=false) {
+App.hide_overlay = (force=false) => {
 	if (App.msg_open && (App.msg_closeable || force)) {
 		$(`#overlay`).css(`display`, `none`)
 		$(`#msg`).css(`display`, `none`)
@@ -1566,7 +1566,7 @@ function hide_overlay(force=false) {
 	}
 }
 
-function msg(txt, temp_disable=false) {
+App.msg = (txt, temp_disable=false) => {
 	hide_foverlay()
 
 	$(`#overlay`).css(`display`, `block`)
@@ -1579,7 +1579,7 @@ function msg(txt, temp_disable=false) {
 		$(`.dialog_btn`).prop(`disabled`, true)
 		App.msg_closeable = false
 
-		setTimeout(function() {
+		setTimeout(() => {
 			$(`.dialog_btn`).prop(`disabled`, false)
 			App.msg_closeable = true
 
@@ -1594,9 +1594,9 @@ function msg(txt, temp_disable=false) {
 	App.msg_open = true
 }
 
-function msg_align_btns(alt=false) {
+App.msg_align_btns = (alt=false) => {
 	if (alt) {
-		$(`#msg`).find(`.dialog_btn`).each(function() {
+		$(`#msg`).find(`.dialog_btn`).each(() => {
 			$(this).width($(this).outerWidth())
 		})
 	}
@@ -1604,17 +1604,17 @@ function msg_align_btns(alt=false) {
 	else {
 		let w = 0
 
-		$(`#msg`).find(`.dialog_btn`).each(function() {
+		$(`#msg`).find(`.dialog_btn`).each(() => {
 			w = Math.max(w, $(this).outerWidth())
 		})
 
-		$(`#msg`).find(`.dialog_btn`).each(function() {
+		$(`#msg`).find(`.dialog_btn`).each(() => {
 			$(this).width(w)
 		})
 	}
 }
 
-function hide_foverlay() {
+App.hide_foverlay = () => {
 	if (App.fmsg_open) {
 		$(`#foverlay`).css(`display`, `none`)
 		$(`#fmsg`).css(`display`, `none`)
@@ -1625,7 +1625,7 @@ function hide_foverlay() {
 	}
 }
 
-function fmsg(txt, el) {
+App.fmsg = (txt, el) => {
 	hide_overlay()
 
 	if (el === App.fmsg_mode) {
@@ -1646,9 +1646,9 @@ function fmsg(txt, el) {
 	return true
 }
 
-function fmsg_align_btns(alt=false) {
+App.fmsg_align_btns = (alt=false) => {
 	if (alt) {
-		$(`#fmsg`).find(`.dialog_btn`).each(function() {
+		$(`#fmsg`).find(`.dialog_btn`).each(() => {
 			$(this).width($(this).outerWidth())
 		})
 	}
@@ -1656,17 +1656,17 @@ function fmsg_align_btns(alt=false) {
 	else {
 		let w = 0
 
-		$(`#fmsg`).find(`.dialog_btn`).each(function() {
+		$(`#fmsg`).find(`.dialog_btn`).each(() => {
 			w = Math.max(w, $(this).outerWidth())
 		})
 
-		$(`#fmsg`).find(`.dialog_btn`).each(function() {
+		$(`#fmsg`).find(`.dialog_btn`).each(() => {
 			$(this).width(w)
 		})
 	}
 }
 
-function position_fmsg(el) {
+App.position_fmsg = (el) => {
 	$(`#fmsg`).css(`top`, $(`#title_container`).outerHeight() - 1)
 	let left = $(`#` + el).offset().left - ($(`#fmsg`).outerWidth() / 2) + ($(`#` + el).width() / 2)
 
@@ -1684,11 +1684,11 @@ function position_fmsg(el) {
 	}
 }
 
-function refresh() {
+App.refresh = () => {
 	document.location = document.location
 }
 
-function play(what) {
+App.play = (what) => {
 	if (what === `music`) {
 		if (options.music) {
 			unmute_music()
@@ -1711,7 +1711,7 @@ function play(what) {
 	}
 }
 
-function music_control() {
+App.music_control = () => {
 	$(`#music`)[0].ontimeupdate = function() {
 		if ((App.count > 0) && (this.currentTime > 73.2)) {
 			this.currentTime = 4.5
@@ -1719,23 +1719,23 @@ function music_control() {
 	}
 }
 
-function pause_music() {
+App.pause_music = () => {
 	$(`#music`)[0].pause()
 }
 
-function unpause_music() {
+App.unpause_music = () => {
 	$(`#music`)[0].play()
 }
 
-function mute_music() {
+App.mute_music = () => {
 	$(`#music`)[0].volume = 0
 }
 
-function unmute_music() {
+App.unmute_music = () => {
 	$(`#music`)[0].volume = 1
 }
 
-function start_music_fadeout() {
+App.start_music_fadeout = () => {
 	if (App.music_fadeout_interval !== undefined) {
 		clearInterval(App.music_fadeout_interval)
 	}
@@ -1743,7 +1743,7 @@ function start_music_fadeout() {
 	App.music_fadeout_interval = setInterval(music_fadeout, 100)
 }
 
-function music_fadeout() {
+App.music_fadeout = () => {
 	let new_volume = $(`#music`)[0].volume - 0.01
 
 	if (new_volume >= 0) {
@@ -1762,15 +1762,15 @@ function music_fadeout() {
 
 }
 
-function to_top() {
+App.to_top = () => {
 	$(`body`).scrollTop(0)
 }
 
-function update_counter() {
+App.update_counter = () => {
 	$(`#title`).html(App.count)
 }
 
-function seed_picker() {
+App.seed_picker = () => {
 	let s = `0 to 999<br><br><input id='seed_input'><br><br>`
 	s += `<button id='seed_check_seed' class='dialog_btn'>Ok</button>&nbsp&nbsp`
 	s += `<button id='seed_random_seed' class='dialog_btn'>?</button><br><br>`
@@ -1788,19 +1788,19 @@ function seed_picker() {
 		position_fmsg(`seed`)
 	}
 
-	$(`#seed_check_seed`).click(function() {
+	$(`#seed_check_seed`).click(() => {
 		check_seed()
 	})
 
-	$(`#seed_random_seed`).click(function() {
+	$(`#seed_random_seed`).click(() => {
 		get_random_seed()
 	})
 
-	$(`#seed_daily`).click(function() {
+	$(`#seed_daily`).click(() => {
 		daily()
 	})
 
-	$(`#seed_random`).click(function() {
+	$(`#seed_random`).click(() => {
 		change_seed(-1)
 	})
 
@@ -1808,7 +1808,7 @@ function seed_picker() {
 	$(`#seed_input`).attr(`max`, 999)
 	$(`#seed_input`).attr(`min`, 0)
 
-	$(`#seed_input`).on(`input`, function() {
+	$(`#seed_input`).on(`input`, () => {
 		if ($(this).val().length > 3) {
 			$(this).val($(this).val().substring(0, 3))
 		}
@@ -1821,7 +1821,7 @@ function seed_picker() {
 	$(`#seed_input`).focus()
 }
 
-function check_seed() {
+App.check_seed = () => {
 	let input = $(`#seed_input`).val().trim()
 
 	if (input == ``) {
@@ -1846,7 +1846,7 @@ function check_seed() {
 	}
 }
 
-function change_seed(s, save=true) {
+App.change_seed = (s, save=true) => {
 	let seed
 
 	if (s == `0.1`) {
@@ -1883,7 +1883,7 @@ function change_seed(s, save=true) {
 	hide_and_stop()
 }
 
-function get_random_seed() {
+App.get_random_seed = () => {
 	Math.seedrandom()
 	let r = get_random_int(0, 999)
 
@@ -1898,18 +1898,18 @@ function get_random_seed() {
 	$(`#seed_input`).val(r).focus()
 }
 
-function get_daily() {
+App.get_daily = () => {
 	let d = new Date()
 	let s = d.getDate() + (d.getMonth() * 100) + d.getYear()
 	Math.seedrandom(s)
 	return get_random_int(0, 999)
 }
 
-function daily() {
+App.daily = () => {
 	change_seed(get_daily())
 }
 
-function speed_picker() {
+App.speed_picker = () => {
 	let s = `<button id='speed_slow' class='dialog_btn'>Slow</button><br><br>`
 	s += `<button id='speed_normal' class='dialog_btn'>Normal</button><br><br>`
 	s += `<button id='speed_fast' class='dialog_btn'>Fast</button><br><br>`
@@ -1920,24 +1920,24 @@ function speed_picker() {
 		position_fmsg(`speed`)
 	}
 
-	$(`#speed_slow`).click(function() {
+	$(`#speed_slow`).click(() => {
 		change_speed(`Slow`)
 	})
 
-	$(`#speed_normal`).click(function() {
+	$(`#speed_normal`).click(() => {
 		change_speed(`Normal`)
 	})
 
-	$(`#speed_fast`).click(function() {
+	$(`#speed_fast`).click(() => {
 		change_speed(`Fast`)
 	})
 
-	$(`#speed_linear`).click(function() {
+	$(`#speed_linear`).click(() => {
 		change_speed(`Linear`)
 	})
 }
 
-function change_speed(what, save=true) {
+App.change_speed = (what, save=true) => {
 	options.speed = what
 	$(`#speed`).html(what)
 
@@ -1948,7 +1948,7 @@ function change_speed(what, save=true) {
 	hide_and_stop()
 }
 
-function mode_picker() {
+App.mode_picker = () => {
 	let s = `<button id='mode_core'class='dialog_btn'>Core</button><br><br>`
 	s += `<button id='mode_advanced'class='dialog_btn'>Advanced</button>`
 
@@ -1957,16 +1957,16 @@ function mode_picker() {
 		position_fmsg(`mode`)
 	}
 
-	$(`#mode_core`).click(function() {
+	$(`#mode_core`).click(() => {
 		change_mode(false)
 	})
 
-	$(`#mode_advanced`).click(function() {
+	$(`#mode_advanced`).click(() => {
 		change_mode(true)
 	})
 }
 
-function change_mode(advanced, save=true) {
+App.change_mode = (advanced, save=true) => {
 	options.advanced = advanced
 	$(`#mode`).html(get_mode_text())
 
@@ -1977,18 +1977,18 @@ function change_mode(advanced, save=true) {
 	hide_and_stop()
 }
 
-function get_random_int(min, max) {
+App.get_random_int = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-function check_firstime() {
+App.check_firstime = () => {
 	if (localStorage.getItem(`firstime`) === null) {
 		show_instructions()
 		localStorage.setItem(`firstime`, `check`)
 	}
 }
 
-function key_detection() {
+App.key_detection = () => {
 	$(document).keydown(function(e) {
 		let code = e.keyCode
 
@@ -2034,7 +2034,7 @@ function key_detection() {
 	})
 }
 
-function stop() {
+App.stop = () => {
 	App.playing = false
 	clear_started()
 	stop_loop()
@@ -2047,24 +2047,24 @@ function stop() {
 	$(`body`).css(`background-image`, `url(splash.jpg)`)
 }
 
-function stop_all_sounds() {
-	$(`.sound`).each(function() {
+App.stop_all_sounds = () => {
+	$(`.sound`).each(() => {
 		this.pause()
 		this.currentTime = 0
 	})
 }
 
-function stop_the_music() {
+App.stop_the_music = () => {
 	$(`#music`)[0].pause()
 	$(`#music`)[0].currentTime = 0
 }
 
-function stop_all_audio() {
+App.stop_all_audio = () => {
 	stop_all_sounds()
 	stop_the_music()
 }
 
-function show_menu() {
+App.show_menu = () => {
 	let s = `<div id='msg_menu'></div>`
 	s += `<button id='menu_instructions' class='dialog_btn'>Instructions</button><br><br>`
 	s += `<button id='menu_highscores' class='dialog_btn'>High Scores</button><br><br>`
@@ -2074,24 +2074,24 @@ function show_menu() {
 	msg(s)
 	msg_align_btns()
 
-	$(`#menu_instructions`).click(function() {
+	$(`#menu_instructions`).click(() => {
 		show_instructions()
 	})
 
-	$(`#menu_highscores`).click(function() {
+	$(`#menu_highscores`).click(() => {
 		show_highscores(options.advanced)
 	})
 
-	$(`#menu_options`).click(function() {
+	$(`#menu_options`).click(() => {
 		show_options()
 	})
 
-	$(`#menu_about`).click(function() {
+	$(`#menu_about`).click(() => {
 		show_about()
 	})
 }
 
-function toggle_menu() {
+App.toggle_menu = () => {
 	if ($(`#msg_menu`).length === 0) {
 		show_menu()
 	}
@@ -2101,7 +2101,7 @@ function toggle_menu() {
 	}
 }
 
-function clear_highscores(advanced) {
+App.clear_highscores = (advanced) => {
 	let conf
 
 	if (advanced) {
@@ -2125,41 +2125,41 @@ function clear_highscores(advanced) {
 	}
 }
 
-var resize_timer = (function() {
+var resize_timer = (() => {
 	var timer
 
 	return function() {
 		clearTimeout(timer)
-		timer = setTimeout(function() {
+		timer = setTimeout(() => {
 			fit()
 		}, 350)
 	}
 })()
 
-function resize_events() {
-	$(window).resize(function() {
+App.resize_events = () => {
+	$(window).resize(() => {
 		resize_timer()
 	})
 }
 
-function play_with_hints() {
+App.play_with_hints = () => {
 	options.hints = true
 	update_options()
 	start()
 }
 
-function disable_hints() {
+App.disable_hints = () => {
 	options.hints = false
 	update_options()
 
 	$(`#hint_dis`).remove()
 
-	$(`.element_container`).each(function() {
+	$(`.element_container`).each(() => {
 		$(this).removeClass(`pulsating`)
 	})
 }
 
-function title_click() {
+App.title_click = () => {
 	if (App.playing && App.started) {
 		toggle_pause()
 	}
@@ -2187,7 +2187,7 @@ function title_click() {
 	}
 }
 
-function toggle_pause() {
+App.toggle_pause = () => {
 	if (App.tick_timer !== undefined && App.playing && App.started) {
 		if (App.tick_timer.active) {
 			App.tick_timer.pause()
@@ -2207,35 +2207,35 @@ function toggle_pause() {
 	}
 }
 
-function set_cursors_pointer() {
-	$(`.element_container`).each(function() {
+App.set_cursors_pointer = () => {
+	$(`.element_container`).each(() => {
 		if (!$(this).hasClass(`gone`)) {
 			$(this).removeClass(`cursor_default`).addClass(`cursor_pointer`)
 		}
 	})
 }
 
-function set_cursors_default() {
-	$(`.element_container`).each(function() {
+App.set_cursors_default = () => {
+	$(`.element_container`).each(() => {
 		if (!$(this).hasClass(`gone`)) {
 			$(this).removeClass(`cursor_pointer`).addClass(`cursor_default`)
 		}
 	})
 }
 
-function succ() {
+App.succ = () => {
 	console.log(`%cThis is a browser feature intended for developers. If someone told you to copy-paste something here to enable a feature, it is a scam and will give them access to your memes.`, `color: red; font-size: x-large`)
 }
 
-function get_setting_title() {
+App.get_setting_title = () => {
 	return `Elements (` + get_full_setting() + `)`
 }
 
-function update_title() {
+App.update_title = () => {
 	document.title = get_setting_title()
 }
 
-function disable_context_menus() {
+App.disable_context_menus = () => {
 	$(`#main_container`)[0].addEventListener(`contextmenu`, event => event.preventDefault())
 	$(`#overlay`)[0].addEventListener(`contextmenu`, event => event.preventDefault())
 	$(`#foverlay`)[0].addEventListener(`contextmenu`, event => event.preventDefault())
@@ -2244,7 +2244,7 @@ function disable_context_menus() {
 	$(`#right_side`)[0].addEventListener(`contextmenu`, event => event.preventDefault())
 }
 
-function start_context_menus() {
+App.start_context_menus = () => {
 	$.contextMenu(
 	{
 		selector: `#title`,
@@ -2260,11 +2260,11 @@ function start_context_menus() {
 	})
 }
 
-function copy_setting() {
+App.copy_setting = () => {
 	copy_to_clipboard(get_setting_title())
 }
 
-function copy_to_clipboard(s) {
+App.copy_to_clipboard = (s) => {
 	let text_area_el = document.createElement(`textarea`)
 	document.body.appendChild(text_area_el)
 	text_area_el.value = s
@@ -2274,7 +2274,7 @@ function copy_to_clipboard(s) {
 	play(`pup2`)
 }
 
-function subtract_count() {
+App.subtract_count = () => {
 	App.count -= 1
 
 	if (App.count < 0) {
@@ -2286,36 +2286,36 @@ function subtract_count() {
 	}
 }
 
-function left_side_clicks() {
-	$(`#seed`).click(function() {
+App.left_side_clicks = () => {
+	$(`#seed`).click(() => {
 		seed_picker()
 	})
 
-	$(`#speed`).click(function() {
+	$(`#speed`).click(() => {
 		speed_picker()
 	})
 
-	$(`#mode`).click(function() {
+	$(`#mode`).click(() => {
 		mode_picker()
 	})
 
-	$(`#start`).click(function() {
+	$(`#start`).click(() => {
 		check_start()
 	})
 }
 
-function title_clicks() {
-	$(`#title`).click(function() {
+App.title_clicks = () => {
+	$(`#title`).click(() => {
 		title_click()
 	})
 }
 
-function right_side_clicks() {
-	$(`#points`).click(function() {
+App.right_side_clicks = () => {
+	$(`#points`).click(() => {
 		show_highscores(options.advanced)
 	})
 
-	$(`#menu`).click(function() {
+	$(`#menu`).click(() => {
 		show_menu()
 	})
 }
