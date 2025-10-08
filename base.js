@@ -1689,7 +1689,9 @@ App.update_counter = () => {
 }
 
 App.seed_picker = () => {
-  let s = `0 to 999<br><br><input id='seed_input' placeholder='Number'><br><br>`
+  let s = ``
+
+  s += `<input id='seed_input' placeholder='Number' type='number'><br><br>`
   s += `<button id='seed_check_seed' class='dialog_btn menu_button_small'>Ok</button>&nbsp&nbsp`
   s += `<button id='seed_random_seed' class='dialog_btn menu_button_small'>?</button><br><br>`
   s += `<button id='seed_daily' class='dialog_btn menu_button'>Daily</button><br><br>`
@@ -1721,6 +1723,8 @@ App.seed_picker = () => {
   $(`#seed_input`).attr(`min`, 0)
 
   $(`#seed_input`).on(`input`, function() {
+    $(this).val(parseInt($(this).val()))
+
     if ($(this).val().length > 3) {
       $(this).val($(this).val().substring(0, 3))
     }
