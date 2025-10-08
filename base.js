@@ -101,7 +101,7 @@ App.init = () => {
 
 App.check_start = () => {
   if ($(`#start`).html() === `Stop`) {
-    stop()
+    App.stop()
   }
   else {
     App.start()
@@ -114,7 +114,7 @@ App.check_escape = () => {
     App.hide_foverlay()
   }
   else if ($(`#title`).html() !== App.main_title) {
-    stop()
+    App.stop()
   }
 }
 
@@ -125,7 +125,7 @@ App.hide_and_stop = () => {
   }
 
   if ($(`#title`).html() !== App.main_title) {
-    stop()
+    App.stop()
   }
 
   App.update_title()
@@ -277,7 +277,7 @@ App.generate = () => {
 
   let id = 0
 
-  $(`.element_container`).each(function () {
+  $(`.element_container`).each(function() {
     $(this).on(`mousedown`, function() {
       if (App.playing && App.started && !App.paused) {
         App.click_events(this)
@@ -291,7 +291,7 @@ App.generate = () => {
 
 App.fit = () => {
   if ($(`#main_container`).html() !== ``) {
-    $(`.breaker`).each(function () {
+    $(`.breaker`).each(function() {
       $(this).remove()
     })
 
@@ -630,7 +630,7 @@ App.make_all_gone = () => {
 }
 
 App.remove_pulsetrios = () => {
-  $(`.pulsetrio`).each(function () {
+  $(`.pulsetrio`).each(function() {
     $(this).removeClass(`pulsetrio`)
   })
 }
@@ -1122,7 +1122,7 @@ App.show_scores = (setting, advanced) => {
   $(`#hs_setting_select`).val(setting)
   $(`#msg`).scrollTop(0)
 
-  $(`.clickable_score`).on(`click`, function () {
+  $(`.clickable_score`).on(`click`, function() {
     App.show_scores($(this).data(`ss`), advanced)
   })
 
@@ -1522,18 +1522,18 @@ App.msg = (txt, temp_disable = false) => {
 
 App.msg_align_btns = (alt = false) => {
   if (alt) {
-    $(`#msg`).find(`.dialog_btn`).each(function () {
+    $(`#msg`).find(`.dialog_btn`).each(function() {
       $(this).width($(this).outerWidth())
     })
   }
   else {
     let w = 0
 
-    $(`#msg`).find(`.dialog_btn`).each(function () {
+    $(`#msg`).find(`.dialog_btn`).each(function() {
       w = Math.max(w, $(this).outerWidth())
     })
 
-    $(`#msg`).find(`.dialog_btn`).each(function () {
+    $(`#msg`).find(`.dialog_btn`).each(function() {
       $(this).width(w)
     })
   }
@@ -1573,18 +1573,18 @@ App.fmsg = (txt, el) => {
 
 App.msg_align_btns = (alt = false) => {
   if (alt) {
-    $(`#fmsg`).find(`.dialog_btn`).each(function () {
+    $(`#fmsg`).find(`.dialog_btn`).each(function() {
       $(this).width($(this).outerWidth())
     })
   }
   else {
     let w = 0
 
-    $(`#fmsg`).find(`.dialog_btn`).each(function () {
+    $(`#fmsg`).find(`.dialog_btn`).each(function() {
       w = Math.max(w, $(this).outerWidth())
     })
 
-    $(`#fmsg`).find(`.dialog_btn`).each(function () {
+    $(`#fmsg`).find(`.dialog_btn`).each(function() {
       $(this).width(w)
     })
   }
@@ -1727,7 +1727,7 @@ App.seed_picker = () => {
   $(`#seed_input`).attr(`max`, 999)
   $(`#seed_input`).attr(`min`, 0)
 
-  $(`#seed_input`).on(`input`, function () {
+  $(`#seed_input`).on(`input`, function() {
     if ($(this).val().length > 3) {
       $(this).val($(this).val().substring(0, 3))
     }
@@ -2058,7 +2058,7 @@ App.disable_hints = () => {
 
   $(`#hint_dis`).remove()
 
-  $(`.element_container`).each(function () {
+  $(`.element_container`).each(function() {
     $(this).removeClass(`pulsating`)
   })
 }
